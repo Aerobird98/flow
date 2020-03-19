@@ -1,15 +1,15 @@
 {
   "files": {
     "main.css": "/wordify/static/css/main.5d414a0b.chunk.css",
-    "main.js": "/wordify/static/js/main.b67973a8.chunk.js",
-    "main.js.map": "/wordify/static/js/main.b67973a8.chunk.js.map",
+    "main.js": "/wordify/static/js/main.c3e6c26d.chunk.js",
+    "main.js.map": "/wordify/static/js/main.c3e6c26d.chunk.js.map",
     "runtime-main.js": "/wordify/static/js/runtime-main.7bd96377.js",
     "runtime-main.js.map": "/wordify/static/js/runtime-main.7bd96377.js.map",
     "static/css/2.7fe1ef02.chunk.css": "/wordify/static/css/2.7fe1ef02.chunk.css",
     "static/js/2.dbcb9d2d.chunk.js": "/wordify/static/js/2.dbcb9d2d.chunk.js",
     "static/js/2.dbcb9d2d.chunk.js.map": "/wordify/static/js/2.dbcb9d2d.chunk.js.map",
     "index.html": "/wordify/index.html",
-    "precache-manifest.ca9b6adfdf3e4f3bbf4ad758bb17f69a.js": "/wordify/precache-manifest.ca9b6adfdf3e4f3bbf4ad758bb17f69a.js",
+    "precache-manifest.12b3afa807e017b75c7566e7ec0d1632.js": "/wordify/precache-manifest.12b3afa807e017b75c7566e7ec0d1632.js",
     "service-worker.js": "/wordify/service-worker.js",
     "static/css/2.7fe1ef02.chunk.css.map": "/wordify/static/css/2.7fe1ef02.chunk.css.map",
     "static/css/main.5d414a0b.chunk.css.map": "/wordify/static/css/main.5d414a0b.chunk.css.map",
@@ -20,6 +20,6 @@
     "static/css/2.7fe1ef02.chunk.css",
     "static/js/2.dbcb9d2d.chunk.js",
     "static/css/main.5d414a0b.chunk.css",
-    "static/js/main.b67973a8.chunk.js"
+    "static/js/main.c3e6c26d.chunk.js"
   ]
 }
