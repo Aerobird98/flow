@@ -1,6 +1,6 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "8d23dddcd53f33f492062c69482a6aea",
+    "revision": "4d92b1909ab7a6719549cdf201195621",
     "url": "/wordify/index.html"
   },
   {
@@ -8,8 +8,8 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/wordify/static/css/2.7fe1ef02.chunk.css"
   },
   {
-    "revision": "4e407550aac90ad55f97",
-    "url": "/wordify/static/css/main.4a1d4d23.chunk.css"
+    "revision": "e4b489f0ba766955b1ef",
+    "url": "/wordify/static/css/main.5d414a0b.chunk.css"
   },
   {
     "revision": "6c191a13739c0d20983d",
@@ -20,8 +20,8 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/wordify/static/js/2.dbcb9d2d.chunk.js.LICENSE.txt"
   },
   {
-    "revision": "4e407550aac90ad55f97",
-    "url": "/wordify/static/js/main.17837a5d.chunk.js"
+    "revision": "e4b489f0ba766955b1ef",
+    "url": "/wordify/static/js/main.b67973a8.chunk.js"
   },
   {
     "revision": "328d119e61f42338bc19",
