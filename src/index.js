@@ -103,12 +103,8 @@ const CUSTOM_STYLEMAP = {
     CODE: {
         fontFamily: '"Fira Code", monospace',
     },
-    BLOCKQUOTE: {
-        borderLeft: '0.25rem solid #eee',
-        color: '#666',
-        fontStyle: 'italic',
-        margin: '1rem 0',
-        padding: '0.5rem 1rem'
+    STRIKETHROUGH: {
+        textDecoration: 'line-through',
     }
 };
 
@@ -129,6 +125,7 @@ const INLINE_STYLES = [
     { label: 'Bold', style: 'BOLD' },
     { label: 'Italic', style: 'ITALIC' },
     { label: 'Underline', style: 'UNDERLINE' },
+    { label: 'Striketrough', style: 'STRIKETHROUGH' },
     { label: 'Monospace', style: 'CODE' },
 ];
 
