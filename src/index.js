@@ -78,8 +78,8 @@ class Wordify extends React.Component {
                 />
                 <div className="Wordify-editor" onClick={this.focus}>
                     <Editor
-                        blockStyleFn={getBlockStyle}
-                        customStyleMap={styleMap}
+                        blockStyleFn={customBlockStyleFn}
+                        customStyleMap={CUSTOM_STYLEMAP}
                         editorState={editorState}
                         handleKeyCommand={this.handleKeyCommand}
                         keyBindingFn={this.mapKeyToEditorCommand}
@@ -93,18 +93,44 @@ class Wordify extends React.Component {
     }
 }
 
-const styleMap = {
-    CODE: {
-        fontFamily: '"Fira Code", monospace',
-    },
-};
-
-function getBlockStyle(block) {
+function customBlockStyleFn(block) {
     switch (block.getType()) {
-        case 'blockquote': return 'Wordify-blockquote';
         default: return null;
     }
 }
+
+const CUSTOM_STYLEMAP = {
+    CODE: {
+        fontFamily: '"Fira Code", monospace',
+    },
+    BLOCKQUOTE: {
+        borderLeft: '0.25rem solid #eee',
+        color: '#666',
+        fontStyle: 'italic',
+        margin: '1rem 0',
+        padding: '0.5rem 1rem'
+    }
+};
+
+const BLOCK_TYPES = [
+    { label: 'H1', style: 'header-one' },
+    { label: 'H2', style: 'header-two' },
+    { label: 'H3', style: 'header-three' },
+    { label: 'H4', style: 'header-four' },
+    { label: 'H5', style: 'header-five' },
+    { label: 'H6', style: 'header-six' },
+    { label: 'Blockquote', style: 'blockquote' },
+    { label: 'UL', style: 'unordered-list-item' },
+    { label: 'OL', style: 'ordered-list-item' },
+    { label: 'Code Block', style: 'code-block' },
+];
+
+const INLINE_STYLES = [
+    { label: 'Bold', style: 'BOLD' },
+    { label: 'Italic', style: 'ITALIC' },
+    { label: 'Underline', style: 'UNDERLINE' },
+    { label: 'Monospace', style: 'CODE' },
+];
 
 class StyleButton extends React.Component {
     constructor() {
@@ -129,19 +155,6 @@ class StyleButton extends React.Component {
     }
 }
 
-const BLOCK_TYPES = [
-    { label: 'H1', style: 'header-one' },
-    { label: 'H2', style: 'header-two' },
-    { label: 'H3', style: 'header-three' },
-    { label: 'H4', style: 'header-four' },
-    { label: 'H5', style: 'header-five' },
-    { label: 'H6', style: 'header-six' },
-    { label: 'Blockquote', style: 'blockquote' },
-    { label: 'UL', style: 'unordered-list-item' },
-    { label: 'OL', style: 'ordered-list-item' },
-    { label: 'Code Block', style: 'code-block' },
-];
-
 const BlockStyleControls = (props) => {
     const { editorState } = props;
     const selection = editorState.getSelection();
@@ -164,13 +177,6 @@ const BlockStyleControls = (props) => {
         </div>
     );
 };
-
-var INLINE_STYLES = [
-    { label: 'Bold', style: 'BOLD' },
-    { label: 'Italic', style: 'ITALIC' },
-    { label: 'Underline', style: 'UNDERLINE' },
-    { label: 'Monospace', style: 'CODE' },
-];
 
 const InlineStyleControls = (props) => {
     const currentStyle = props.editorState.getCurrentInlineStyle();

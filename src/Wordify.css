@@ -3,54 +3,42 @@
 .Wordify-root {
     background: #fff;
     font-family: "Quicksand", sans-serif;
+    font-weight: normal;
     font-size: 1rem;
     padding: 1rem;
 }
 
-.Wordify-editor {
-    border-top: 0.125rem solid #ddd;
+.Wordify-root .Wordify-editor {
     cursor: text;
-    font-size: 1rem;
     margin-top: 0.5rem;
 }
 
-.Wordify-editor .public-DraftEditorPlaceholder-root,
 .Wordify-editor .public-DraftEditor-content {
     margin: 0 -1rem -1rem;
     padding: 1rem;
 }
 
-.Wordify-editor .Wordify-blockquote {
-    border-left: 0.25rem solid #eee;
-    color: #666;
-    font-family: "Quicksand", sans-serif;
-    font-style: italic;
-    margin: 1rem 0;
-    padding: 0.5rem 1rem;
-}
-
 .Wordify-editor .public-DraftStyleDefault-pre {
-    background-color: rgba(0, 0, 0, 0.05);
+    background-color: #eee;
     font-family: "Fira Code", monospace;
-    font-size: 1rem;
     padding: 1rem;
 }
 
-.Wordify-controls {
-    font-family: "Quicksand", sans-serif;
-    font-size: 1rem;
+.Wordify-root .Wordify-controls {
     margin-bottom: 0.25rem;
     user-select: none;
 }
 
-.Wordify-styleButton {
+.Wordify-root .Wordify-controls .Wordify-styleButton {
     color: #999;
+
     cursor: pointer;
     margin-right: 1rem;
     padding: 0.125rem 0;
     display: inline-block;
 }
 
-.Wordify-activeButton {
+.Wordify-root .Wordify-controls .Wordify-activeButton {
     color: #03A9F4;
+    font-weight: bold;
 }
