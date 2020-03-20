@@ -1,25 +1,25 @@
 {
   "files": {
-    "main.css": "/wordify/static/css/main.57ddc2c5.chunk.css",
-    "main.js": "/wordify/static/js/main.450e7740.chunk.js",
-    "main.js.map": "/wordify/static/js/main.450e7740.chunk.js.map",
+    "main.css": "/wordify/static/css/main.6b3ada83.chunk.css",
+    "main.js": "/wordify/static/js/main.02011497.chunk.js",
+    "main.js.map": "/wordify/static/js/main.02011497.chunk.js.map",
     "runtime-main.js": "/wordify/static/js/runtime-main.7bd96377.js",
     "runtime-main.js.map": "/wordify/static/js/runtime-main.7bd96377.js.map",
     "static/css/2.7fe1ef02.chunk.css": "/wordify/static/css/2.7fe1ef02.chunk.css",
-    "static/js/2.1e6509ab.chunk.js": "/wordify/static/js/2.1e6509ab.chunk.js",
-    "static/js/2.1e6509ab.chunk.js.map": "/wordify/static/js/2.1e6509ab.chunk.js.map",
+    "static/js/2.b53ebb68.chunk.js": "/wordify/static/js/2.b53ebb68.chunk.js",
+    "static/js/2.b53ebb68.chunk.js.map": "/wordify/static/js/2.b53ebb68.chunk.js.map",
     "index.html": "/wordify/index.html",
-    "precache-manifest.c8dbfa57890d3511800a7bd96a834dc2.js": "/wordify/precache-manifest.c8dbfa57890d3511800a7bd96a834dc2.js",
+    "precache-manifest.bb40d1024332e1519c90d3b59d4a0ab1.js": "/wordify/precache-manifest.bb40d1024332e1519c90d3b59d4a0ab1.js",
     "service-worker.js": "/wordify/service-worker.js",
     "static/css/2.7fe1ef02.chunk.css.map": "/wordify/static/css/2.7fe1ef02.chunk.css.map",
-    "static/css/main.57ddc2c5.chunk.css.map": "/wordify/static/css/main.57ddc2c5.chunk.css.map",
-    "static/js/2.1e6509ab.chunk.js.LICENSE.txt": "/wordify/static/js/2.1e6509ab.chunk.js.LICENSE.txt"
+    "static/css/main.6b3ada83.chunk.css.map": "/wordify/static/css/main.6b3ada83.chunk.css.map",
+    "static/js/2.b53ebb68.chunk.js.LICENSE.txt": "/wordify/static/js/2.b53ebb68.chunk.js.LICENSE.txt"
   },
   "entrypoints": [
     "static/js/runtime-main.7bd96377.js",
     "static/css/2.7fe1ef02.chunk.css",
-    "static/js/2.1e6509ab.chunk.js",
-    "static/css/main.57ddc2c5.chunk.css",
-    "static/js/main.450e7740.chunk.js"
+    "static/js/2.b53ebb68.chunk.js",
+    "static/css/main.6b3ada83.chunk.css",
+    "static/js/main.02011497.chunk.js"
   ]
 }
