@@ -1,10 +1,11 @@
 @import url('https://fonts.googleapis.com/css2?family=Fira+Code:wght@300;400;500;600;700&family=Quicksand:wght@300;400;500;600;700&display=swap');
 
 .Wordify-root {
-    background: #fff;
+    background: white;
     font-family: "Quicksand", sans-serif;
     font-weight: normal;
     font-size: 1rem;
+    line-height: 1.5rem;
     padding: 1rem;
 }
 
@@ -13,24 +14,13 @@
     margin-top: 0.5rem;
 }
 
-.Wordify-editor .public-DraftEditor-content {
-    margin: 0 -1rem -1rem;
-    padding: 1rem;
-}
-
-.Wordify-editor .public-DraftStyleDefault-pre {
-    background-color: #eee;
-    font-family: "Fira Code", monospace;
-    padding: 1rem;
-}
-
 .Wordify-root .Wordify-controls {
     margin-bottom: 0.25rem;
     user-select: none;
 }
 
-.Wordify-root .Wordify-controls .Wordify-styleButton {
-    color: #999;
+.Wordify-root .Wordify-controls .Wordify-button {
+    color: black;
 
     cursor: pointer;
     margin-right: 1rem;
@@ -38,7 +28,17 @@
     display: inline-block;
 }
 
-.Wordify-root .Wordify-controls .Wordify-activeButton {
+.Wordify-root .Wordify-controls .Wordify-button-active {
     color: #03A9F4;
-    font-weight: bold;
+    font-weight: bolder;
 }
+
+.Wordify-root .Wordify-editor .public-DraftEditor-content {
+    margin: 1rem;
+}
+
+.Wordify-root .Wordify-editor .public-DraftStyleDefault-pre {}
+
+.Wordify-root .Wordify-editor .public-DraftStyleDefault-ul {}
+
+.Wordify-root .Wordify-editor .public-DraftStyleDefault-ol {}

@@ -5,14 +5,14 @@
   "homepage": "http://Aerobird98.github.io/wordify",
   "dependencies": {
     "draft-js": "^0.11.4",
-    "react": "^16.13.0",
-    "react-dom": "^16.13.0",
+    "react": "^16.13.1",
+    "react-dom": "^16.13.1",
     "react-scripts": "3.4.0"
   },
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "deploy": "gh-pages -d build",
+    "deploy": "npm run build && gh-pages -d build",
     "eject": "react-scripts eject"
   },
   "eslintConfig": {

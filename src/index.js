@@ -115,17 +115,15 @@ const BLOCK_TYPES = [
     { label: 'H4', style: 'header-four' },
     { label: 'H5', style: 'header-five' },
     { label: 'H6', style: 'header-six' },
-    { label: 'Blockquote', style: 'blockquote' },
     { label: 'UL', style: 'unordered-list-item' },
     { label: 'OL', style: 'ordered-list-item' },
-    { label: 'Code Block', style: 'code-block' },
 ];
 
 const INLINE_STYLES = [
     { label: 'Bold', style: 'BOLD' },
     { label: 'Italic', style: 'ITALIC' },
     { label: 'Underline', style: 'UNDERLINE' },
-    { label: 'Striketrough', style: 'STRIKETHROUGH' },
+    { label: 'Strikethrough', style: 'STRIKETHROUGH' },
     { label: 'Monospace', style: 'CODE' },
 ];
 
@@ -139,9 +137,9 @@ class StyleButton extends React.Component {
     }
 
     render() {
-        let className = 'Wordify-styleButton';
+        let className = 'Wordify-button';
         if (this.props.active) {
-            className += ' Wordify-activeButton';
+            className += ' Wordify-button-active';
         }
 
         return (
@@ -197,5 +195,4 @@ ReactDOM.render(<Wordify />, document.getElementById('root'));
 
 // If you want your app to work offline and load faster, you can change
 // unregister() to register() below. Note this comes with some pitfalls.
-// Learn more about service workers: https://bit.ly/CRA-PWA
 serviceWorker.unregister();
