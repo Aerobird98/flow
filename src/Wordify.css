@@ -1,44 +1,45 @@
 @import url('https://fonts.googleapis.com/css2?family=Fira+Code:wght@300;400;500;600;700&family=Quicksand:wght@300;400;500;600;700&display=swap');
 
-.Wordify-root {
-    background: white;
-    font-family: "Quicksand", sans-serif;
-    font-weight: normal;
-    font-size: 1rem;
-    line-height: 1.5rem;
-    padding: 1rem;
+@media print {
+    .Wordify-root .Wordify-controls {
+        display: none;
+    } 
 }
 
-.Wordify-root .Wordify-editor {
-    cursor: text;
-    margin-top: 0.5rem;
+@media screen {
+    .Wordify-root {
+        background: white;
+        font-family: "Quicksand", sans-serif;
+        font-weight: normal;
+        font-size: 1rem;
+        line-height: 1.5rem;
+        padding: 1rem;
+    }
+    
+    .Wordify-root .Wordify-editor {
+        cursor: text;
+        margin: 1rem;
+    }
+    
+    .Wordify-root .Wordify-controls {
+        margin-bottom: 0.25rem;
+        user-select: none;
+    }
+    
+    .Wordify-root .Wordify-controls .Wordify-button {
+        cursor: pointer;
+        margin-right: 1rem;
+        padding: 0.125rem 0;
+        display: inline-block;
+    }
+    
+    .Wordify-root .Wordify-controls .Wordify-button-active {
+        color: #81c91e;
+        font-weight: bolder;
+    }
+
+    .Wordify-root .Wordify-controls .Wordify-button-disabled {
+        color: black;
+        font-weight: bold;
+    }
 }
-
-.Wordify-root .Wordify-controls {
-    margin-bottom: 0.25rem;
-    user-select: none;
-}
-
-.Wordify-root .Wordify-controls .Wordify-button {
-    color: black;
-
-    cursor: pointer;
-    margin-right: 1rem;
-    padding: 0.125rem 0;
-    display: inline-block;
-}
-
-.Wordify-root .Wordify-controls .Wordify-button-active {
-    color: #03A9F4;
-    font-weight: bolder;
-}
-
-.Wordify-root .Wordify-editor .public-DraftEditor-content {
-    margin: 1rem;
-}
-
-.Wordify-root .Wordify-editor .public-DraftStyleDefault-pre {}
-
-.Wordify-root .Wordify-editor .public-DraftStyleDefault-ul {}
-
-.Wordify-root .Wordify-editor .public-DraftStyleDefault-ol {}

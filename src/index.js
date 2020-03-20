@@ -3,8 +3,8 @@ import ReactDOM from 'react-dom';
 import { Editor, EditorState, RichUtils, getDefaultKeyBinding } from 'draft-js';
 import * as serviceWorker from './serviceWorker';
 
-import './index.css';
 import '../node_modules/draft-js/dist/Draft.css';
+import './index.css';
 import './Wordify.css';
 
 class Wordify extends React.Component {
@@ -79,7 +79,7 @@ class Wordify extends React.Component {
                 <div className="Wordify-editor" onClick={this.focus}>
                     <Editor
                         blockStyleFn={customBlockStyleFn}
-                        customStyleMap={CUSTOM_STYLEMAP}
+                        customStyleMap={INLINE_STYLEMAP}
                         editorState={editorState}
                         handleKeyCommand={this.handleKeyCommand}
                         keyBindingFn={this.mapKeyToEditorCommand}
@@ -99,7 +99,7 @@ function customBlockStyleFn(block) {
     }
 }
 
-const CUSTOM_STYLEMAP = {
+const INLINE_STYLEMAP = {
     CODE: {
         fontFamily: '"Fira Code", monospace',
     },
@@ -140,6 +140,8 @@ class StyleButton extends React.Component {
         let className = 'Wordify-button';
         if (this.props.active) {
             className += ' Wordify-button-active';
+        } else {
+            className += ' Wordify-button-disabled';
         }
 
         return (

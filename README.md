@@ -1,6 +1,6 @@
 # wordify
 
-A compact web based rich-text editor to produce documents in "standardized" format. This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+A compact web based rich-text editor based on [Draft-js](https://draftjs.org/) to produce documents in "standardized" format.
 
 ## Available Scripts
 
@@ -24,14 +24,4 @@ Your app is ready to be deployed!
 
 ### `npm run deploy`
 
-Builds the app for production to the `build` folder, just like `npm run build`, then deployes it to [Github Pages](https://pages.github.com/).
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+After `npm run build` you can deploy your build to [Github Pages](https://pages.github.com/) with this command.
