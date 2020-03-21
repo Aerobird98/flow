@@ -1,6 +1,6 @@
 # wordify
 
-A compact web based rich-text editor based on [Draft-js](https://draftjs.org/) to produce documents in "standardized" format.
+A compact web based rich-text editor based on [Slate-js](https://docs.slatejs.org/) to produce documents in "standardized" format.
 
 ## Available Scripts
 

@@ -1,14 +1,70 @@
+@import url('https://fonts.googleapis.com/css2?family=Fira+Code:wght@300;400;500;600;700&family=Quicksand:wght@300;400;500;600;700&display=swap');
+
 @media print {
-  html, body, #root {
-    overflow: hidden;
+  @page {
+    size: A4 !important;
+    margin: 25mm !important;
+  }
+
+  html,
+  body {
+    overflow: hidden !important;
+  }
+
+  body {
+    margin: 0 !important;
+
+    font-family: 'Times New Roman', Times, serif !important;
+    font-size: 12pt !important;
+    line-height: 1.5em !important;
+  }
+
+  .tools {
+    display: none;
   }
 }
 
-@media screen {
-  html, body, #root {
-    margin: 0;
-    padding: 0;
-    width: 100vw;
-    overflow-x: hidden;
+@media all {
+
+  html,
+  body {
+    background: white;
   }
+
+  body {
+    font-family: 'Quicksand', sans-serif;
+    text-align: justify;
+    color: black;
+    font-size: 1rem;
+    line-height: 1.5rem;
+    margin: 1rem;
+  }
+
+  code {
+    font-family: 'Fira Code', monospace;
+    background-color: whitesmoke;
+  }
+
+  div.tools {
+    margin-bottom: 0.25rem;
+    user-select: none;
+  }
+
+  span.btn {
+    cursor: pointer;
+    margin-right: 1rem;
+    padding: 0.125rem 0;
+    display: inline-block;
+  }
+
+  span.btn.active {
+    color: #81c91e;
+    font-weight: bolder;
+  }
+
+  span.btn.disabled {
+    color: black;
+    font-weight: bold;
+  }
+
 }

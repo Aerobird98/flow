@@ -1,200 +1,242 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import { Editor, EditorState, RichUtils, getDefaultKeyBinding } from 'draft-js';
-import * as serviceWorker from './serviceWorker';
+import React, { useMemo, useState, useCallback } from "react";
+import ReactDOM from 'react-dom'
 
-import '../node_modules/draft-js/dist/Draft.css';
-import './index.css';
-import './Wordify.css';
+import { createEditor, Transforms, Editor } from 'slate'
+import { Slate, useSlate, Editable, withReact } from 'slate-react'
+import { withHistory } from 'slate-history'
 
-class Wordify extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = { editorState: EditorState.createEmpty() };
+import * as serviceWorker from './serviceWorker'
 
-        this.focus = () => this.refs.editor.focus();
-        this.onChange = (editorState) => this.setState({ editorState });
+import './index.css'
 
-        this.handleKeyCommand = this._handleKeyCommand.bind(this);
-        this.mapKeyToEditorCommand = this._mapKeyToEditorCommand.bind(this);
-        this.toggleBlockType = this._toggleBlockType.bind(this);
-        this.toggleInlineStyle = this._toggleInlineStyle.bind(this);
+const Leaf = ({ attributes, children, leaf }) => {
+    if (leaf.bold) {
+        children = <strong>{children}</strong>
     }
 
-    _handleKeyCommand(command, editorState) {
-        const newState = RichUtils.handleKeyCommand(editorState, command);
-        if (newState) {
-            this.onChange(newState);
-            return true;
-        }
-        return false;
+    if (leaf.code) {
+        children = <code>{children}</code>
     }
 
-    _mapKeyToEditorCommand(e) {
-        if (e.keyCode === 9 /* TAB */) {
-            const newEditorState = RichUtils.onTab(
-                e,
-                this.state.editorState,
-                4, /* maxDepth */
-            );
-            if (newEditorState !== this.state.editorState) {
-                this.onChange(newEditorState);
-            }
-            return;
-        }
-        return getDefaultKeyBinding(e);
+    if (leaf.italic) {
+        children = <em>{children}</em>
     }
 
-    _toggleBlockType(blockType) {
-        this.onChange(
-            RichUtils.toggleBlockType(
-                this.state.editorState,
-                blockType
-            )
-        );
+    if (leaf.underline) {
+        children = <u>{children}</u>
     }
 
-    _toggleInlineStyle(inlineStyle) {
-        this.onChange(
-            RichUtils.toggleInlineStyle(
-                this.state.editorState,
-                inlineStyle
-            )
-        );
+    if (leaf.strike) {
+        children = <s>{children}</s>
     }
 
-    render() {
-        const { editorState } = this.state;
+    return <span {...attributes}>{children}</span>
+}
 
-        return (
-            <div className="Wordify-root">
-                <BlockStyleControls
-                    editorState={editorState}
-                    onToggle={this.toggleBlockType}
-                />
-                <InlineStyleControls
-                    editorState={editorState}
-                    onToggle={this.toggleInlineStyle}
-                />
-                <div className="Wordify-editor" onClick={this.focus}>
-                    <Editor
-                        blockStyleFn={customBlockStyleFn}
-                        customStyleMap={INLINE_STYLEMAP}
-                        editorState={editorState}
-                        handleKeyCommand={this.handleKeyCommand}
-                        keyBindingFn={this.mapKeyToEditorCommand}
-                        onChange={this.onChange}
-                        ref="editor"
-                        spellCheck={true}
-                    />
-                </div>
-            </div>
-        );
+const Element = ({ attributes, children, element }) => {
+    switch (element.type) {
+        case 'heading-one':
+            return <h1 {...attributes}>{children}</h1>
+        case 'heading-two':
+            return <h2 {...attributes}>{children}</h2>
+        case 'heading-three':
+            return <h3 {...attributes}>{children}</h3>
+        case 'heading-four':
+            return <h4 {...attributes}>{children}</h4>
+        case 'heading-five':
+            return <h5 {...attributes}>{children}</h5>
+        case 'heading-six':
+            return <h6 {...attributes}>{children}</h6>
+        case 'list-item':
+            return <li {...attributes}>{children}</li>
+        case 'unordered-list':
+            return <ul {...attributes}>{children}</ul>
+        case 'ordered-list':
+            return <ol {...attributes}>{children}</ol>
+        case 'block-quote':
+            return <blockquote {...attributes}>{children}</blockquote>
+        default:
+            return <p {...attributes}>{children}</p>
     }
 }
 
-function customBlockStyleFn(block) {
-    switch (block.getType()) {
-        default: return null;
-    }
-}
-
-const INLINE_STYLEMAP = {
-    CODE: {
-        fontFamily: '"Fira Code", monospace',
+const WordifyEditor = {
+    isMarkActive(editor, format) {
+        const marks = Editor.marks(editor)
+        return marks ? marks[format] === true : false
     },
-    STRIKETHROUGH: {
-        textDecoration: 'line-through',
-    }
-};
 
-const BLOCK_TYPES = [
-    { label: 'H1', style: 'header-one' },
-    { label: 'H2', style: 'header-two' },
-    { label: 'H3', style: 'header-three' },
-    { label: 'H4', style: 'header-four' },
-    { label: 'H5', style: 'header-five' },
-    { label: 'H6', style: 'header-six' },
-    { label: 'UL', style: 'unordered-list-item' },
-    { label: 'OL', style: 'ordered-list-item' },
-];
+    isBlockActive(editor, format) {
+        const [match] = Editor.nodes(editor, {
+            match: n => n.type === format,
+        })
 
-const INLINE_STYLES = [
-    { label: 'Bold', style: 'BOLD' },
-    { label: 'Italic', style: 'ITALIC' },
-    { label: 'Underline', style: 'UNDERLINE' },
-    { label: 'Strikethrough', style: 'STRIKETHROUGH' },
-    { label: 'Monospace', style: 'CODE' },
-];
+        return !!match
+    },
 
-class StyleButton extends React.Component {
-    constructor() {
-        super();
-        this.onToggle = (e) => {
-            e.preventDefault();
-            this.props.onToggle(this.props.style);
-        };
-    }
+    toggleMark(editor, format) {
+        const isActive = WordifyEditor.isMarkActive(editor, format)
 
-    render() {
-        let className = 'Wordify-button';
-        if (this.props.active) {
-            className += ' Wordify-button-active';
+        if (isActive) {
+            Editor.removeMark(editor, format)
         } else {
-            className += ' Wordify-button-disabled';
+            Editor.addMark(editor, format, true)
         }
+    },
 
-        return (
-            <span className={className} onMouseDown={this.onToggle}>
-                {this.props.label}
-            </span>
-        );
-    }
+    toggleBlock(editor, format) {
+        const isActive = WordifyEditor.isBlockActive(editor, format)
+        Transforms.setNodes(
+            editor,
+            { type: isActive ? null : format },
+            { match: n => Editor.isBlock(editor, n) }
+        )
+    },
 }
 
-const BlockStyleControls = (props) => {
-    const { editorState } = props;
-    const selection = editorState.getSelection();
-    const blockType = editorState
-        .getCurrentContent()
-        .getBlockForKey(selection.getStartKey())
-        .getType();
+const Wordify = () => {
+    const editor = useMemo(() => withHistory(withReact(createEditor())), [])
+    const [value, setValue] = useState(
+        JSON.parse(localStorage.getItem('content'))
+        ||
+        [
+            {
+                type: 'paragraph',
+                children: [
+                    {
+                        text: 'A line of text in a paragraph.'
+                    },
+                ]
+            }
+        ])
+
+    const renderLeaf = useCallback(props => {
+        return <Leaf {...props} />
+    }, [])
+
+    const renderElement = useCallback(props => {
+        return <Element {...props} />
+    }, [])
 
     return (
-        <div className="Wordify-controls">
-            {BLOCK_TYPES.map((type) =>
-                <StyleButton
-                    key={type.label}
-                    active={type.style === blockType}
-                    label={type.label}
-                    onToggle={props.onToggle}
-                    style={type.style}
-                />
-            )}
-        </div>
-    );
-};
+        <Slate
+            editor={editor}
+            value={value}
+            onChange={value => {
+                setValue(value)
+                const content = JSON.stringify(value)
+                localStorage.setItem('content', content)
+            }}
+            autoFocus
+        >
+            <div className='tools'>
+                <BlockButton format='heading-one' label='H1' />
+                <BlockButton format='heading-two' label='H2' />
+                <BlockButton format='heading-three' label='H3' />
+                <BlockButton format='heading-four' label='H4' />
+                <BlockButton format='heading-five' label='H5' />
+                <BlockButton format='heading-six' label='H6' />
+            </div>
+            <div className='tools'>
+                <MarkButton format='bold' label='Bold' />
+                <MarkButton format='italic' label='Italic' />
+                <MarkButton format='underline' label='Underline' />
+                <MarkButton format='strike' label='Strikethrough' />
+                <MarkButton format='code' label='Code' />
+            </div>
+            <Editable
+                renderLeaf={renderLeaf}
+                renderElement={renderElement}
+                onKeyDown={event => {
+                    if (!event.ctrlKey) {
+                        return
+                    }
 
-const InlineStyleControls = (props) => {
-    const currentStyle = props.editorState.getCurrentInlineStyle();
+                    switch (event.key) {
+                        case '1': {
+                            event.preventDefault()
+                            WordifyEditor.toggleBlock(editor, 'heading-one')
+                            break
+                        }
+                        case '2': {
+                            event.preventDefault()
+                            WordifyEditor.toggleBlock(editor, 'heading-two')
+                            break
+                        }
+                        case '3': {
+                            event.preventDefault()
+                            WordifyEditor.toggleBlock(editor, 'heading-three')
+                            break
+                        }
+                        case '4': {
+                            event.preventDefault()
+                            WordifyEditor.toggleBlock(editor, 'heading-four')
+                            break
+                        }
+                        case '5': {
+                            event.preventDefault()
+                            WordifyEditor.toggleBlock(editor, 'heading-five')
+                            break
+                        }
+                        case '6': {
+                            event.preventDefault()
+                            WordifyEditor.toggleBlock(editor, 'heading-six')
+                            break
+                        }
+                        case 'b': {
+                            event.preventDefault()
+                            WordifyEditor.toggleMark(editor, 'bold')
+                            break
+                        }
+                        case 'i': {
+                            event.preventDefault()
+                            WordifyEditor.toggleMark(editor, 'italic')
+                            break
+                        }
+                        case '`': {
+                            event.preventDefault()
+                            WordifyEditor.toggleMark(editor, 'code')
+                            break
+                        }
+                        default:
+                            break
+                    }
+                }}
+            />
+        </Slate>
+    )
+}
 
+const BlockButton = ({ format, label }) => {
+    const editor = useSlate()
     return (
-        <div className="Wordify-controls">
-            {INLINE_STYLES.map((type) =>
-                <StyleButton
-                    key={type.label}
-                    active={currentStyle.has(type.style)}
-                    label={type.label}
-                    onToggle={props.onToggle}
-                    style={type.style}
-                />
-            )}
-        </div>
-    );
-};
+        <span className={'btn' + (WordifyEditor.isBlockActive(editor, format) ? ' active' : ' disabled')}
+            onMouseDown={event => {
+                event.preventDefault()
+                WordifyEditor.toggleBlock(editor, format)
+            }}
+        >
+            {label}
+        </span>
+    )
+}
 
-ReactDOM.render(<Wordify />, document.getElementById('root'));
+const MarkButton = ({ format, label }) => {
+    const editor = useSlate()
+    return (
+        <span className={'btn' + (WordifyEditor.isMarkActive(editor, format) ? ' active' : ' disabled')}
+            onMouseDown={event => {
+                event.preventDefault()
+                WordifyEditor.toggleMark(editor, format)
+            }}
+        >
+            {label}
+        </span>
+    )
+}
 
-// If you want your app to work offline and load faster, you can change
+ReactDOM.render(<Wordify />, document.getElementById('wordify'))
+
+// If you want your editor to work offline and load faster, you can change
 // unregister() to register() below. Note this comes with some pitfalls.
-serviceWorker.unregister();
+serviceWorker.unregister()
