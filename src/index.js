@@ -9,6 +9,11 @@ import * as serviceWorker from './serviceWorker'
 
 import './index.css'
 
+const LIST_TYPES = [
+    'ordered-list',
+    'unordered-list'
+]
+
 const Leaf = ({ attributes, children, leaf }) => {
     if (leaf.bold) {
         children = <strong>{children}</strong>
@@ -86,29 +91,26 @@ const FlowEditor = {
 
     toggleBlock(editor, format) {
         const isActive = FlowEditor.isBlockActive(editor, format)
-        Transforms.setNodes(
-            editor,
+
+        Transforms.setNodes(editor,
             { type: isActive ? null : format },
             { match: n => Editor.isBlock(editor, n) }
         )
     },
 }
 
+const defaultValue = {
+    type: 'paragraph',
+    children: [
+        {
+            text: 'A line of text in a paragraph.'
+        },
+    ]
+}
+
 const Flow = () => {
     const editor = useMemo(() => withHistory(withReact(createEditor())), [])
-    const [value, setValue] = useState(
-        JSON.parse(localStorage.getItem('content'))
-        ||
-        [
-            {
-                type: 'paragraph',
-                children: [
-                    {
-                        text: 'A line of text in a paragraph.'
-                    },
-                ]
-            }
-        ])
+    const [value, setValue] = useState(JSON.parse(localStorage.getItem('content')) || [defaultValue])
 
     const renderLeaf = useCallback(props => {
         return <Leaf {...props} />
@@ -127,7 +129,6 @@ const Flow = () => {
                 const content = JSON.stringify(value)
                 localStorage.setItem('content', content)
             }}
-            autoFocus
         >
             <div className='tools'>
                 <BlockButton format='heading-one' label='H1' />
@@ -148,6 +149,7 @@ const Flow = () => {
             <Editable
                 renderLeaf={renderLeaf}
                 renderElement={renderElement}
+                placeholder="Compose something epic..."
                 onKeyDown={event => {
                     if (!event.ctrlKey) {
                         return
@@ -178,6 +180,7 @@ const Flow = () => {
                             break
                     }
                 }}
+                autoFocus
             />
         </Slate>
     )
