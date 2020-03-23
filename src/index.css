@@ -1,96 +1,69 @@
-@import url('https://fonts.googleapis.com/css2?family=Fira+Code:wght@300;400;500;600;700&family=Quicksand:wght@300;400;500;600;700&display=swap');
-
-/*
-  flow-brand-colors:
-
-  dark-blue rgb(0, 92, 197)
-  light-blue rgb(33, 136, 255)
-  light-washed-white rgb(219, 237, 255)
-  dark-washed-white rgb(200, 225, 255)
-  dark-blue-grey rgb(27, 31, 35)
-*/
+@page {
+  size: A4 portrait;
+  marks: none;
+  bleed: none;
+  margin: 25mm;
+}
 
 @media print {
 
   html,
   body {
     overflow: hidden !important;
-  }
-
-  html {
-    background: white !important;
-  }
-
-  body {
     margin: 0 !important;
-
-    font-family: 'Times New Roman', Times, serif !important;
+    padding: 0 !important;
+    text-align: justify !important;
     font-size: 12pt !important;
     line-height: 1.5em !important;
-    color: black !important;
-  }
-
-  code {
-    background-color: whitesmoke !important;
   }
 
   blockquote {
-    color: gray !important;
+    font-style: italic !important;
+    padding-left: 1em !important;
+    border-left: 0.25em solid !important;
+    margin-block-start: 1em !important;
+    margin-block-end: 1em !important;
+    margin-inline-start: 0em !important;
+    margin-inline-end: 0em !important;
   }
 
-  .tools {
-    display: none;
+  div.tools,
+  span.btn {
+    display: none !important;
   }
 }
 
-@media all {
+@media screen {
 
-  html {
-    background: rgb(219, 237, 255);
-  }
-
+  html,
   body {
-    font-family: 'Quicksand', sans-serif;
-    text-align: justify;
-    color: rgb(27, 31, 35);
-    font-size: 1em;
-    line-height: 1.5em;
-    margin: 1em;
-  }
-
-  code {
-    font-family: 'Fira Code', monospace;
-    background-color: rgb(200, 225, 255);
+    margin: 1em !important;
+    padding: 0em !important;
+    text-align: justify !important;
+    font-size: 1em !important;
+    line-height: 1.5em !important;
   }
 
   blockquote {
-    font-style: italic;
-    padding: 0.5em;
-    margin: 0;
-    border-left: 0.25em solid;
-    color: rgb(0, 92, 197);
+    font-style: italic !important;
+    padding-left: 1em !important;
+    border-left: 0.25em solid !important;
+    margin-block-start: 1em !important;
+    margin-block-end: 1em !important;
+    margin-inline-start: 0em !important;
+    margin-inline-end: 0em !important;
   }
 
   div.tools {
-    margin-bottom: 0.25em;
-    user-select: none;
+    margin-bottom: 0.25em !important;
+    user-select: none !important;
   }
 
   span.btn {
-    cursor: pointer;
-    margin-right: 1em;
-    padding: 0.125em 0;
-    display: inline-block;
+    cursor: pointer !important;
+    margin-right: 1em !important;
+    padding: 0.125em 0em !important;
+    display: inline-block !important;
+    font-weight: bolder !important;
   }
-
-  span.btn.active {
-    color: rgb(0, 92, 197);
-    font-weight: bolder;
-  }
-
-  span.btn.disabled {
-    color: rgb(27, 31, 35);
-    font-weight: bold;
-  }
-
 }

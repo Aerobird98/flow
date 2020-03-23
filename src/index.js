@@ -5,6 +5,9 @@ import { createEditor, Transforms, Editor } from 'slate'
 import { Slate, useSlate, Editable, withReact } from 'slate-react'
 import { withHistory } from 'slate-history'
 
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faBold, faItalic, faUnderline, faStrikethrough, faCode, faSubscript, faSuperscript, faHeading, faQuoteLeft, faListOl, faListUl, faLightbulb } from '@fortawesome/free-solid-svg-icons'
+
 import * as serviceWorker from './serviceWorker'
 
 import './index.css'
@@ -30,6 +33,14 @@ const Leaf = ({ attributes, children, leaf }) => {
         children = <s>{children}</s>
     }
 
+    if (leaf.subscript) {
+        children = <sub>{children}</sub>
+    }
+
+    if (leaf.superscript) {
+        children = <sup>{children}</sup>
+    }
+
     return <span {...attributes}>{children}</span>
 }
 
@@ -50,9 +61,9 @@ const Element = ({ attributes, children, element }) => {
         case 'block-quote':
             return <blockquote {...attributes}>{children}</blockquote>
         case 'list-item':
-            return <li {...attributes}>{children}</li>
+            return <li {...attributes}><span className='fa-li'><FontAwesomeIcon icon={faLightbulb} /></span>{children}</li>
         case 'unordered-list':
-            return <ul {...attributes}>{children}</ul>
+            return <ul className='fa-ul' {...attributes}>{children}</ul>
         case 'ordered-list':
             return <ol {...attributes}>{children}</ol>
         default:
@@ -143,22 +154,17 @@ const Flow = () => {
             }}
         >
             <div className='tools'>
-                <BlockButton format='heading-one' label='H1' />
-                <BlockButton format='heading-two' label='H2' />
-                <BlockButton format='heading-three' label='H3' />
-                <BlockButton format='heading-four' label='H4' />
-                <BlockButton format='heading-five' label='H5' />
-                <BlockButton format='heading-six' label='H6' />
-                <BlockButton format='block-quote' label='Blockquote' />
-                <BlockButton format='ordered-list' label='OL' />
-                <BlockButton format='unordered-list' label='UL' />
-            </div>
-            <div className='tools'>
-                <MarkButton format='bold' label='Bold' />
-                <MarkButton format='italic' label='Italic' />
-                <MarkButton format='underline' label='Underline' />
-                <MarkButton format='strike' label='Strikethrough' />
-                <MarkButton format='code' label='Code' />
+                <MarkButton format='bold' icon={faBold} />
+                <MarkButton format='italic' icon={faItalic} />
+                <MarkButton format='underline' icon={faUnderline} />
+                <MarkButton format='strike' icon={faStrikethrough} />
+                <MarkButton format='code' icon={faCode} />
+                <MarkButton format='subscript' icon={faSubscript} />
+                <MarkButton format='superscript' icon={faSuperscript} />
+                <BlockButton format='heading-one' icon={faHeading} />
+                <BlockButton format='block-quote' icon={faQuoteLeft} />
+                <BlockButton format='unordered-list' icon={faListUl} />
+                <BlockButton format='ordered-list' icon={faListOl} />
             </div>
             <Editable
                 renderLeaf={renderLeaf}
@@ -194,13 +200,12 @@ const Flow = () => {
                             break
                     }
                 }}
-                autoFocus
             />
         </Slate>
     )
 }
 
-const BlockButton = ({ format, label }) => {
+const BlockButton = ({ format, icon }) => {
     const editor = useSlate()
     return (
         <span className={'btn' + (FlowEditor.isBlockActive(editor, format) ? ' active' : ' disabled')}
@@ -209,12 +214,12 @@ const BlockButton = ({ format, label }) => {
                 FlowEditor.toggleBlock(editor, format)
             }}
         >
-            {label}
+            <FontAwesomeIcon icon={icon} fixedWidth />
         </span>
     )
 }
 
-const MarkButton = ({ format, label }) => {
+const MarkButton = ({ format, icon }) => {
     const editor = useSlate()
     return (
         <span className={'btn' + (FlowEditor.isMarkActive(editor, format) ? ' active' : ' disabled')}
@@ -223,7 +228,7 @@ const MarkButton = ({ format, label }) => {
                 FlowEditor.toggleMark(editor, format)
             }}
         >
-            {label}
+            <FontAwesomeIcon icon={icon} fixedWidth />
         </span>
     )
 }
