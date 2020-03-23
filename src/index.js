@@ -60,7 +60,7 @@ const Element = ({ attributes, children, element }) => {
     }
 }
 
-const WordifyEditor = {
+const FlowEditor = {
     isMarkActive(editor, format) {
         const marks = Editor.marks(editor)
         return marks ? marks[format] === true : false
@@ -75,7 +75,7 @@ const WordifyEditor = {
     },
 
     toggleMark(editor, format) {
-        const isActive = WordifyEditor.isMarkActive(editor, format)
+        const isActive = FlowEditor.isMarkActive(editor, format)
 
         if (isActive) {
             Editor.removeMark(editor, format)
@@ -85,7 +85,7 @@ const WordifyEditor = {
     },
 
     toggleBlock(editor, format) {
-        const isActive = WordifyEditor.isBlockActive(editor, format)
+        const isActive = FlowEditor.isBlockActive(editor, format)
         Transforms.setNodes(
             editor,
             { type: isActive ? null : format },
@@ -94,7 +94,7 @@ const WordifyEditor = {
     },
 }
 
-const Wordify = () => {
+const Flow = () => {
     const editor = useMemo(() => withHistory(withReact(createEditor())), [])
     const [value, setValue] = useState(
         JSON.parse(localStorage.getItem('content'))
@@ -154,49 +154,24 @@ const Wordify = () => {
                     }
 
                     switch (event.key) {
-                        case '1': {
-                            event.preventDefault()
-                            WordifyEditor.toggleBlock(editor, 'heading-one')
-                            break
-                        }
-                        case '2': {
-                            event.preventDefault()
-                            WordifyEditor.toggleBlock(editor, 'heading-two')
-                            break
-                        }
-                        case '3': {
-                            event.preventDefault()
-                            WordifyEditor.toggleBlock(editor, 'heading-three')
-                            break
-                        }
-                        case '4': {
-                            event.preventDefault()
-                            WordifyEditor.toggleBlock(editor, 'heading-four')
-                            break
-                        }
-                        case '5': {
-                            event.preventDefault()
-                            WordifyEditor.toggleBlock(editor, 'heading-five')
-                            break
-                        }
-                        case '6': {
-                            event.preventDefault()
-                            WordifyEditor.toggleBlock(editor, 'heading-six')
-                            break
-                        }
                         case 'b': {
                             event.preventDefault()
-                            WordifyEditor.toggleMark(editor, 'bold')
+                            FlowEditor.toggleMark(editor, 'bold')
                             break
                         }
                         case 'i': {
                             event.preventDefault()
-                            WordifyEditor.toggleMark(editor, 'italic')
+                            FlowEditor.toggleMark(editor, 'italic')
+                            break
+                        }
+                        case 'u': {
+                            event.preventDefault()
+                            FlowEditor.toggleMark(editor, 'underline')
                             break
                         }
                         case '`': {
                             event.preventDefault()
-                            WordifyEditor.toggleMark(editor, 'code')
+                            FlowEditor.toggleMark(editor, 'code')
                             break
                         }
                         default:
@@ -211,10 +186,10 @@ const Wordify = () => {
 const BlockButton = ({ format, label }) => {
     const editor = useSlate()
     return (
-        <span className={'btn' + (WordifyEditor.isBlockActive(editor, format) ? ' active' : ' disabled')}
+        <span className={'btn' + (FlowEditor.isBlockActive(editor, format) ? ' active' : ' disabled')}
             onMouseDown={event => {
                 event.preventDefault()
-                WordifyEditor.toggleBlock(editor, format)
+                FlowEditor.toggleBlock(editor, format)
             }}
         >
             {label}
@@ -225,10 +200,10 @@ const BlockButton = ({ format, label }) => {
 const MarkButton = ({ format, label }) => {
     const editor = useSlate()
     return (
-        <span className={'btn' + (WordifyEditor.isMarkActive(editor, format) ? ' active' : ' disabled')}
+        <span className={'btn' + (FlowEditor.isMarkActive(editor, format) ? ' active' : ' disabled')}
             onMouseDown={event => {
                 event.preventDefault()
-                WordifyEditor.toggleMark(editor, format)
+                FlowEditor.toggleMark(editor, format)
             }}
         >
             {label}
@@ -236,7 +211,7 @@ const MarkButton = ({ format, label }) => {
     )
 }
 
-ReactDOM.render(<Wordify />, document.getElementById('wordify'))
+ReactDOM.render(<Flow />, document.getElementById('editor'))
 
 // If you want your editor to work offline and load faster, you can change
 // unregister() to register() below. Note this comes with some pitfalls.

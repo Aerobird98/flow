@@ -1,6 +1,6 @@
-# wordify
+# flow
 
-A compact web based rich-text editor based on [Slate-js](https://docs.slatejs.org/) to produce documents in "standardized" format.
+A compact web based rich-text editor using on [Slate-js](https://docs.slatejs.org/) to produce documents in "standardized" format.
 
 ## Available Scripts
 
