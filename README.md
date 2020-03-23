@@ -1,6 +1,6 @@
 # flow
 
-A compact web based rich-text editor using on [Slate-js](https://docs.slatejs.org/) to produce documents in "standardized" format.
+A compact web based rich-text editor using [Slate-js](https://docs.slatejs.org/) to produce documents in "standardized" format.
 
 ## Available Scripts
 
@@ -25,3 +25,8 @@ Your app is ready to be deployed!
 ### `npm run deploy`
 
 After `npm run build` you can deploy your build to [Github Pages](https://pages.github.com/) with this command.
+
+### `npm run release`
+
+Builds the app for production to the `build` folder, just like `npm run build`.<br />
+Then deploys it to [Github Pages](https://pages.github.com/).

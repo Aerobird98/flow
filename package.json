@@ -1,8 +1,8 @@
 {
   "name": "flow",
-  "version": "0.1.0",
+  "version": "0.1.5",
   "private": true,
-  "homepage": "http://Aerobird98.github.io/wordify",
+  "homepage": "http://Aerobird98.github.io/flow",
   "dependencies": {
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
@@ -14,7 +14,8 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "deploy": "gh-pages -d build"
+    "deploy": "gh-pages -d build",
+    "release": "npm run build && npm run deploy"
   },
   "eslintConfig": {
     "extends": "react-app"
