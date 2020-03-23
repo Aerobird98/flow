@@ -47,14 +47,14 @@ const Element = ({ attributes, children, element }) => {
             return <h5 {...attributes}>{children}</h5>
         case 'heading-six':
             return <h6 {...attributes}>{children}</h6>
+        case 'block-quote':
+            return <blockquote {...attributes}>{children}</blockquote>
         case 'list-item':
             return <li {...attributes}>{children}</li>
         case 'unordered-list':
             return <ul {...attributes}>{children}</ul>
         case 'ordered-list':
             return <ol {...attributes}>{children}</ol>
-        case 'block-quote':
-            return <blockquote {...attributes}>{children}</blockquote>
         default:
             return <p {...attributes}>{children}</p>
     }
@@ -136,6 +136,7 @@ const Wordify = () => {
                 <BlockButton format='heading-four' label='H4' />
                 <BlockButton format='heading-five' label='H5' />
                 <BlockButton format='heading-six' label='H6' />
+                <BlockButton format='block-quote' label='Blockquote' />
             </div>
             <div className='tools'>
                 <MarkButton format='bold' label='Bold' />
