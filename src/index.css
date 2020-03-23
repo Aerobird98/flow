@@ -1,10 +1,24 @@
 @import url('https://fonts.googleapis.com/css2?family=Fira+Code:wght@300;400;500;600;700&family=Quicksand:wght@300;400;500;600;700&display=swap');
 
+/*
+  flow-brand-colors:
+
+  dark-blue rgb(0, 92, 197)
+  light-blue rgb(33, 136, 255)
+  light-washed-white rgb(219, 237, 255)
+  dark-washed-white rgb(200, 225, 255)
+  dark-blue-grey rgb(27, 31, 35)
+*/
+
 @media print {
 
   html,
   body {
     overflow: hidden !important;
+  }
+
+  html {
+    background: white !important;
   }
 
   body {
@@ -13,6 +27,15 @@
     font-family: 'Times New Roman', Times, serif !important;
     font-size: 12pt !important;
     line-height: 1.5em !important;
+    color: black !important;
+  }
+
+  code {
+    background-color: whitesmoke !important;
+  }
+
+  blockquote {
+    color: gray !important;
   }
 
   .tools {
@@ -22,15 +45,14 @@
 
 @media all {
 
-  html,
-  body {
-    background: white;
+  html {
+    background: rgb(219, 237, 255);
   }
 
   body {
     font-family: 'Quicksand', sans-serif;
     text-align: justify;
-    color: black;
+    color: rgb(27, 31, 35);
     font-size: 1em;
     line-height: 1.5em;
     margin: 1em;
@@ -38,7 +60,7 @@
 
   code {
     font-family: 'Fira Code', monospace;
-    background-color: #81c91e;
+    background-color: rgb(200, 225, 255);
   }
 
   blockquote {
@@ -46,7 +68,7 @@
     padding: 0.5em;
     margin: 0;
     border-left: 0.25em solid;
-    color: #81c91e;
+    color: rgb(0, 92, 197);
   }
 
   div.tools {
@@ -62,12 +84,12 @@
   }
 
   span.btn.active {
-    color: #81c91e;
+    color: rgb(0, 92, 197);
     font-weight: bolder;
   }
 
   span.btn.disabled {
-    color: black;
+    color: rgb(27, 31, 35);
     font-weight: bold;
   }
 
