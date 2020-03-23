@@ -9,11 +9,6 @@ import * as serviceWorker from './serviceWorker'
 
 import './index.css'
 
-const LIST_TYPES = [
-    'ordered-list',
-    'unordered-list'
-]
-
 const Leaf = ({ attributes, children, leaf }) => {
     if (leaf.bold) {
         children = <strong>{children}</strong>
