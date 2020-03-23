@@ -85,12 +85,29 @@ const FlowEditor = {
     },
 
     toggleBlock(editor, format) {
+        if (format === 'list-item') {
+            return
+        }
+
         const isActive = FlowEditor.isBlockActive(editor, format)
 
+        const LIST_TYPES = ['ordered-list', 'unordered-list']
+        const isList = LIST_TYPES.includes(format)
+
+        Transforms.unwrapNodes(editor, {
+            match: n => LIST_TYPES.includes(n.type),
+            split: true,
+        })
+
         Transforms.setNodes(editor,
-            { type: isActive ? null : format },
+            { type: isActive ? null : isList ? 'list-item' : format },
             { match: n => Editor.isBlock(editor, n) }
         )
+
+        if (!isActive && isList) {
+            const block = { type: format, children: [] }
+            Transforms.wrapNodes(editor, block)
+        }
     },
 }
 
@@ -133,6 +150,8 @@ const Flow = () => {
                 <BlockButton format='heading-five' label='H5' />
                 <BlockButton format='heading-six' label='H6' />
                 <BlockButton format='block-quote' label='Blockquote' />
+                <BlockButton format='ordered-list' label='OL' />
+                <BlockButton format='unordered-list' label='UL' />
             </div>
             <div className='tools'>
                 <MarkButton format='bold' label='Bold' />
