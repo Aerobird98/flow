@@ -1,11 +1,38 @@
-import React, { useMemo, useState, useCallback } from "react";
+import React, {  
+    useMemo,
+    useState,
+    useCallback
+} from "react";
+
 import ReactDOM from 'react-dom'
 
-import { createEditor, Transforms, Editor } from 'slate'
-import { Slate, useSlate, Editable, withReact } from 'slate-react'
-import { withHistory } from 'slate-history'
+import {
+    createEditor,
+    Transforms,
+    Editor
+} from 'slate'
 
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import {
+    Slate,
+    useSlate,
+    Editable,
+    withReact
+} from 'slate-react'
+
+import {
+    withHistory
+} from 'slate-history'
+
+import {
+    Breadcrumb,
+    BreadcrumbItem,
+    Button
+} from 'react-bootstrap'
+
+import {
+    FontAwesomeIcon
+} from '@fortawesome/react-fontawesome'
+
 import {
     faBold,
     faItalic,
@@ -14,70 +41,16 @@ import {
     faCode,
     faSubscript,
     faSuperscript,
+    faParagraph,
     faHeading,
-    faQuoteLeft,
     faAlignLeft,
     faAlignCenter,
     faAlignRight,
     faAlignJustify
 } from '@fortawesome/free-solid-svg-icons'
 
-import * as serviceWorker from './serviceWorker'
-
+import * as serviceWorker from './serviceWorker.js'
 import './index.scss';
-
-const Leaf = ({ attributes, children, leaf }) => {
-    if (leaf.bold) {
-        children = <strong>{children}</strong>
-    }
-
-    if (leaf.code) {
-        children = <code>{children}</code>
-    }
-
-    if (leaf.italic) {
-        children = <em>{children}</em>
-    }
-
-    if (leaf.underline) {
-        children = <u>{children}</u>
-    }
-
-    if (leaf.strike) {
-        children = <s>{children}</s>
-    }
-
-    if (leaf.subscript) {
-        children = <sub>{children}</sub>
-    }
-
-    if (leaf.superscript) {
-        children = <sup>{children}</sup>
-    }
-
-    return <span {...attributes}>{children}</span>
-}
-
-const Element = ({ attributes, children, element }) => {
-    switch (element.type) {
-        case 'heading-one':
-            return <h1 className={element.align} {...attributes}>{children}</h1>
-        case 'heading-two':
-            return <h2 className={element.align} {...attributes}>{children}</h2>
-        case 'heading-three':
-            return <h3 className={element.align} {...attributes}>{children}</h3>
-        case 'heading-four':
-            return <h4 className={element.align} {...attributes}>{children}</h4>
-        case 'heading-five':
-            return <h5 className={element.align} {...attributes}>{children}</h5>
-        case 'heading-six':
-            return <h6 className={element.align} {...attributes}>{children}</h6>
-        case 'block-quote':
-            return <blockquote className={element.align} {...attributes}>{children}</blockquote>
-        default:
-            return <p className={element.align} {...attributes}>{children}</p>
-    }
-}
 
 const FlowEditor = {
     isMarkActive(editor, format) {
@@ -112,20 +85,32 @@ const FlowEditor = {
 
     toggleBlock(editor, format) {
         const isActive = FlowEditor.isBlockActive(editor, format)
-        Transforms.setNodes(editor,
-            { type: isActive ? null : format },
-            { match: n => Editor.isBlock(editor, n) }
-        )
+        Transforms.setNodes(editor, {
+            type: isActive ? null : format
+        }, {
+            match: n => Editor.isBlock(editor, n)
+        })
     },
 
-    changeAlign(editor, align) {
-        Transforms.setNodes(editor, { align: align })
+    toggleAlign(editor, align) {
+        const isActive = FlowEditor.isAlignActive(editor, align)
+        Transforms.setNodes(editor, {
+            align: isActive ? null : align
+        }, {
+            match: n => Editor.isBlock(editor, n)
+        })
     }
 }
 
 const Flow = () => {
     const editor = useMemo(() => withHistory(withReact(createEditor())), [])
-    const [value, setValue] = useState(JSON.parse(localStorage.getItem('content')) || [])
+    const [value, setValue] = useState(JSON.parse(localStorage.getItem('content')) || [
+        {
+            type: 'paragraph',
+            align: 'text-left',
+            children: [{ text: '' }],
+        },
+    ])
 
     const renderLeaf = useCallback(props => {
         return <Leaf {...props} />
@@ -145,30 +130,12 @@ const Flow = () => {
                 localStorage.setItem('content', content)
             }}
         >
-            <div className='d-print-none sticky-top bg-light'>
-                <MarkButton format='bold' icon={faBold} />
-                <MarkButton format='italic' icon={faItalic} />
-                <MarkButton format='underline' icon={faUnderline} />
-                <MarkButton format='strike' icon={faStrikethrough} />
-                <MarkButton format='code' icon={faCode} />
-                <MarkButton format='subscript' icon={faSubscript} />
-                <MarkButton format='superscript' icon={faSuperscript} />
-                <BlockButton format='heading-one' icon={faHeading} />
-                <BlockButton format='block-quote' icon={faQuoteLeft} />
-                <AlignButton format='text-left' icon={faAlignLeft} />
-                <AlignButton format='text-center' icon={faAlignCenter} />
-                <AlignButton format='text-right' icon={faAlignRight} />
-                <AlignButton format='text-justify' icon={faAlignJustify} />
-                <nav aria-label="breadcrumb">
-                    <ol class="breadcrumb">
-                        <li class="breadcrumb-item"><a href="#">Storage</a></li>
-                        <li class="breadcrumb-item active" aria-current="page">content</li>
-                    </ol>
-                </nav>
-            </div>
+            <Tools className='d-print-none sticky-top bg-light' />
             <Editable className='p-5'
                 renderLeaf={renderLeaf}
                 renderElement={renderElement}
+                spellCheck
+                autoFocus
                 onKeyDown={event => {
                     if (event.ctrlKey) {
                         switch (event.key) {
@@ -202,12 +169,91 @@ const Flow = () => {
     )
 }
 
-const FormatButton = ({ isActive, toggleFormat, format, icon }) => {
+const Leaf = ({ attributes, children, leaf }) => {
+    if (leaf.bold) {
+        children = <strong>{children}</strong>
+    }
+
+    if (leaf.code) {
+        children = <code>{children}</code>
+    }
+
+    if (leaf.italic) {
+        children = <em>{children}</em>
+    }
+
+    if (leaf.underline) {
+        children = <u>{children}</u>
+    }
+
+    if (leaf.strikethrough) {
+        children = <s>{children}</s>
+    }
+
+    if (leaf.subscript) {
+        children = <sub>{children}</sub>
+    }
+
+    if (leaf.superscript) {
+        children = <sup>{children}</sup>
+    }
+
+    return <span {...attributes}>{children}</span>
+}
+
+const Element = ({ attributes, children, element }) => {
+    switch (element.type) {
+        case 'heading-one':
+            return <h1 className={element.align} {...attributes}>{children}</h1>
+        case 'heading-two':
+            return <h2 className={element.align} {...attributes}>{children}</h2>
+        case 'heading-three':
+            return <h3 className={element.align} {...attributes}>{children}</h3>
+        case 'heading-four':
+            return <h4 className={element.align} {...attributes}>{children}</h4>
+        case 'heading-five':
+            return <h5 className={element.align} {...attributes}>{children}</h5>
+        case 'heading-six':
+            return <h6 className={element.align} {...attributes}>{children}</h6>
+        case 'paragraph':
+            return <p className={element.align} {...attributes}>{children}</p>
+        default:
+            return <div className={element.align} {...attributes}>{children}</div>
+    }
+}
+
+const Tools = props => {
+    return (
+        <div {...props}>
+            <MarkButton format='bold' icon={faBold} />
+            <MarkButton format='italic' icon={faItalic} />
+            <MarkButton format='underline' icon={faUnderline} />
+            <MarkButton format='strikethrough' icon={faStrikethrough} />
+            <MarkButton format='code' icon={faCode} />
+            <MarkButton format='subscript' icon={faSubscript} />
+            <MarkButton format='superscript' icon={faSuperscript} />
+            <BlockButton format='paragraph' icon={faParagraph} />
+            <BlockButton format='heading-one' icon={faHeading} />
+            <AlignButton format='text-left' icon={faAlignLeft} />
+            <AlignButton format='text-center' icon={faAlignCenter} />
+            <AlignButton format='text-right' icon={faAlignRight} />
+            <AlignButton format='text-justify' icon={faAlignJustify} />
+            <Breadcrumb>
+                <BreadcrumbItem href='#'>Storage</BreadcrumbItem>
+                <BreadcrumbItem href='#' active>content</BreadcrumbItem>
+            </Breadcrumb>
+        </div>
+    )
+}
+
+const FormatButton = ({ isActive, toggleFormat, format, icon, label}, props) => {
     const editor = useSlate()
     return (
-        <span
-            role='button'
-            className={'m-3 btn' + (isActive(editor, format) ? ' active' : '')}
+        <Button {...props}
+            aria-label={format}
+            className='rounded-0 border-0'
+            variant='outline-primary'
+            active={isActive(editor, format)}
             onMouseDown={event => {
                 event.preventDefault()
                 toggleFormat(editor, format)
@@ -215,42 +261,45 @@ const FormatButton = ({ isActive, toggleFormat, format, icon }) => {
         >
             <FontAwesomeIcon
                 icon={icon}
-                size='lg'
                 fixedWidth
             />
-        </span>
+            {label}
+        </Button>
     )
 }
 
-const BlockButton = ({ format, icon }) => {
+const BlockButton = ({ format, icon, label }, props) => {
     return (
-        <FormatButton
+        <FormatButton {...props}
             isActive={FlowEditor.isBlockActive}
             toggleFormat={FlowEditor.toggleBlock}
             format={format}
             icon={icon}
+            label={label}
         />
     )
 }
 
-const MarkButton = ({ format, icon }) => {
+const MarkButton = ({ format, icon, label }, props) => {
     return (
-        <FormatButton
+        <FormatButton {...props}
             isActive={FlowEditor.isMarkActive}
             toggleFormat={FlowEditor.toggleMark}
             format={format}
             icon={icon}
+            label={label}
         />
     )
 }
 
-const AlignButton = ({ format, icon }) => {
+const AlignButton = ({ format, icon, label }, props) => {
     return (
-        <FormatButton
+        <FormatButton {...props}
             isActive={FlowEditor.isAlignActive}
-            toggleFormat={FlowEditor.changeAlign}
+            toggleFormat={FlowEditor.toggleAlign}
             format={format}
             icon={icon}
+            label={label}
         />
     )
 }
