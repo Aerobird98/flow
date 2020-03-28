@@ -1,4 +1,4 @@
-import React, {  
+import React, {
     useMemo,
     useState,
     useCallback
@@ -24,8 +24,6 @@ import {
 } from 'slate-history'
 
 import {
-    Breadcrumb,
-    BreadcrumbItem,
     Button
 } from 'react-bootstrap'
 
@@ -46,7 +44,10 @@ import {
     faAlignLeft,
     faAlignCenter,
     faAlignRight,
-    faAlignJustify
+    faAlignJustify,
+    faUndo,
+    faRedo,
+    faServer
 } from '@fortawesome/free-solid-svg-icons'
 
 import * as serviceWorker from './serviceWorker.js'
@@ -92,79 +93,32 @@ const FlowEditor = {
         })
     },
 
-    toggleAlign(editor, align) {
-        const isActive = FlowEditor.isAlignActive(editor, align)
+    toggleAlign(editor, format) {
+        const isActive = FlowEditor.isAlignActive(editor, format)
         Transforms.setNodes(editor, {
-            align: isActive ? null : align
+            align: isActive ? null : format
         }, {
             match: n => Editor.isBlock(editor, n)
         })
     }
 }
 
-const Flow = () => {
+const Flow = props => {
+    const { file } = props
     const editor = useMemo(() => withHistory(withReact(createEditor())), [])
-    const [value, setValue] = useState(JSON.parse(localStorage.getItem('content')) || [
-        {
-            type: 'paragraph',
-            align: 'text-left',
-            children: [{ text: '' }],
-        },
-    ])
-
-    const renderLeaf = useCallback(props => {
-        return <Leaf {...props} />
-    }, [])
-
-    const renderElement = useCallback(props => {
-        return <Element {...props} />
-    }, [])
-
+    const [value, setValue] = useState(JSON.parse(localStorage.getItem(file)) || [{ children: [{ text: '' }] }])
     return (
         <Slate
             editor={editor}
             value={value}
             onChange={value => {
                 setValue(value)
-                const content = JSON.stringify(value)
-                localStorage.setItem('content', content)
+                localStorage.setItem(file, JSON.stringify(value))
             }}
         >
-            <Tools className='d-print-none sticky-top bg-light' />
-            <Editable className='p-5'
-                renderLeaf={renderLeaf}
-                renderElement={renderElement}
-                spellCheck
-                autoFocus
-                onKeyDown={event => {
-                    if (event.ctrlKey) {
-                        switch (event.key) {
-                            case 'b': {
-                                event.preventDefault()
-                                FlowEditor.toggleMark(editor, 'bold')
-                                break
-                            }
-                            case 'i': {
-                                event.preventDefault()
-                                FlowEditor.toggleMark(editor, 'italic')
-                                break
-                            }
-                            case 'u': {
-                                event.preventDefault()
-                                FlowEditor.toggleMark(editor, 'underline')
-                                break
-                            }
-                            case '`': {
-                                event.preventDefault()
-                                FlowEditor.toggleMark(editor, 'code')
-                                break
-                            }
-                            default:
-                                break
-                        }
-                    }
-                }}
-            />
+            <FlowTools className='d-print-none sticky-top bg-light' />
+            <FlowEditable className='d-print-block d-print-p-0 p-5 bg-light' spellCheck autoFocus />
+            <FlowStatus className='d-print-none pl-3 fixed-bottom bg-light' />
         </Slate>
     )
 }
@@ -218,13 +172,105 @@ const Element = ({ attributes, children, element }) => {
         case 'paragraph':
             return <p className={element.align} {...attributes}>{children}</p>
         default:
-            return <div className={element.align} {...attributes}>{children}</div>
+            return <div className={element.align + ' text-monospace'} {...attributes}>{children}</div>
     }
 }
 
-const Tools = props => {
+const FlowEditable = props => {
+    const editor = useSlate()
+
+    const renderLeaf = useCallback(props => {
+        return <Leaf {...props} />
+    }, [])
+
+    const renderElement = useCallback(props => {
+        return <Element {...props} />
+    }, [])
+
+    return (
+        <Editable {...props}
+            renderLeaf={renderLeaf}
+            renderElement={renderElement}
+            onKeyDown={event => {
+                if (event.ctrlKey) {
+                    switch (event.key) {
+                        case 'b': {
+                            event.preventDefault()
+                            FlowEditor.toggleMark(editor, 'bold')
+                            break
+                        }
+                        case 'i': {
+                            event.preventDefault()
+                            FlowEditor.toggleMark(editor, 'italic')
+                            break
+                        }
+                        case 'u': {
+                            event.preventDefault()
+                            FlowEditor.toggleMark(editor, 'underline')
+                            break
+                        }
+                        case '~': {
+                            event.preventDefault()
+                            FlowEditor.toggleMark(editor, 'code')
+                            break
+                        }
+                        default:
+                            break
+                    }
+                }
+            }}
+        />
+    )
+}
+
+const FlowStatus = props => {
+    const editor = useSlate()
+    const selection = editor.selection
+
+    let ln = 1
+    let col = 1
+    let wordCount = -1
+    let charCount = -1
+    if (selection) {
+        ln = selection.anchor.path[0] + 1
+        col = selection.anchor.offset + 1
+        const words = Editor.positions(editor, {
+            at: editor.selection,
+            unit: 'word'
+        })
+        const chars = Editor.positions(editor, {
+            at: editor.selection,
+            unit: 'character'
+        })
+        for (let _word of words) {
+            wordCount++
+        }
+        for (let _char of chars) {
+            charCount++
+        }
+    }
+
+    return <div {...props}>At Line {ln}, Column {col}, {wordCount} Words and {charCount} Characters in selection</div>
+}
+
+const FlowTools = props => {
+    const editor = useSlate()
     return (
         <div {...props}>
+            <FlowButton disabled icon={faServer} onMouseDown={event => {
+                event.preventDefault()
+            }}
+            />
+            <FlowButton disabled={editor.history.undos.length === 0} icon={faUndo} onMouseDown={event => {
+                event.preventDefault()
+                editor.undo()
+            }}
+            />
+            <FlowButton disabled={editor.history.redos.length === 0} icon={faRedo} onMouseDown={event => {
+                event.preventDefault()
+                editor.redo()
+            }}
+            />
             <MarkButton format='bold' icon={faBold} />
             <MarkButton format='italic' icon={faItalic} />
             <MarkButton format='underline' icon={faUnderline} />
@@ -233,31 +279,24 @@ const Tools = props => {
             <MarkButton format='subscript' icon={faSubscript} />
             <MarkButton format='superscript' icon={faSuperscript} />
             <BlockButton format='paragraph' icon={faParagraph} />
-            <BlockButton format='heading-one' icon={faHeading} />
+            <BlockButton format='heading-one' icon={faHeading} label='lvl1' />
+            <BlockButton format='heading-two' icon={faHeading} label='lvl2' />
+            <BlockButton format='heading-three' icon={faHeading} label='lvl3' />
             <AlignButton format='text-left' icon={faAlignLeft} />
             <AlignButton format='text-center' icon={faAlignCenter} />
             <AlignButton format='text-right' icon={faAlignRight} />
             <AlignButton format='text-justify' icon={faAlignJustify} />
-            <Breadcrumb>
-                <BreadcrumbItem href='#'>Storage</BreadcrumbItem>
-                <BreadcrumbItem href='#' active>content</BreadcrumbItem>
-            </Breadcrumb>
         </div>
     )
 }
 
-const FormatButton = ({ isActive, toggleFormat, format, icon, label}, props) => {
-    const editor = useSlate()
+const FlowButton = props => {
+    const { icon, label } = props
     return (
-        <Button {...props}
-            aria-label={format}
+        <Button
             className='rounded-0 border-0'
             variant='outline-primary'
-            active={isActive(editor, format)}
-            onMouseDown={event => {
-                event.preventDefault()
-                toggleFormat(editor, format)
-            }}
+            {...props}
         >
             <FontAwesomeIcon
                 icon={icon}
@@ -268,43 +307,58 @@ const FormatButton = ({ isActive, toggleFormat, format, icon, label}, props) => 
     )
 }
 
-const BlockButton = ({ format, icon, label }, props) => {
+const BlockButton = props => {
+    const { format, icon, label } = props
+    const editor = useSlate()
     return (
-        <FormatButton {...props}
-            isActive={FlowEditor.isBlockActive}
-            toggleFormat={FlowEditor.toggleBlock}
-            format={format}
+        <FlowButton
             icon={icon}
             label={label}
+            active={FlowEditor.isBlockActive(editor, format)}
+            onMouseDown={event => {
+                event.preventDefault()
+                FlowEditor.toggleBlock(editor, format)
+            }}
+            {...props}
         />
     )
 }
 
-const MarkButton = ({ format, icon, label }, props) => {
+const MarkButton = props => {
+    const { format, icon, label } = props
+    const editor = useSlate()
     return (
-        <FormatButton {...props}
-            isActive={FlowEditor.isMarkActive}
-            toggleFormat={FlowEditor.toggleMark}
-            format={format}
+        <FlowButton
             icon={icon}
             label={label}
+            active={FlowEditor.isMarkActive(editor, format)}
+            onMouseDown={event => {
+                event.preventDefault()
+                FlowEditor.toggleMark(editor, format)
+            }}
+            {...props}
         />
     )
 }
 
-const AlignButton = ({ format, icon, label }, props) => {
+const AlignButton = props => {
+    const { format, icon, label } = props
+    const editor = useSlate()
     return (
-        <FormatButton {...props}
-            isActive={FlowEditor.isAlignActive}
-            toggleFormat={FlowEditor.toggleAlign}
-            format={format}
+        <FlowButton
             icon={icon}
             label={label}
+            active={FlowEditor.isAlignActive(editor, format)}
+            onMouseDown={event => {
+                event.preventDefault()
+                FlowEditor.toggleAlign(editor, format)
+            }}
+            {...props}
         />
     )
 }
 
-ReactDOM.render(<Flow />, document.getElementById('editor'))
+ReactDOM.render(<Flow file='content' />, document.getElementById('editor'))
 
 // If you want your editor to work offline and load faster, you can change
 // unregister() to register() below. Note this comes with some pitfalls.
