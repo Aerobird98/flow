@@ -6,7 +6,7 @@ By *"standardized"* I mean its using [bootstrap](https://getbootstrap.com/)'s de
 
 ## Usage
 
-You can use the buttons in the tools section at the top of the page or use *keyboard* sortcuts listed in a table below. It has an autosaving feature that saves your documents to your browser's *local-storage* container.
+You can use the buttons in the tools section at the top of the page or use *keyboard* sortcuts listed in the table below. It has an autosaving feature that saves your documents to your browser's *local-storage* container, you can access it trough a the **UI** by pressing the *server* button at the top left of the tools section.
 
 | Command     | Description                          |
 | ----------- | ------------------------------------ |
@@ -18,11 +18,8 @@ You can use the buttons in the tools section at the top of the page or use *keyb
 | `Ctrl + b`  | Format selection to bold             |
 | `Ctrl + i`  | Format selection to italic           |
 | `Ctrl + u`  | Format selection to underline        |
+| `Ctrl + s`  | Format selection to strikethrough    |
 | `Ctrl + ~`  | Format selection to code (monospace) |
-
-I am using an **Icon Library** namely [FontAwesome](https://fontawesome.com/) to represent common formating options and functionality in the tools section, however if you are uncertain in the meaning of some of the icons (which hopfuly wont happen as freqently since these icons are **AWESOME**) just hover over one of the buttons to get more information on its functionality in question.
-
-At the bottom of the page you can see a neat status line providing information about the current selection, word and character count and other statistics of the currently edited document.
 
 ## Development
 

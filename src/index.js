@@ -118,7 +118,6 @@ const Flow = props => {
         >
             <FlowTools className='d-print-none sticky-top bg-light' />
             <FlowEditable className='d-print-block d-print-p-0 p-5 bg-light' spellCheck autoFocus />
-            <FlowStatus className='d-print-none pl-3 fixed-bottom bg-light' />
         </Slate>
     )
 }
@@ -126,10 +125,6 @@ const Flow = props => {
 const Leaf = ({ attributes, children, leaf }) => {
     if (leaf.bold) {
         children = <strong>{children}</strong>
-    }
-
-    if (leaf.code) {
-        children = <code>{children}</code>
     }
 
     if (leaf.italic) {
@@ -142,6 +137,10 @@ const Leaf = ({ attributes, children, leaf }) => {
 
     if (leaf.strikethrough) {
         children = <s>{children}</s>
+    }
+
+    if (leaf.code) {
+        children = <code>{children}</code>
     }
 
     if (leaf.subscript) {
@@ -188,88 +187,74 @@ const FlowEditable = props => {
     }, [])
 
     return (
-        <Editable {...props}
-            renderLeaf={renderLeaf}
-            renderElement={renderElement}
-            onKeyDown={event => {
-                if (event.ctrlKey) {
-                    switch (event.key) {
-                        case 'b': {
-                            event.preventDefault()
-                            FlowEditor.toggleMark(editor, 'bold')
-                            break
+        <div {...props}>
+            <Editable
+                renderLeaf={renderLeaf}
+                renderElement={renderElement}
+                onKeyDown={event => {
+                    if (event.ctrlKey) {
+                        switch (event.key) {
+                            case 'b': {
+                                event.preventDefault()
+                                FlowEditor.toggleMark(editor, 'bold')
+                                break
+                            }
+                            case 'i': {
+                                event.preventDefault()
+                                FlowEditor.toggleMark(editor, 'italic')
+                                break
+                            }
+                            case 'u': {
+                                event.preventDefault()
+                                FlowEditor.toggleMark(editor, 'underline')
+                                break
+                            }
+                            case 's': {
+                                event.preventDefault()
+                                FlowEditor.toggleMark(editor, 'strikethrough')
+                                break
+                            }
+                            case '~': {
+                                event.preventDefault()
+                                FlowEditor.toggleMark(editor, 'code')
+                                break
+                            }
+                            default:
+                                break
                         }
-                        case 'i': {
-                            event.preventDefault()
-                            FlowEditor.toggleMark(editor, 'italic')
-                            break
-                        }
-                        case 'u': {
-                            event.preventDefault()
-                            FlowEditor.toggleMark(editor, 'underline')
-                            break
-                        }
-                        case '~': {
-                            event.preventDefault()
-                            FlowEditor.toggleMark(editor, 'code')
-                            break
-                        }
-                        default:
-                            break
                     }
-                }
-            }}
-        />
+                }}
+            />
+        </div>
     )
-}
-
-const FlowStatus = props => {
-    const editor = useSlate()
-    const selection = editor.selection
-
-    let ln = 1
-    let col = 1
-    let wordCount = -1
-    let charCount = -1
-    if (selection) {
-        ln = selection.anchor.path[0] + 1
-        col = selection.anchor.offset + 1
-        const words = Editor.positions(editor, {
-            at: editor.selection,
-            unit: 'word'
-        })
-        const chars = Editor.positions(editor, {
-            at: editor.selection,
-            unit: 'character'
-        })
-        for (let _word of words) {
-            wordCount++
-        }
-        for (let _char of chars) {
-            charCount++
-        }
-    }
-
-    return <div {...props}>At Line {ln}, Column {col}, {wordCount} Words and {charCount} Characters in selection</div>
 }
 
 const FlowTools = props => {
     const editor = useSlate()
     return (
         <div {...props}>
-            <FlowButton disabled icon={faServer} onMouseDown={event => {
-                event.preventDefault()
-            }}
+            <FlowButton
+                disabled
+                icon={faServer}
+                onMouseDown={event => {
+                    event.preventDefault()
+                }}
             />
-            <FlowButton disabled={editor.history.undos.length === 0} icon={faUndo} onMouseDown={event => {
-                event.preventDefault()
-                editor.undo()
-            }}
+            <FlowButton
+                disabled={editor.history.undos.length === 0}
+                icon={faUndo}
+                onMouseDown={event => {
+                    event.preventDefault()
+                    editor.undo()
+                }}
             />
-            <FlowButton disabled={editor.history.redos.length === 0} icon={faRedo} onMouseDown={event => {
-                event.preventDefault()
-                editor.redo()
-            }}
+            <FlowButton
+                disabled={editor.history.redos.length === 0}
+                icon={faRedo}
+                onMouseDown={event => {
+                    event.preventDefault()
+                    editor.redo()
+                }}
             />
             <MarkButton format='bold' icon={faBold} />
             <MarkButton format='italic' icon={faItalic} />
@@ -279,9 +264,9 @@ const FlowTools = props => {
             <MarkButton format='subscript' icon={faSubscript} />
             <MarkButton format='superscript' icon={faSuperscript} />
             <BlockButton format='paragraph' icon={faParagraph} />
-            <BlockButton format='heading-one' icon={faHeading} label='lvl1' />
-            <BlockButton format='heading-two' icon={faHeading} label='lvl2' />
-            <BlockButton format='heading-three' icon={faHeading} label='lvl3' />
+            <BlockButton format='heading-one' icon={faHeading} />
+            <BlockButton format='heading-two' icon={faHeading} />
+            <BlockButton format='heading-three' icon={faHeading} />
             <AlignButton format='text-left' icon={faAlignLeft} />
             <AlignButton format='text-center' icon={faAlignCenter} />
             <AlignButton format='text-right' icon={faAlignRight} />
@@ -294,6 +279,8 @@ const FlowButton = props => {
     const { icon, label } = props
     return (
         <Button
+            title={icon.iconName}
+            aria-label={icon.iconName}
             className='rounded-0 border-0'
             variant='outline-primary'
             {...props}
@@ -308,12 +295,10 @@ const FlowButton = props => {
 }
 
 const BlockButton = props => {
-    const { format, icon, label } = props
+    const { format } = props
     const editor = useSlate()
     return (
         <FlowButton
-            icon={icon}
-            label={label}
             active={FlowEditor.isBlockActive(editor, format)}
             onMouseDown={event => {
                 event.preventDefault()
@@ -325,12 +310,10 @@ const BlockButton = props => {
 }
 
 const MarkButton = props => {
-    const { format, icon, label } = props
+    const { format } = props
     const editor = useSlate()
     return (
         <FlowButton
-            icon={icon}
-            label={label}
             active={FlowEditor.isMarkActive(editor, format)}
             onMouseDown={event => {
                 event.preventDefault()
@@ -342,12 +325,10 @@ const MarkButton = props => {
 }
 
 const AlignButton = props => {
-    const { format, icon, label } = props
+    const { format } = props
     const editor = useSlate()
     return (
         <FlowButton
-            icon={icon}
-            label={label}
             active={FlowEditor.isAlignActive(editor, format)}
             onMouseDown={event => {
                 event.preventDefault()
