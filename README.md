@@ -6,50 +6,31 @@ By *"standardized"* I mean its using [bootstrap](https://getbootstrap.com/)'s de
 
 ## Usage
 
-You can use the buttons in the tools section at the top of the page or use *keyboard* sortcuts listed in the table below. It has an autosaving feature that saves your documents to your browser's *local-storage* container, you can access it trough a the **UI** by pressing the *server* button at the top left of the tools section.
+You can use the buttons in the tools section at the top of the app or use *keyboard* sortcuts listed in the table below. It has an autosaving feature that saves your documents to your browser's *local-storage* container, you can access it trough a the **UI** by pressing the *server* button at the top left of the tools section.
 
-| Command     | Description                          |
-| ----------- | ------------------------------------ |
-| `Ctrl + z`  | undo                                 |
-| `Ctrl + y`  | redo                                 |
-| `Ctrl + c`  | copy                                 |
-| `Ctrl + x`  | cut                                  |
-| `Ctrl + v`  | paste                                |
-| `Ctrl + b`  | Format selection to bold             |
-| `Ctrl + i`  | Format selection to italic           |
-| `Ctrl + u`  | Format selection to underline        |
-| `Ctrl + s`  | Format selection to strikethrough    |
-| `Ctrl + ~`  | Format selection to code (monospace) |
+| Shortcut   | Description                          |
+| ---------- | ------------------------------------ |
+| `Ctrl + z` | undo                                 |
+| `Ctrl + y` | redo                                 |
+| `Ctrl + c` | copy                                 |
+| `Ctrl + x` | cut                                  |
+| `Ctrl + v` | paste                                |
+| `Ctrl + b` | Format selection to bold             |
+| `Ctrl + i` | Format selection to italic           |
+| `Ctrl + u` | Format selection to underline        |
+| `Ctrl + s` | Format selection to strikethrough    |
+| `Ctrl + ~` | Format selection to code (monospace) |
 
 ## Development
 
-In the project directory, you can run:
+After you run `npm install` in the project directory, these commands will become available:
 
-### `npm start`
-
-Runs the editor in development mode.<br />
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
-
-The page will reload if you make edits.<br />
-You will also see any lint errors in the developer console.
-
-### `npm run build`
-
-Builds the app for production to the `build` folder.<br />
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.<br />
-Your editor is ready to be deployed!
-
-### `npm run deploy`
-
-After you ran `npm run build` you can deploy the contents of the `build` folder to [Github Pages](https://pages.github.com/) with this command. <br />
-Make sure to actualy run `npm run build` and the `build` folder does exists before running this command.
-
-### `npm run release`
-
-Builds the app for production to the `build` folder, just like `npm run build` would.<br />
-Then deploys it to [Github Pages](https://pages.github.com/) for you in one simple command.
+| Command                          | Description                                                                                |
+| -------------------------------- | ------------------------------------------------------------------------------------------ |
+| `npm run develop` or `npm start` | Runs the app in development mode at [http://localhost:3000](http://localhost:3000).        |
+| `npm run build`                  | Builds the app for production to the `build` folder.                                       |
+| `npm run deploy`                 | Deploys the contents of the `build` folder to [Github Pages](https://pages.github.com/)    |
+| `npm run release`                | Builds the app for production then deploys it to [Github Pages](https://pages.github.com/) |
 
 ## License
 

@@ -4,7 +4,9 @@ import React, {
     useCallback
 } from "react";
 
-import ReactDOM from 'react-dom'
+import {
+    render
+} from 'react-dom'
 
 import {
     createEditor,
@@ -104,20 +106,20 @@ const FlowEditor = {
 }
 
 const Flow = props => {
-    const { file } = props
     const editor = useMemo(() => withHistory(withReact(createEditor())), [])
-    const [value, setValue] = useState(JSON.parse(localStorage.getItem(file)) || [{ children: [{ text: '' }] }])
+    const [value, setValue] = useState(JSON.parse(localStorage.getItem('content')) || [{ children: [{ text: '' }] }])
     return (
         <Slate
             editor={editor}
             value={value}
             onChange={value => {
                 setValue(value)
-                localStorage.setItem(file, JSON.stringify(value))
+                localStorage.setItem('content', JSON.stringify(value))
             }}
+            {...props}
         >
-            <FlowTools className='d-print-none sticky-top bg-light' />
-            <FlowEditable className='d-print-block d-print-p-0 p-5 bg-light' spellCheck autoFocus />
+            <FlowTools className='d-print-none sticky-top bg-light shadow' />
+            <FlowEditable className='d-print-block d-print-p-0 p-5' spellCheck autoFocus />
         </Slate>
     )
 }
@@ -140,7 +142,7 @@ const Leaf = ({ attributes, children, leaf }) => {
     }
 
     if (leaf.code) {
-        children = <code>{children}</code>
+        children = <span className='text-monospace'>{children}</span>
     }
 
     if (leaf.subscript) {
@@ -339,7 +341,7 @@ const AlignButton = props => {
     )
 }
 
-ReactDOM.render(<Flow file='content' />, document.getElementById('editor'))
+render(<Flow />, document.getElementById('editor'))
 
 // If you want your editor to work offline and load faster, you can change
 // unregister() to register() below. Note this comes with some pitfalls.
