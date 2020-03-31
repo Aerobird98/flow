@@ -53,7 +53,7 @@ import {
 } from '@fortawesome/free-solid-svg-icons'
 
 import * as serviceWorker from './serviceWorker.js'
-import './index.scss';
+import './app.scss';
 
 const FlowEditor = {
     isMarkActive(editor, format) {
@@ -119,7 +119,7 @@ const Flow = props => {
             {...props}
         >
             <FlowTools className='d-print-none sticky-top bg-light shadow' />
-            <FlowEditable className='d-print-block d-print-p-0 p-5' spellCheck autoFocus />
+            <FlowEditable className='d-print-block d-print-p-0 p-5 min-vh-100' spellCheck autoFocus />
         </Slate>
     )
 }
@@ -189,45 +189,44 @@ const FlowEditable = props => {
     }, [])
 
     return (
-        <div {...props}>
-            <Editable
-                renderLeaf={renderLeaf}
-                renderElement={renderElement}
-                onKeyDown={event => {
-                    if (event.ctrlKey) {
-                        switch (event.key) {
-                            case 'b': {
-                                event.preventDefault()
-                                FlowEditor.toggleMark(editor, 'bold')
-                                break
-                            }
-                            case 'i': {
-                                event.preventDefault()
-                                FlowEditor.toggleMark(editor, 'italic')
-                                break
-                            }
-                            case 'u': {
-                                event.preventDefault()
-                                FlowEditor.toggleMark(editor, 'underline')
-                                break
-                            }
-                            case 's': {
-                                event.preventDefault()
-                                FlowEditor.toggleMark(editor, 'strikethrough')
-                                break
-                            }
-                            case '~': {
-                                event.preventDefault()
-                                FlowEditor.toggleMark(editor, 'code')
-                                break
-                            }
-                            default:
-                                break
+        <Editable
+            renderLeaf={renderLeaf}
+            renderElement={renderElement}
+            onKeyDown={event => {
+                if (event.ctrlKey) {
+                    switch (event.key) {
+                        case 'b': {
+                            event.preventDefault()
+                            FlowEditor.toggleMark(editor, 'bold')
+                            break
                         }
+                        case 'i': {
+                            event.preventDefault()
+                            FlowEditor.toggleMark(editor, 'italic')
+                            break
+                        }
+                        case 'u': {
+                            event.preventDefault()
+                            FlowEditor.toggleMark(editor, 'underline')
+                            break
+                        }
+                        case 's': {
+                            event.preventDefault()
+                            FlowEditor.toggleMark(editor, 'strikethrough')
+                            break
+                        }
+                        case '~': {
+                            event.preventDefault()
+                            FlowEditor.toggleMark(editor, 'code')
+                            break
+                        }
+                        default:
+                            break
                     }
-                }}
-            />
-        </div>
+                }
+            }}
+            {...props}
+        />
     )
 }
 
@@ -284,7 +283,7 @@ const FlowButton = props => {
             title={icon.iconName}
             aria-label={icon.iconName}
             className='rounded-0 border-0'
-            variant='outline-primary'
+            variant='outline-success'
             {...props}
         >
             <FontAwesomeIcon
@@ -341,7 +340,7 @@ const AlignButton = props => {
     )
 }
 
-render(<Flow />, document.getElementById('editor'))
+render(<Flow />, document.getElementById('app'))
 
 // If you want your editor to work offline and load faster, you can change
 // unregister() to register() below. Note this comes with some pitfalls.
