@@ -1,6 +1,6 @@
 # flow
 
-A compact web based rich-text editor builds on top of [Slate-js](https://docs.slatejs.org/) and [React-js](https://reactjs.org/) to produce documents in *"standardized"* format with powerful, yet simple and accessible editing capabilities.
+A compact web based rich-text editor that builds on top of [Slate-js](https://docs.slatejs.org/) and [React-js](https://reactjs.org/) to produce documents in *"standardized"* format with powerful, yet simple and accessible editing capabilities.
 
 ## Usage
 
