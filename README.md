@@ -25,12 +25,11 @@ You can use the buttons in the tools section at the top of the app or use *keybo
 
 This app is bundled by [Parcel-js](https://parceljs.org/) a blazing fast, zero configuration web application bundler. Run `npm install` in the project directory to install all the dependencies and dev-tools so these commands will become available:
 
-| Command                      | Description                                                                                |
-| ---------------------------- | ------------------------------------------------------------------------------------------ |
-| `npm run dev` or `npm start` | Builds the app for development to the `dev` folder. DEVSERVER runs on `localhost:3000`     |
-| `npm run build`              | Builds the app for production to the `dist` folder.                                        |
-| `npm run deploy`             | Deploys the contents of the `dist` folder to [Github Pages](https://pages.github.com/)     |
-| `npm run release`            | Builds the app for production then deploys it to [Github Pages](https://pages.github.com/) |
+| Command         | Description                                                                               |
+| --------------- | ----------------------------------------------------------------------------------------- |
+| `npm run dev`   | Builds the app for development to the `dev` folder and serves it over `localhost:3000`.   |
+| `npm run build` | Builds the app for production to the `dist` folder, but won't deploy it.                  |
+| `npm run deploy`| Builds the app for production and deploys it to [Github Pages](https://pages.github.com/) |
 
 ## License
 

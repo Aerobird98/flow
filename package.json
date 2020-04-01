@@ -17,10 +17,9 @@
   },
   "scripts": {
     "start": "npm run dev",
-    "dev": "parcel serve index.html --port 3000 --out-dir dev",
-    "build": "parcel build index.html --out-dir dist",
-    "deploy": "gh-pages -d dist",
-    "release": "npm run build && npm run deploy"
+    "dev": "rm -rf dev && parcel serve index.html --port 3000 --out-dir dev",
+    "build": "rm -rf dist && parcel build index.html --out-dir dist --public-url /flow",
+    "deploy": "npm run build && gh-pages -d dist"
   },
   "devDependencies": {
     "gh-pages": "^2.2.0",
