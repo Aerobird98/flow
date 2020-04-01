@@ -1,7 +1,24 @@
 {
   "name": "flow",
   "version": "0.6.0",
+  "description": "A compact web based rich-text editor that builds on top of Slate-js and React-js with powerful, yet simple and accessible editing capabilities.",
+  "main": "index.html",
   "private": true,
+  "scripts": {
+    "start": "npm run dev",
+    "dev": "rm -rf dev && parcel serve index.html --port 3000 --out-dir dev",
+    "build": "rm -rf dist && parcel build index.html --out-dir dist --public-url /flow",
+    "deploy": "gh-pages -d dist"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Aerobird98/flow.git"
+  },
+  "author": "Aerobird98",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Aerobird98/flow/issues"
+  },
   "homepage": "http://Aerobird98.github.io/flow",
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^1.2.28",
@@ -15,15 +32,10 @@
     "slate-history": "^0.57.1",
     "slate-react": "^0.57.1"
   },
-  "scripts": {
-    "start": "npm run dev",
-    "dev": "rm -rf dev && parcel serve index.html --port 3000 --out-dir dev",
-    "build": "rm -rf dist && parcel build index.html --out-dir dist --public-url /flow",
-    "deploy": "npm run build && gh-pages -d dist"
-  },
   "devDependencies": {
     "gh-pages": "^2.2.0",
     "parcel-bundler": "^1.12.4",
+    "prettier": "^2.0.2",
     "sass": "^1.26.3"
   }
 }
