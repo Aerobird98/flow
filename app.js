@@ -50,8 +50,8 @@ const FlowEditor = {
   },
 
   toggleMark(editor, format) {
-    const isActive = FlowEditor.isMarkActive(editor, format);
-    if (isActive) {
+    const active = FlowEditor.isMarkActive(editor, format);
+    if (active) {
       Editor.removeMark(editor, format);
     } else {
       Editor.addMark(editor, format, true);
@@ -59,11 +59,11 @@ const FlowEditor = {
   },
 
   toggleBlock(editor, format) {
-    const isActive = FlowEditor.isBlockActive(editor, format);
+    const active = FlowEditor.isBlockActive(editor, format);
     Transforms.setNodes(
       editor,
       {
-        type: isActive ? null : format
+        type: active ? null : format
       },
       {
         match: n => Editor.isBlock(editor, n)
@@ -72,11 +72,11 @@ const FlowEditor = {
   },
 
   toggleAlign(editor, format) {
-    const isActive = FlowEditor.isAlignActive(editor, format);
+    const active = FlowEditor.isAlignActive(editor, format);
     Transforms.setNodes(
       editor,
       {
-        align: isActive ? null : format
+        align: active ? null : format
       },
       {
         match: n => Editor.isBlock(editor, n)
@@ -112,7 +112,9 @@ const Flow = props => {
   );
 };
 
-const Leaf = ({ attributes, children, leaf }) => {
+const Leaf = props => {
+  const { attributes, leaf } = props;
+  let { children } = props;
   if (leaf.bold) {
     children = <b>{children}</b>;
   }
@@ -144,7 +146,9 @@ const Leaf = ({ attributes, children, leaf }) => {
   return <span {...attributes}>{children}</span>;
 };
 
-const Element = ({ attributes, children, element }) => {
+const Element = props => {
+  const { attributes, element } = props;
+  let { children } = props;
   switch (element.type) {
     case "heading-one":
       return (
@@ -297,15 +301,16 @@ const FlowTools = props => {
 };
 
 const FlowButton = props => {
-  const { icon, label, active } = props;
+  const { icon, label, active, disabled, onMouseDown } = props;
   return (
     <button
       title={label || icon.iconName}
       aria-label={label || icon.iconName}
+      disabled={disabled}
+      onMouseDown={onMouseDown}
       className={
         "btn btn-outline-success rounded-0 border-0 " + (active ? "active" : "")
       }
-      {...props}
     >
       <FontAwesomeIcon icon={icon} fixedWidth />
       {label}
