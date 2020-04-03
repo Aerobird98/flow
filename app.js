@@ -1,5 +1,6 @@
-import React, { useMemo, useState, useCallback } from "react";
-import { render } from "react-dom";
+/** @jsx h */
+import { h, render } from "preact";
+import { useMemo, useState, useCallback } from "preact/hooks";
 import { createEditor, Transforms, Editor } from "slate";
 import { Slate, useSlate, Editable, withReact } from "slate-react";
 import { withHistory } from "slate-history";
@@ -106,9 +107,9 @@ const Flow = props => {
       }}
       {...props}
     >
-      <FlowTools className="d-print-none sticky-top bg-light" />
+      <FlowTools class="d-print-none sticky-top bg-light text-dark" />
       <FlowEditable
-        className="d-print-block d-print-p-0 p-5"
+        class="d-print-block d-print-p-0 p-5 bg-light text-dark"
         spellCheck
         autoFocus
       />
@@ -156,49 +157,49 @@ const Element = props => {
   switch (element.type) {
     case "heading-one":
       return (
-        <h1 className={element.align} {...attributes}>
+        <h1 class={element.align} {...attributes}>
           {children}
         </h1>
       );
     case "heading-two":
       return (
-        <h2 className={element.align} {...attributes}>
+        <h2 class={element.align} {...attributes}>
           {children}
         </h2>
       );
     case "heading-three":
       return (
-        <h3 className={element.align} {...attributes}>
+        <h3 class={element.align} {...attributes}>
           {children}
         </h3>
       );
     case "heading-four":
       return (
-        <h4 className={element.align} {...attributes}>
+        <h4 class={element.align} {...attributes}>
           {children}
         </h4>
       );
     case "heading-five":
       return (
-        <h5 className={element.align} {...attributes}>
+        <h5 class={element.align} {...attributes}>
           {children}
         </h5>
       );
     case "heading-six":
       return (
-        <h6 className={element.align} {...attributes}>
+        <h6 class={element.align} {...attributes}>
           {children}
         </h6>
       );
     case "paragraph":
       return (
-        <p className={element.align} {...attributes}>
+        <p class={element.align} {...attributes}>
           {children}
         </p>
       );
     default:
       return (
-        <div className={element.align} {...attributes}>
+        <div class={element.align} {...attributes}>
           {children}
         </div>
       );
@@ -265,6 +266,7 @@ const FlowTools = props => {
       <FlowButton
         disabled
         icon="server"
+        label="Storage"
         onMouseDown={event => {
           event.preventDefault();
         }}
@@ -272,6 +274,7 @@ const FlowTools = props => {
       <FlowButton
         disabled={editor.history.undos.length === 0}
         icon="undo"
+        label="Undo"
         onMouseDown={event => {
           event.preventDefault();
           editor.undo();
@@ -280,26 +283,42 @@ const FlowTools = props => {
       <FlowButton
         disabled={editor.history.redos.length === 0}
         icon="redo"
+        label="Redo"
         onMouseDown={event => {
           event.preventDefault();
           editor.redo();
         }}
       />
-      <MarkButton format="bold" icon="bold" />
-      <MarkButton format="italic" icon="italic" />
-      <MarkButton format="underline" icon="underline" />
-      <MarkButton format="strikethrough" icon="strikethrough" />
-      <MarkButton format="code" icon="code" />
-      <MarkButton format="subscript" icon="subscript" />
-      <MarkButton format="superscript" icon="superscript" />
-      <BlockButton format="paragraph" icon="paragraph" />
-      <BlockButton format="heading-one" icon="heading" />
-      <BlockButton format="heading-two" icon="heading" />
-      <BlockButton format="heading-three" icon="heading" />
-      <AlignButton format="text-left" icon="align-left" />
-      <AlignButton format="text-center" icon="align-center" />
-      <AlignButton format="text-right" icon="align-right" />
-      <AlignButton format="text-justify" icon="align-justify" />
+      <MarkButton format="bold" icon="bold" label="Bold" />
+      <MarkButton format="italic" icon="italic" label="Italic" />
+      <MarkButton format="underline" icon="underline" label="Underline" />
+      <MarkButton
+        format="strikethrough"
+        icon="strikethrough"
+        label="Strikethrough"
+      />
+      <MarkButton format="code" icon="code" label="Monospace" />
+      <MarkButton format="subscript" icon="subscript" label="Subscript" />
+      <MarkButton format="superscript" icon="superscript" label="Superscript" />
+      <BlockButton format="paragraph" icon="paragraph" label="Paragraph" />
+      <BlockButton format="heading-one" icon="heading" label="Heading 1" />
+      <BlockButton format="heading-two" icon="heading" label="Heading 2" />
+      <BlockButton format="heading-three" icon="heading" label="Heading 3" />
+      <BlockButton format="heading-four" icon="heading" label="Heading 4" />
+      <BlockButton format="heading-five" icon="heading" label="Heading 5" />
+      <BlockButton format="heading-six" icon="heading" label="Heading 6" />
+      <AlignButton format="text-left" icon="align-left" label="Align left" />
+      <AlignButton
+        format="text-center"
+        icon="align-center"
+        label="align center"
+      />
+      <AlignButton format="text-right" icon="align-right" label="align right" />
+      <AlignButton
+        format="text-justify"
+        icon="align-justify"
+        label="align justify"
+      />
     </div>
   );
 };
@@ -313,17 +332,16 @@ const FlowButton = props => {
   const { icon, label, active, disabled, onMouseDown } = props;
   return (
     <button
-      title={label || icon.iconName}
-      aria-label={label || icon.iconName}
+      title={label}
+      aria-label={label}
       onMouseDown={onMouseDown}
-      className={
+      class={
         "btn btn-outline-success rounded-0 border-0 " +
         (active ? "active" : "") +
         (disabled ? " disabled" : "")
       }
     >
-      <FlowIcon icon={icon} />
-      {label}
+      {icon ? <FlowIcon icon={icon} /> : label}
     </button>
   );
 };
