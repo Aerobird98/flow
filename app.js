@@ -306,10 +306,11 @@ const FlowButton = props => {
     <button
       title={label || icon.iconName}
       aria-label={label || icon.iconName}
-      disabled={disabled}
       onMouseDown={onMouseDown}
       className={
-        "btn btn-outline-success rounded-0 border-0 " + (active ? "active" : "")
+        "btn btn-outline-success rounded-0 border-0 " +
+        (active ? "active" : "") +
+        (disabled ? " disabled" : "")
       }
     >
       <FontAwesomeIcon icon={icon} fixedWidth />
