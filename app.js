@@ -3,7 +3,6 @@ import { render } from "react-dom";
 import { createEditor, Transforms, Editor } from "slate";
 import { Slate, useSlate, Editable, withReact } from "slate-react";
 import { withHistory } from "slate-history";
-import { Button } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 import {
@@ -103,9 +102,9 @@ const Flow = props => {
       }}
       {...props}
     >
-      <FlowTools className="d-print-none sticky-top bg-light shadow" />
+      <FlowTools className="d-print-none sticky-top bg-light" />
       <FlowEditable
-        className="d-print-block d-print-p-0 p-5 min-vh-100"
+        className="d-print-block d-print-p-0 p-5"
         spellCheck
         autoFocus
       />
@@ -115,11 +114,11 @@ const Flow = props => {
 
 const Leaf = ({ attributes, children, leaf }) => {
   if (leaf.bold) {
-    children = <strong>{children}</strong>;
+    children = <b>{children}</b>;
   }
 
   if (leaf.italic) {
-    children = <em>{children}</em>;
+    children = <i>{children}</i>;
   }
 
   if (leaf.underline) {
@@ -298,18 +297,19 @@ const FlowTools = props => {
 };
 
 const FlowButton = props => {
-  const { icon, label } = props;
+  const { icon, label, active } = props;
   return (
-    <Button
-      title={icon.iconName}
-      aria-label={icon.iconName}
-      className="rounded-0 border-0"
-      variant="outline-success"
+    <button
+      title={label || icon.iconName}
+      aria-label={label || icon.iconName}
+      className={
+        "btn btn-outline-success rounded-0 border-0 " + (active ? "active" : "")
+      }
       {...props}
     >
       <FontAwesomeIcon icon={icon} fixedWidth />
       {label}
-    </Button>
+    </button>
   );
 };
 
