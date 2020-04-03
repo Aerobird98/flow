@@ -4,8 +4,11 @@ import { createEditor, Transforms, Editor } from "slate";
 import { Slate, useSlate, Editable, withReact } from "slate-react";
 import { withHistory } from "slate-history";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-
+import { library } from "@fortawesome/fontawesome-svg-core";
 import {
+  faServer,
+  faUndo,
+  faRedo,
   faBold,
   faItalic,
   faUnderline,
@@ -18,14 +21,15 @@ import {
   faAlignLeft,
   faAlignCenter,
   faAlignRight,
-  faAlignJustify,
-  faUndo,
-  faRedo,
-  faServer
+  faAlignJustify
 } from "@fortawesome/free-solid-svg-icons";
 
-import * as serviceWorker from "./serviceWorker.js";
 import "./app.scss";
+
+// If you want your app to work offline and load faster, you can uncoment
+// the code below. Note this comes with some pitfalls.
+// See the serviceWorker.js script for details.
+//import * as serviceWorker from "./serviceWorker.js";
 
 const FlowEditor = {
   isMarkActive(editor, format) {
@@ -260,14 +264,14 @@ const FlowTools = props => {
     <div {...props}>
       <FlowButton
         disabled
-        icon={faServer}
+        icon="server"
         onMouseDown={event => {
           event.preventDefault();
         }}
       />
       <FlowButton
         disabled={editor.history.undos.length === 0}
-        icon={faUndo}
+        icon="undo"
         onMouseDown={event => {
           event.preventDefault();
           editor.undo();
@@ -275,29 +279,34 @@ const FlowTools = props => {
       />
       <FlowButton
         disabled={editor.history.redos.length === 0}
-        icon={faRedo}
+        icon="redo"
         onMouseDown={event => {
           event.preventDefault();
           editor.redo();
         }}
       />
-      <MarkButton format="bold" icon={faBold} />
-      <MarkButton format="italic" icon={faItalic} />
-      <MarkButton format="underline" icon={faUnderline} />
-      <MarkButton format="strikethrough" icon={faStrikethrough} />
-      <MarkButton format="code" icon={faCode} />
-      <MarkButton format="subscript" icon={faSubscript} />
-      <MarkButton format="superscript" icon={faSuperscript} />
-      <BlockButton format="paragraph" icon={faParagraph} />
-      <BlockButton format="heading-one" icon={faHeading} />
-      <BlockButton format="heading-two" icon={faHeading} />
-      <BlockButton format="heading-three" icon={faHeading} />
-      <AlignButton format="text-left" icon={faAlignLeft} />
-      <AlignButton format="text-center" icon={faAlignCenter} />
-      <AlignButton format="text-right" icon={faAlignRight} />
-      <AlignButton format="text-justify" icon={faAlignJustify} />
+      <MarkButton format="bold" icon="bold" />
+      <MarkButton format="italic" icon="italic" />
+      <MarkButton format="underline" icon="underline" />
+      <MarkButton format="strikethrough" icon="strikethrough" />
+      <MarkButton format="code" icon="code" />
+      <MarkButton format="subscript" icon="subscript" />
+      <MarkButton format="superscript" icon="superscript" />
+      <BlockButton format="paragraph" icon="paragraph" />
+      <BlockButton format="heading-one" icon="heading" />
+      <BlockButton format="heading-two" icon="heading" />
+      <BlockButton format="heading-three" icon="heading" />
+      <AlignButton format="text-left" icon="align-left" />
+      <AlignButton format="text-center" icon="align-center" />
+      <AlignButton format="text-right" icon="align-right" />
+      <AlignButton format="text-justify" icon="align-justify" />
     </div>
   );
+};
+
+const FlowIcon = props => {
+  const { icon } = props;
+  return <FontAwesomeIcon icon={icon} fixedWidth />;
 };
 
 const FlowButton = props => {
@@ -313,7 +322,7 @@ const FlowButton = props => {
         (disabled ? " disabled" : "")
       }
     >
-      <FontAwesomeIcon icon={icon} fixedWidth />
+      <FlowIcon icon={icon} />
       {label}
     </button>
   );
@@ -364,9 +373,26 @@ const AlignButton = props => {
   );
 };
 
+library.add(
+  faServer,
+  faUndo,
+  faRedo,
+  faBold,
+  faItalic,
+  faUnderline,
+  faStrikethrough,
+  faCode,
+  faSubscript,
+  faSuperscript,
+  faParagraph,
+  faHeading,
+  faAlignLeft,
+  faAlignCenter,
+  faAlignRight,
+  faAlignJustify
+);
 render(<Flow />, document.getElementById("app"));
-
-// If you want your editor to work offline and load faster, you can change
-// unregister() to register() below. Note this comes with some pitfalls.
+// If you want your app to work offline and load faster, you can uncoment
+// the code below. Note this comes with some pitfalls.
 // See the serviceWorker.js script for details.
-serviceWorker.unregister();
+//serviceWorker.register();

@@ -2,7 +2,7 @@
 
 A compact web based rich-text editor that builds on top of [Slate-js](https://docs.slatejs.org/) and [React-js](https://reactjs.org/) with powerful, yet simple and accessible editing capabilities.
 
-It is "standardized" and by _"standardized"_ I mean its using [bootstrap](https://getbootstrap.com/)'s design system not just for its beautiful **UI** but also for handling eficient and consistent document **formating and styling**, this means that it may _lack_ some editing capabilities of other rich-text editors by design, like changing the _font-family_ or _font-size_, (for that you have some heading style options with predefined sizes, and a code formating option for changing to a monospaced font family) however in exchange you get consistent styling and good typography across your documents, if that is not for you, there are plenty of other non-opinionated rich-text editors out there you can try out.
+It is _"standardized"_ or heavily _opinionated_ and by that I mean its using a design system not just for its beautiful **UI** but also for handling eficient and consistent document **formating and styling**, this means that it may _lack_ some editing capabilities of other rich-text editors by design, like changing the _font-family_ or _font-size_, (for that you have some heading style options with predefined sizes, and a code formating option for changing to a monospaced font family) however in exchange you get consistent styling and good typography across your documents, if that is not for you, there are plenty of other non-opinionated rich-text editors out there you can try out.
 
 ## Usage
 
