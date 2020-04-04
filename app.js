@@ -22,7 +22,7 @@ import {
   faAlignLeft,
   faAlignCenter,
   faAlignRight,
-  faAlignJustify
+  faAlignJustify,
 } from "@fortawesome/free-solid-svg-icons";
 
 import "./app.scss";
@@ -33,6 +33,23 @@ import "./app.scss";
 //import * as serviceWorker from "./serviceWorker.js";
 
 const FlowEditor = {
+  // Define a serializing function that takes a value and
+  // returns the string content of each paragraph in the value's children
+  // then joins them all with line breaks denoting paragraphs.
+  serializeText(value) {
+    return value.map((n) => Node.string(n)).join("\n");
+  },
+
+  // Define a deserializing function that takes a string and
+  // returns a value from an array of children derived by splitting the string.
+  deserializeText(string) {
+    return string.split("\n").map((line) => {
+      return {
+        children: [{ text: line }],
+      };
+    });
+  },
+
   isMarkActive(editor, format) {
     const marks = Editor.marks(editor);
     return marks ? marks[format] === true : false;
@@ -40,7 +57,7 @@ const FlowEditor = {
 
   isBlockActive(editor, format) {
     const [match] = Editor.nodes(editor, {
-      match: n => n.type === format
+      match: (n) => n.type === format,
     });
 
     return !!match;
@@ -48,7 +65,7 @@ const FlowEditor = {
 
   isAlignActive(editor, align) {
     const [match] = Editor.nodes(editor, {
-      match: n => n.align === align
+      match: (n) => n.align === align,
     });
 
     return !!match;
@@ -68,10 +85,10 @@ const FlowEditor = {
     Transforms.setNodes(
       editor,
       {
-        type: active ? null : format
+        type: active ? null : format,
       },
       {
-        match: n => Editor.isBlock(editor, n)
+        match: (n) => Editor.isBlock(editor, n),
       }
     );
   },
@@ -81,45 +98,40 @@ const FlowEditor = {
     Transforms.setNodes(
       editor,
       {
-        align: active ? null : format
+        align: active ? null : format,
       },
       {
-        match: n => Editor.isBlock(editor, n)
+        match: (n) => Editor.isBlock(editor, n),
       }
     );
-  }
+  },
 };
 
-const Flow = props => {
+const Flow = (props) => {
   const editor = useMemo(() => withHistory(withReact(createEditor())), []);
   const [value, setValue] = useState(
     JSON.parse(localStorage.getItem("content")) || [
-      { children: [{ text: "" }] }
+      { children: [{ text: "" }] },
     ]
   );
+
+  const onChange = (value) => {
+    setValue(value);
+    localStorage.setItem("content", JSON.stringify(value));
+  };
+
   return (
-    <Slate
-      editor={editor}
-      value={value}
-      onChange={value => {
-        setValue(value);
-        localStorage.setItem("content", JSON.stringify(value));
-      }}
-      {...props}
-    >
-      <FlowTools class="d-print-none sticky-top bg-light text-dark" />
-      <FlowEditable
-        class="d-print-block d-print-p-0 p-5 bg-light text-dark"
-        spellCheck
-        autoFocus
-      />
+    <Slate editor={editor} value={value} onChange={onChange} {...props}>
+      <FlowTools class="d-block d-print-none sticky-top bg-light text-dark" />
+      <FlowEditable class="d-block d-print-block d-print-p-0 p-5 bg-light text-dark" />
     </Slate>
   );
 };
 
-const Leaf = props => {
+const FlowLeaf = (props) => {
   const { attributes, leaf } = props;
   let { children } = props;
+
   if (leaf.bold) {
     children = <b>{children}</b>;
   }
@@ -151,9 +163,10 @@ const Leaf = props => {
   return <span {...attributes}>{children}</span>;
 };
 
-const Element = props => {
+const FlowElement = (props) => {
   const { attributes, element } = props;
   let { children } = props;
+
   switch (element.type) {
     case "heading-one":
       return (
@@ -206,22 +219,24 @@ const Element = props => {
   }
 };
 
-const FlowEditable = props => {
+const FlowEditable = (props) => {
   const editor = useSlate();
 
-  const renderLeaf = useCallback(props => {
-    return <Leaf {...props} />;
+  const renderLeaf = useCallback((props) => {
+    return <FlowLeaf {...props} />;
   }, []);
 
-  const renderElement = useCallback(props => {
-    return <Element {...props} />;
+  const renderElement = useCallback((props) => {
+    return <FlowElement {...props} />;
   }, []);
 
   return (
     <Editable
+      spellCheck
+      autoFocus
       renderLeaf={renderLeaf}
       renderElement={renderElement}
-      onKeyDown={event => {
+      onKeyDown={(event) => {
         if (event.ctrlKey) {
           switch (event.key) {
             case "b": {
@@ -259,15 +274,16 @@ const FlowEditable = props => {
   );
 };
 
-const FlowTools = props => {
+const FlowTools = (props) => {
   const editor = useSlate();
+
   return (
     <div {...props}>
       <FlowButton
         disabled
         icon="server"
         label="Storage"
-        onMouseDown={event => {
+        onMouseDown={(event) => {
           event.preventDefault();
         }}
       />
@@ -275,7 +291,7 @@ const FlowTools = props => {
         disabled={editor.history.undos.length === 0}
         icon="undo"
         label="Undo"
-        onMouseDown={event => {
+        onMouseDown={(event) => {
           event.preventDefault();
           editor.undo();
         }}
@@ -284,7 +300,7 @@ const FlowTools = props => {
         disabled={editor.history.redos.length === 0}
         icon="redo"
         label="Redo"
-        onMouseDown={event => {
+        onMouseDown={(event) => {
           event.preventDefault();
           editor.redo();
         }}
@@ -307,52 +323,49 @@ const FlowTools = props => {
       <BlockButton format="heading-four" icon="heading" label="Heading 4" />
       <BlockButton format="heading-five" icon="heading" label="Heading 5" />
       <BlockButton format="heading-six" icon="heading" label="Heading 6" />
-      <AlignButton format="text-left" icon="align-left" label="Align left" />
+      <AlignButton format="text-left" icon="align-left" label="Align Left" />
       <AlignButton
         format="text-center"
         icon="align-center"
-        label="align center"
+        label="Align Center"
       />
-      <AlignButton format="text-right" icon="align-right" label="align right" />
+      <AlignButton format="text-right" icon="align-right" label="Align Right" />
       <AlignButton
         format="text-justify"
         icon="align-justify"
-        label="align justify"
+        label="Align Justify"
       />
     </div>
   );
 };
 
-const FlowIcon = props => {
-  const { icon } = props;
-  return <FontAwesomeIcon icon={icon} fixedWidth />;
-};
-
-const FlowButton = props => {
+const FlowButton = (props) => {
   const { icon, label, active, disabled, onMouseDown } = props;
+
   return (
     <button
       title={label}
       aria-label={label}
       onMouseDown={onMouseDown}
       class={
-        "btn btn-outline-success rounded-0 border-0 " +
+        "btn btn-outline-dark rounded-0 border-0 " +
         (active ? "active" : "") +
         (disabled ? " disabled" : "")
       }
     >
-      {icon ? <FlowIcon icon={icon} /> : label}
+      {icon ? <FontAwesomeIcon icon={icon} fixedWidth /> : label}
     </button>
   );
 };
 
-const BlockButton = props => {
+const BlockButton = (props) => {
   const { format } = props;
   const editor = useSlate();
+
   return (
     <FlowButton
       active={FlowEditor.isBlockActive(editor, format)}
-      onMouseDown={event => {
+      onMouseDown={(event) => {
         event.preventDefault();
         FlowEditor.toggleBlock(editor, format);
       }}
@@ -361,13 +374,14 @@ const BlockButton = props => {
   );
 };
 
-const MarkButton = props => {
+const MarkButton = (props) => {
   const { format } = props;
   const editor = useSlate();
+
   return (
     <FlowButton
       active={FlowEditor.isMarkActive(editor, format)}
-      onMouseDown={event => {
+      onMouseDown={(event) => {
         event.preventDefault();
         FlowEditor.toggleMark(editor, format);
       }}
@@ -376,13 +390,14 @@ const MarkButton = props => {
   );
 };
 
-const AlignButton = props => {
+const AlignButton = (props) => {
   const { format } = props;
   const editor = useSlate();
+
   return (
     <FlowButton
       active={FlowEditor.isAlignActive(editor, format)}
-      onMouseDown={event => {
+      onMouseDown={(event) => {
         event.preventDefault();
         FlowEditor.toggleAlign(editor, format);
       }}
