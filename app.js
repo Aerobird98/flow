@@ -1,7 +1,7 @@
 /** @jsx h */
 import { h, render } from "preact";
 import { useMemo, useState, useCallback } from "preact/hooks";
-import { createEditor, Transforms, Editor } from "slate";
+import { createEditor, Transforms, Editor, Node } from "slate";
 import { Slate, useSlate, Editable, withReact } from "slate-react";
 import { withHistory } from "slate-history";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -23,6 +23,7 @@ import {
   faAlignCenter,
   faAlignRight,
   faAlignJustify,
+  faQuoteLeft,
 } from "@fortawesome/free-solid-svg-icons";
 
 import "./app.scss";
@@ -33,16 +34,16 @@ import "./app.scss";
 //import * as serviceWorker from "./serviceWorker.js";
 
 const FlowEditor = {
-  // Define a serializing function that takes a value and
-  // returns the string content of each paragraph in the value's children
+  // Define a serializing function that takes nodes and
+  // returns the string content of each paragraph in the nodes's children
   // then joins them all with line breaks denoting paragraphs.
-  serializeText(value) {
-    return value.map((n) => Node.string(n)).join("\n");
+  serializePlainText(nodes) {
+    return nodes.map((n) => Node.string(n)).join("\n");
   },
 
   // Define a deserializing function that takes a string and
-  // returns a value from an array of children derived by splitting the string.
-  deserializeText(string) {
+  // returns nodes as an array of children derived by splitting the string.
+  deserializePlainText(string) {
     return string.split("\n").map((line) => {
       return {
         children: [{ text: line }],
@@ -168,6 +169,12 @@ const FlowElement = (props) => {
   let { children } = props;
 
   switch (element.type) {
+    case "paragraph":
+      return (
+        <p class={element.align} {...attributes}>
+          {children}
+        </p>
+      );
     case "heading-one":
       return (
         <h1 class={element.align} {...attributes}>
@@ -204,11 +211,14 @@ const FlowElement = (props) => {
           {children}
         </h6>
       );
-    case "paragraph":
+    case "blockquote":
       return (
-        <p class={element.align} {...attributes}>
+        <blockquote
+          class={element.align + " text-muted border-left pl-3"}
+          {...attributes}
+        >
           {children}
-        </p>
+        </blockquote>
       );
     default:
       return (
@@ -279,14 +289,7 @@ const FlowTools = (props) => {
 
   return (
     <div {...props}>
-      <FlowButton
-        disabled
-        icon="server"
-        label="Storage"
-        onMouseDown={(event) => {
-          event.preventDefault();
-        }}
-      />
+      <FlowButton disabled icon="server" label="Storage" />
       <FlowButton
         disabled={editor.history.undos.length === 0}
         icon="undo"
@@ -323,6 +326,7 @@ const FlowTools = (props) => {
       <BlockButton format="heading-four" icon="heading" label="Heading 4" />
       <BlockButton format="heading-five" icon="heading" label="Heading 5" />
       <BlockButton format="heading-six" icon="heading" label="Heading 6" />
+      <BlockButton format="blockquote" icon="quote-left" label="Blockquote" />
       <AlignButton format="text-left" icon="align-left" label="Align Left" />
       <AlignButton
         format="text-center"
@@ -347,9 +351,10 @@ const FlowButton = (props) => {
       title={label}
       aria-label={label}
       onMouseDown={onMouseDown}
+      disabled={disabled}
       class={
-        "btn btn-outline-dark rounded-0 border-0 " +
-        (active ? "active" : "") +
+        "btn btn-outline-dark rounded-0 border-0" +
+        (active ? " active" : "") +
         (disabled ? " disabled" : "")
       }
     >
@@ -419,6 +424,7 @@ library.add(
   faSuperscript,
   faParagraph,
   faHeading,
+  faQuoteLeft,
   faAlignLeft,
   faAlignCenter,
   faAlignRight,
