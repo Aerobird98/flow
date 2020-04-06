@@ -1,14 +1,15 @@
 {
   "name": "flow",
-  "version": "0.6.0",
+  "version": "0.7.0",
   "description": "A compact web based rich-text editor that builds on top of Slate-js with powerful, yet simple and accessible editing capabilities.",
-  "main": "index.html",
   "private": true,
   "scripts": {
-    "start": "npm run dev",
-    "dev": "rm -rf dev && parcel serve index.html --port 3000 --out-dir dev",
-    "build": "rm -rf dist && parcel build index.html --out-dir dist --public-url /flow",
-    "deploy": "gh-pages -d dist"
+    "start": "npm run devel",
+    "clean": "rm -rf dist",
+    "devel": "npm run clean && parcel serve index.html --port 3000",
+    "build": "npm run clean && parcel build index.html --public-url /flow",
+    "deploy": "gh-pages -d dist",
+    "release": "npm run build && npm run deploy"
   },
   "repository": {
     "type": "git",
@@ -36,7 +37,7 @@
   },
   "devDependencies": {
     "gh-pages": "^2.2.0",
-    "parcel-bundler": "^1.12.4",
+    "parcel": "^1.12.4",
     "prettier": "^2.0.2",
     "sass": "^1.26.3"
   }

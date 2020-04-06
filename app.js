@@ -7,7 +7,7 @@ import { withHistory } from "slate-history";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { library } from "@fortawesome/fontawesome-svg-core";
 import {
-  faServer,
+  faTools,
   faUndo,
   faRedo,
   faBold,
@@ -32,6 +32,10 @@ import "./app.scss";
 // the code below. Note this comes with some pitfalls.
 // See the serviceWorker.js script for details.
 //import * as serviceWorker from "./serviceWorker.js";
+
+const IS_MAC =
+  typeof window != "undefined" &&
+  /Mac|iPod|iPhone|iPad/.test(window.navigator.platform);
 
 const FlowEditor = {
   // Define a serializing function that takes nodes and
@@ -240,45 +244,86 @@ const FlowEditable = (props) => {
     return <FlowElement {...props} />;
   }, []);
 
+  const onKeyDown = (event) => {
+    if (IS_MAC ? event.metaKey : event.ctrlKey) {
+      if (event.altKey) {
+        switch (event.key) {
+          case "0": {
+            event.preventDefault();
+            FlowEditor.toggleBlock(editor, "paragraph");
+            break;
+          }
+          case "1": {
+            event.preventDefault();
+            FlowEditor.toggleBlock(editor, "heading-one");
+            break;
+          }
+          case "2": {
+            event.preventDefault();
+            FlowEditor.toggleBlock(editor, "heading-two");
+            break;
+          }
+          case "3": {
+            event.preventDefault();
+            FlowEditor.toggleBlock(editor, "heading-three");
+            break;
+          }
+          case "4": {
+            event.preventDefault();
+            FlowEditor.toggleBlock(editor, "heading-four");
+            break;
+          }
+          case "5": {
+            event.preventDefault();
+            FlowEditor.toggleBlock(editor, "heading-five");
+            break;
+          }
+          case "6": {
+            event.preventDefault();
+            FlowEditor.toggleBlock(editor, "heading-six");
+            break;
+          }
+        }
+      }
+      switch (event.key) {
+        case "b": {
+          event.preventDefault();
+          FlowEditor.toggleMark(editor, "bold");
+          break;
+        }
+        case "i": {
+          event.preventDefault();
+          FlowEditor.toggleMark(editor, "italic");
+          break;
+        }
+        case "u": {
+          event.preventDefault();
+          FlowEditor.toggleMark(editor, "underline");
+          break;
+        }
+        case "s": {
+          event.preventDefault();
+          FlowEditor.toggleMark(editor, "strikethrough");
+          break;
+        }
+        case "~": {
+          event.preventDefault();
+          FlowEditor.toggleMark(editor, "code");
+          break;
+        }
+        default:
+          break;
+      }
+    }
+  };
+
   return (
     <Editable
       spellCheck
       autoFocus
       renderLeaf={renderLeaf}
       renderElement={renderElement}
-      onKeyDown={(event) => {
-        if (event.ctrlKey) {
-          switch (event.key) {
-            case "b": {
-              event.preventDefault();
-              FlowEditor.toggleMark(editor, "bold");
-              break;
-            }
-            case "i": {
-              event.preventDefault();
-              FlowEditor.toggleMark(editor, "italic");
-              break;
-            }
-            case "u": {
-              event.preventDefault();
-              FlowEditor.toggleMark(editor, "underline");
-              break;
-            }
-            case "s": {
-              event.preventDefault();
-              FlowEditor.toggleMark(editor, "strikethrough");
-              break;
-            }
-            case "~": {
-              event.preventDefault();
-              FlowEditor.toggleMark(editor, "code");
-              break;
-            }
-            default:
-              break;
-          }
-        }
-      }}
+      onKeyDown={onKeyDown}
       {...props}
     />
   );
@@ -289,7 +334,7 @@ const FlowTools = (props) => {
 
   return (
     <div {...props}>
-      <FlowButton disabled icon="server" label="Storage" />
+      <FlowButton disabled icon="tools" label="Tools" />
       <FlowButton
         disabled={editor.history.undos.length === 0}
         icon="undo"
@@ -316,7 +361,7 @@ const FlowTools = (props) => {
         icon="strikethrough"
         label="Strikethrough"
       />
-      <MarkButton format="code" icon="code" label="Monospace" />
+      <MarkButton format="code" icon="code" label="Code" />
       <MarkButton format="subscript" icon="subscript" label="Subscript" />
       <MarkButton format="superscript" icon="superscript" label="Superscript" />
       <BlockButton format="paragraph" icon="paragraph" label="Paragraph" />
@@ -412,7 +457,7 @@ const AlignButton = (props) => {
 };
 
 library.add(
-  faServer,
+  faTools,
   faUndo,
   faRedo,
   faBold,

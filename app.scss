@@ -2,11 +2,11 @@
 @import "node_modules/bootstrap/scss/functions";
 @import "node_modules/bootstrap/scss/variables";
 @import "node_modules/bootstrap/scss/mixins";
-// Core
+// Optional
 @import "node_modules/bootstrap/scss/reboot";
 @import "node_modules/bootstrap/scss/type";
 //@import "node_modules/bootstrap/scss/images";
-//@import "node_modules/bootstrap/scss/code";
+@import "node_modules/bootstrap/scss/code";
 //@import "node_modules/bootstrap/scss/grid";
 // Utilities
 @import "node_modules/bootstrap/scss/utilities/align";
@@ -28,7 +28,7 @@
 //@import "node_modules/bootstrap/scss/utilities/visibility";
 // Components
 @import "node_modules/bootstrap/scss/buttons";
-
+// Custom
 @media print {
   .d-print-p-0 {
     padding: 0rem !important;
