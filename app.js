@@ -115,14 +115,14 @@ const FlowEditor = {
 const Flow = (props) => {
   const editor = useMemo(() => withHistory(withReact(createEditor())), []);
   const [value, setValue] = useState(
-    JSON.parse(localStorage.getItem("content")) || [
+    JSON.parse(window.localStorage.getItem("content")) || [
       { children: [{ text: "" }] },
     ]
   );
 
   const onChange = (value) => {
     setValue(value);
-    localStorage.setItem("content", JSON.stringify(value));
+    window.localStorage.setItem("content", JSON.stringify(value));
   };
 
   return (
@@ -181,46 +181,43 @@ const FlowElement = (props) => {
       );
     case "heading-one":
       return (
-        <h1 class={element.align} {...attributes}>
+        <h1 class={element.align + " h1"} {...attributes}>
           {children}
         </h1>
       );
     case "heading-two":
       return (
-        <h2 class={element.align} {...attributes}>
+        <h2 class={element.align + " h2"} {...attributes}>
           {children}
         </h2>
       );
     case "heading-three":
       return (
-        <h3 class={element.align} {...attributes}>
+        <h3 class={element.align + " h3"} {...attributes}>
           {children}
         </h3>
       );
     case "heading-four":
       return (
-        <h4 class={element.align} {...attributes}>
+        <h4 class={element.align + " h4"} {...attributes}>
           {children}
         </h4>
       );
     case "heading-five":
       return (
-        <h5 class={element.align} {...attributes}>
+        <h5 class={element.align + " h5"} {...attributes}>
           {children}
         </h5>
       );
     case "heading-six":
       return (
-        <h6 class={element.align} {...attributes}>
+        <h6 class={element.align + " h6"} {...attributes}>
           {children}
         </h6>
       );
     case "blockquote":
       return (
-        <blockquote
-          class={element.align + " text-muted border-left pl-3"}
-          {...attributes}
-        >
+        <blockquote class={element.align + " blockquote"} {...attributes}>
           {children}
         </blockquote>
       );
