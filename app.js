@@ -23,6 +23,7 @@ import {
   faAlignJustify,
 } from "@fortawesome/free-solid-svg-icons";
 
+import "typeface-quicksand";
 import "./app.scss";
 
 // If you want your app to work offline and load faster, you can uncoment
