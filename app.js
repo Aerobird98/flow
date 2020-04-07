@@ -15,15 +15,12 @@ import {
   faUnderline,
   faStrikethrough,
   faCode,
-  faSubscript,
-  faSuperscript,
   faParagraph,
   faHeading,
   faAlignLeft,
   faAlignCenter,
   faAlignRight,
   faAlignJustify,
-  faQuoteLeft,
 } from "@fortawesome/free-solid-svg-icons";
 
 import "./app.scss";
@@ -157,14 +154,6 @@ const FlowLeaf = (props) => {
     children = <code>{children}</code>;
   }
 
-  if (leaf.subscript) {
-    children = <sub>{children}</sub>;
-  }
-
-  if (leaf.superscript) {
-    children = <sup>{children}</sup>;
-  }
-
   return <span {...attributes}>{children}</span>;
 };
 
@@ -214,12 +203,6 @@ const FlowElement = (props) => {
         <h6 class={element.align + " h6"} {...attributes}>
           {children}
         </h6>
-      );
-    case "blockquote":
-      return (
-        <blockquote class={element.align + " blockquote"} {...attributes}>
-          {children}
-        </blockquote>
       );
     default:
       return (
@@ -359,8 +342,6 @@ const FlowTools = (props) => {
         label="Strikethrough"
       />
       <MarkButton format="code" icon="code" label="Code" />
-      <MarkButton format="subscript" icon="subscript" label="Subscript" />
-      <MarkButton format="superscript" icon="superscript" label="Superscript" />
       <BlockButton format="paragraph" icon="paragraph" label="Paragraph" />
       <BlockButton format="heading-one" icon="heading" label="Heading 1" />
       <BlockButton format="heading-two" icon="heading" label="Heading 2" />
@@ -368,7 +349,6 @@ const FlowTools = (props) => {
       <BlockButton format="heading-four" icon="heading" label="Heading 4" />
       <BlockButton format="heading-five" icon="heading" label="Heading 5" />
       <BlockButton format="heading-six" icon="heading" label="Heading 6" />
-      <BlockButton format="blockquote" icon="quote-left" label="Blockquote" />
       <AlignButton format="text-left" icon="align-left" label="Align Left" />
       <AlignButton
         format="text-center"
@@ -462,11 +442,8 @@ library.add(
   faUnderline,
   faStrikethrough,
   faCode,
-  faSubscript,
-  faSuperscript,
   faParagraph,
   faHeading,
-  faQuoteLeft,
   faAlignLeft,
   faAlignCenter,
   faAlignRight,

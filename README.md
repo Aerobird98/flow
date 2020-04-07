@@ -6,9 +6,7 @@ Flow (the app) is a _"standardized"_ or heavily _opinionated_ tool and by that I
 
 ## Usage
 
-Use the buttons in the tools section at the top of the app or use _keyboard_ sortcuts listed in the table below to toggle _mark-style_ formating like **Bold**, _Italic_, <u>Underline</u>, ~~Strikethrough~~, or `code` on the selected text, _block-style_ formating however like Paragraphs and Heading types or Aligning don't need selection, just make sure to leave the cursor in the block that needs formating before pushing those buttons to toggle the needed styles. Flow (the app) will highlight buttons when their format is active on the selected text or on the block the cursor is in.
-
-The editor has an autosaving feature that saves your documents to your browser's _local-storage_ container. If you are done editing your document, use your browser's built-in printing capabilities (like print-to-pdf) to produce a print with customized margins, headers, footers and the like through the aformentioned printing feature's custom parameters. Please note that Flow (the app) don't have any defaults for printing margins and other options, you **MUST** rely on your browser for that.
+Use the buttons in the tools section at the top of the app or use _keyboard_ sortcuts listed in the table below to toggle _mark-style_ formating like **Bold**, _Italic_, <u>Underline</u>, ~~Strikethrough~~, or `code` on the selected text, _block-style_ formating however like Paragraphs and Heading types or Aligning don't need selection, just make sure to leave the cursor in the block that needs formating before pushing those buttons to toggle the needed styles. Flow (the app) will highlight buttons when their format is active on the selected text or on the block the cursor is in. The editor has an autosaving feature that saves your documents to your browser's _local-storage_ container which you can acces through the developer-tools of your browser.
 
 | Shortcut         | Description                                  |
 | ---------------- | -------------------------------------------- |
@@ -32,7 +30,7 @@ The editor has an autosaving feature that saves your documents to your browser's
 
 ## Development
 
-This app is using [Preact-js](https://preactjs.com/) a fast 3kB alternative to [React-js](https://reactjs.org/) with the same _modern_ **API**, bundled by [Parcel-js](https://parceljs.org/) a blazing fast, zero configuration web application bundler and currently using [Bootstrap](https://getbootstrap.com/) as an opinionated design system to build upon.
+This app is using [Preact-js](https://preactjs.com/) a fast 3kB alternative to [React-js](https://reactjs.org/) with the same _modern_ **API**, bundled by [Parcel-js](https://parceljs.org/) a blazing fast, zero configuration web application bundler and currently using [Bootstrap](https://getbootstrap.com/) as an opinionated design system to build upon paired with [FontAwesome]()'s **awesome** icons.
 
 Run `npm install` in the project directory to install all the dependencies and dev-tools so these commands will become available:
 
