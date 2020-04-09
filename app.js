@@ -3,18 +3,16 @@ import { h, render } from "preact";
 import { useMemo, useState, useCallback } from "preact/hooks";
 import { createEditor, Transforms, Editor, Node } from "slate";
 import { Slate, useSlate, Editable, withReact } from "slate-react";
-import { withHistory } from "slate-history";
+import { withHistory, HistoryEditor } from "slate-history";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { library } from "@fortawesome/fontawesome-svg-core";
 import {
-  faTools,
   faUndo,
   faRedo,
   faBold,
   faItalic,
   faUnderline,
   faStrikethrough,
-  faCode,
   faParagraph,
   faHeading,
   faAlignLeft,
@@ -112,10 +110,9 @@ const FlowEditor = {
 
 const Flow = (props) => {
   const editor = useMemo(() => withHistory(withReact(createEditor())), []);
+  const defaultValue = [{ children: [{ text: "" }] }];
   const [value, setValue] = useState(
-    JSON.parse(window.localStorage.getItem("content")) || [
-      { children: [{ text: "" }] },
-    ]
+    JSON.parse(window.localStorage.getItem("content")) || defaultValue
   );
 
   const onChange = (value) => {
@@ -124,14 +121,16 @@ const Flow = (props) => {
   };
 
   return (
-    <Slate editor={editor} value={value} onChange={onChange} {...props}>
-      <FlowTools class="d-block d-print-none sticky-top bg-light text-dark" />
-      <FlowEditable class="d-block d-print-block d-print-p-0 p-5 bg-light text-dark" />
+    <Slate editor={editor} value={value} onChange={onChange}>
+      <div class="d-flex flex-column min-vh-100" {...props}>
+        <Toolbox />
+        <Textbox />
+      </div>
     </Slate>
   );
 };
 
-const FlowLeaf = (props) => {
+const Leaf = (props) => {
   const { attributes, leaf } = props;
   let { children } = props;
 
@@ -151,14 +150,10 @@ const FlowLeaf = (props) => {
     children = <s>{children}</s>;
   }
 
-  if (leaf.code) {
-    children = <code>{children}</code>;
-  }
-
   return <span {...attributes}>{children}</span>;
 };
 
-const FlowElement = (props) => {
+const Element = (props) => {
   const { attributes, element } = props;
   let { children } = props;
 
@@ -207,26 +202,28 @@ const FlowElement = (props) => {
       );
     default:
       return (
-        <div class={element.align} {...attributes}>
+        <div class={element.align + " text-monospace"} {...attributes}>
           {children}
         </div>
       );
   }
 };
 
-const FlowEditable = (props) => {
+const Textbox = (props) => {
   const editor = useSlate();
 
   const renderLeaf = useCallback((props) => {
-    return <FlowLeaf {...props} />;
+    return <Leaf {...props} />;
   }, []);
 
   const renderElement = useCallback((props) => {
-    return <FlowElement {...props} />;
+    return <Element {...props} />;
   }, []);
 
   const onKeyDown = (event) => {
-    if (IS_MAC ? event.metaKey : event.ctrlKey) {
+    const modifier = IS_MAC ? event.metaKey : event.ctrlKey;
+
+    if (modifier) {
       if (event.altKey) {
         switch (event.key) {
           case "0": {
@@ -265,75 +262,57 @@ const FlowEditable = (props) => {
             break;
           }
         }
-      }
-      switch (event.key) {
-        case "b": {
-          event.preventDefault();
-          FlowEditor.toggleMark(editor, "bold");
-          break;
+      } else {
+        switch (event.key) {
+          case "b": {
+            event.preventDefault();
+            FlowEditor.toggleMark(editor, "bold");
+            break;
+          }
+          case "i": {
+            event.preventDefault();
+            FlowEditor.toggleMark(editor, "italic");
+            break;
+          }
+          case "u": {
+            event.preventDefault();
+            FlowEditor.toggleMark(editor, "underline");
+            break;
+          }
+          case "s": {
+            event.preventDefault();
+            FlowEditor.toggleMark(editor, "strikethrough");
+            break;
+          }
+          default:
+            break;
         }
-        case "i": {
-          event.preventDefault();
-          FlowEditor.toggleMark(editor, "italic");
-          break;
-        }
-        case "u": {
-          event.preventDefault();
-          FlowEditor.toggleMark(editor, "underline");
-          break;
-        }
-        case "s": {
-          event.preventDefault();
-          FlowEditor.toggleMark(editor, "strikethrough");
-          break;
-        }
-        case "~": {
-          event.preventDefault();
-          FlowEditor.toggleMark(editor, "code");
-          break;
-        }
-        default:
-          break;
       }
     }
   };
 
   return (
     <Editable
+      as="div"
       spellCheck
       autoFocus
       renderLeaf={renderLeaf}
       renderElement={renderElement}
       onKeyDown={onKeyDown}
+      class="d-flex flex-column flex-fill d-print-block d-print-p-0 p-5 bg-light text-dark"
       {...props}
     />
   );
 };
 
-const FlowTools = (props) => {
-  const editor = useSlate();
-
+const Toolbox = (props) => {
   return (
-    <div {...props}>
-      <FlowButton disabled icon="tools" label="Tools" />
-      <FlowButton
-        disabled={editor.history.undos.length === 0}
-        icon="undo"
-        label="Undo"
-        onMouseDown={(event) => {
-          event.preventDefault();
-          editor.undo();
-        }}
-      />
-      <FlowButton
-        disabled={editor.history.redos.length === 0}
-        icon="redo"
-        label="Redo"
-        onMouseDown={(event) => {
-          event.preventDefault();
-          editor.redo();
-        }}
-      />
+    <div
+      class="d-flex flex-wrap p-3 d-print-none sticky-top bg-light text-dark"
+      {...props}
+    >
+      <UndoButton />
+      <RedoButton />
       <MarkButton format="bold" icon="bold" label="Bold" />
       <MarkButton format="italic" icon="italic" label="Italic" />
       <MarkButton format="underline" icon="underline" label="Underline" />
@@ -342,14 +321,13 @@ const FlowTools = (props) => {
         icon="strikethrough"
         label="Strikethrough"
       />
-      <MarkButton format="code" icon="code" label="Code" />
       <BlockButton format="paragraph" icon="paragraph" label="Paragraph" />
-      <BlockButton format="heading-one" icon="heading" label="Heading 1" />
-      <BlockButton format="heading-two" icon="heading" label="Heading 2" />
-      <BlockButton format="heading-three" icon="heading" label="Heading 3" />
-      <BlockButton format="heading-four" icon="heading" label="Heading 4" />
-      <BlockButton format="heading-five" icon="heading" label="Heading 5" />
       <BlockButton format="heading-six" icon="heading" label="Heading 6" />
+      <BlockButton format="heading-five" icon="heading" label="Heading 5" />
+      <BlockButton format="heading-four" icon="heading" label="Heading 4" />
+      <BlockButton format="heading-three" icon="heading" label="Heading 3" />
+      <BlockButton format="heading-two" icon="heading" label="Heading 2" />
+      <BlockButton format="heading-one" icon="heading" label="Heading 1" />
       <AlignButton format="text-left" icon="align-left" label="Align Left" />
       <AlignButton
         format="text-center"
@@ -366,7 +344,7 @@ const FlowTools = (props) => {
   );
 };
 
-const FlowButton = (props) => {
+const Button = (props) => {
   const { icon, label, active, disabled, onMouseDown } = props;
 
   return (
@@ -376,26 +354,47 @@ const FlowButton = (props) => {
       onMouseDown={onMouseDown}
       disabled={disabled}
       class={
-        "btn btn-outline-dark rounded-0 border-0" +
-        (active ? " active" : "") +
-        (disabled ? " disabled" : "")
+        "btn mr-1" +
+        (disabled
+          ? " disabled text-muted"
+          : active
+          ? " text-light bg-dark"
+          : " text-dark bg-light")
       }
     >
-      {icon ? <FontAwesomeIcon icon={icon} fixedWidth /> : label}
+      <FontAwesomeIcon icon={icon} fixedWidth />
     </button>
   );
 };
 
-const BlockButton = (props) => {
-  const { format } = props;
+const UndoButton = (props) => {
   const editor = useSlate();
 
   return (
-    <FlowButton
-      active={FlowEditor.isBlockActive(editor, format)}
+    <Button
+      disabled={editor.history.undos.length === 0}
+      icon="undo"
+      label="Undo"
       onMouseDown={(event) => {
         event.preventDefault();
-        FlowEditor.toggleBlock(editor, format);
+        HistoryEditor.undo(editor);
+      }}
+      {...props}
+    />
+  );
+};
+
+const RedoButton = (props) => {
+  const editor = useSlate();
+
+  return (
+    <Button
+      disabled={editor.history.redos.length === 0}
+      icon="redo"
+      label="Redo"
+      onMouseDown={(event) => {
+        event.preventDefault();
+        HistoryEditor.redo(editor);
       }}
       {...props}
     />
@@ -407,11 +406,29 @@ const MarkButton = (props) => {
   const editor = useSlate();
 
   return (
-    <FlowButton
+    <Button
       active={FlowEditor.isMarkActive(editor, format)}
+      label="Mark"
       onMouseDown={(event) => {
         event.preventDefault();
         FlowEditor.toggleMark(editor, format);
+      }}
+      {...props}
+    />
+  );
+};
+
+const BlockButton = (props) => {
+  const { format } = props;
+  const editor = useSlate();
+
+  return (
+    <Button
+      active={FlowEditor.isBlockActive(editor, format)}
+      label="Block"
+      onMouseDown={(event) => {
+        event.preventDefault();
+        FlowEditor.toggleBlock(editor, format);
       }}
       {...props}
     />
@@ -423,8 +440,9 @@ const AlignButton = (props) => {
   const editor = useSlate();
 
   return (
-    <FlowButton
+    <Button
       active={FlowEditor.isAlignActive(editor, format)}
+      label="Align"
       onMouseDown={(event) => {
         event.preventDefault();
         FlowEditor.toggleAlign(editor, format);
@@ -435,14 +453,12 @@ const AlignButton = (props) => {
 };
 
 library.add(
-  faTools,
   faUndo,
   faRedo,
   faBold,
   faItalic,
   faUnderline,
   faStrikethrough,
-  faCode,
   faParagraph,
   faHeading,
   faAlignLeft,
