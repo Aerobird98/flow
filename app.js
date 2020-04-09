@@ -1,7 +1,7 @@
 /** @jsx h */
 import { h, render } from "preact";
 import { useMemo, useState, useCallback } from "preact/hooks";
-import { createEditor, Transforms, Editor, Node } from "slate";
+import { createEditor, Transforms, Editor, Node, Text } from "slate";
 import { Slate, useSlate, Editable, withReact } from "slate-react";
 import { withHistory, HistoryEditor } from "slate-history";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -13,6 +13,7 @@ import {
   faItalic,
   faUnderline,
   faStrikethrough,
+  faRemoveFormat,
   faParagraph,
   faHeading,
   faAlignLeft,
@@ -28,10 +29,6 @@ import "./app.scss";
 // the code below. Note this comes with some pitfalls.
 // See the serviceWorker.js script for details.
 //import * as serviceWorker from "./serviceWorker.js";
-
-const IS_MAC =
-  typeof window != "undefined" &&
-  /Mac|iPod|iPhone|iPad/.test(window.navigator.platform);
 
 const FlowEditor = {
   // Define a serializing function that takes nodes and
@@ -52,13 +49,16 @@ const FlowEditor = {
   },
 
   isMarkActive(editor, format) {
-    const marks = Editor.marks(editor);
-    return marks ? marks[format] === true : false;
+    const [match] = Editor.nodes(editor, {
+      match: (n) => Text.isText(n) && n[format] === true,
+    });
+
+    return !!match;
   },
 
   isBlockActive(editor, format) {
     const [match] = Editor.nodes(editor, {
-      match: (n) => n.type === format,
+      match: (n) => Editor.isBlock(editor, n) && n.type === format,
     });
 
     return !!match;
@@ -66,7 +66,7 @@ const FlowEditor = {
 
   isAlignActive(editor, align) {
     const [match] = Editor.nodes(editor, {
-      match: (n) => n.align === align,
+      match: (n) => Editor.isBlock(editor, n) && n.align === align,
     });
 
     return !!match;
@@ -74,15 +74,21 @@ const FlowEditor = {
 
   toggleMark(editor, format) {
     const active = FlowEditor.isMarkActive(editor, format);
-    if (active) {
-      Editor.removeMark(editor, format);
-    } else {
-      Editor.addMark(editor, format, true);
-    }
+    Transforms.setNodes(
+      editor,
+      {
+        [format]: active ? null : true,
+      },
+      {
+        match: (n) => Text.isText(n),
+        split: true,
+      }
+    );
   },
 
   toggleBlock(editor, format) {
     const active = FlowEditor.isBlockActive(editor, format);
+
     Transforms.setNodes(
       editor,
       {
@@ -90,12 +96,14 @@ const FlowEditor = {
       },
       {
         match: (n) => Editor.isBlock(editor, n),
+        split: true,
       }
     );
   },
 
   toggleAlign(editor, format) {
     const active = FlowEditor.isAlignActive(editor, format);
+
     Transforms.setNodes(
       editor,
       {
@@ -221,11 +229,14 @@ const Textbox = (props) => {
   }, []);
 
   const onKeyDown = (event) => {
-    const modifier = IS_MAC ? event.metaKey : event.ctrlKey;
+    const ON_MAC = /Mac|iPod|iPhone|iPad/.test(window.navigator.platform);
+    const key = event.key;
+    const modKey = ON_MAC ? event.metaKey : event.ctrlKey;
+    const altKey = event.altKey;
 
-    if (modifier) {
-      if (event.altKey) {
-        switch (event.key) {
+    if (modKey) {
+      if (altKey) {
+        switch (key) {
           case "0": {
             event.preventDefault();
             FlowEditor.toggleBlock(editor, "paragraph");
@@ -261,9 +272,11 @@ const Textbox = (props) => {
             FlowEditor.toggleBlock(editor, "heading-six");
             break;
           }
+          default:
+            break;
         }
       } else {
-        switch (event.key) {
+        switch (key) {
           case "b": {
             event.preventDefault();
             FlowEditor.toggleMark(editor, "bold");
@@ -459,6 +472,7 @@ library.add(
   faItalic,
   faUnderline,
   faStrikethrough,
+  faRemoveFormat,
   faParagraph,
   faHeading,
   faAlignLeft,
