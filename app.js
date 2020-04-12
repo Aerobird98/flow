@@ -1,14 +1,16 @@
 /** @jsx h */
 import { h, render } from "preact";
 import { useMemo, useState, useCallback } from "preact/hooks";
-import { createEditor, Transforms, Editor, Node, Text } from "slate";
+import { createEditor, Transforms, Editor, Node, Text, Range } from "slate";
 import { Slate, useSlate, Editable, withReact } from "slate-react";
 import { withHistory, HistoryEditor } from "slate-history";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { library } from "@fortawesome/fontawesome-svg-core";
 import {
+  faExpand,
   faUndo,
   faRedo,
+  faPrint,
   faBold,
   faItalic,
   faUnderline,
@@ -20,6 +22,8 @@ import {
   faAlignCenter,
   faAlignRight,
   faAlignJustify,
+  faLink,
+  faImage,
 } from "@fortawesome/free-solid-svg-icons";
 
 import "typeface-quicksand";
@@ -31,59 +35,69 @@ import "./app.scss";
 //import * as serviceWorker from "./serviceWorker.js";
 
 const FlowEditor = {
-  // Define a serializing function that takes nodes and
-  // returns the string content of each paragraph in the nodes's children
+  // Define a serializing function that takes a value and
+  // returns the string content of each node in the value's children
   // then joins them all with line breaks denoting paragraphs.
-  serializePlainText(nodes) {
-    return nodes.map((n) => Node.string(n)).join("\n");
+  serializePlainText(value) {
+    return value.map((n) => Node.string(n)).join("\n");
   },
 
   // Define a deserializing function that takes a string and
-  // returns nodes as an array of children derived by splitting the string.
+  // returns a value as an array of children derived by splitting the string.
   deserializePlainText(string) {
-    return string.split("\n").map((line) => {
+    return string.split("\n").map((paragraph) => {
       return {
-        children: [{ text: line }],
+        children: [{ text: paragraph }],
       };
     });
   },
 
   isMarkActive(editor, format) {
+    const isCollapsed = FlowEditor.isSelectionCollapsed(editor);
     const [match] = Editor.nodes(editor, {
-      match: (n) => Text.isText(n) && n[format] === true,
+      match: (n) => n[format] === true,
     });
 
-    return !!match;
+    return isCollapsed ? false : !!match;
   },
 
   isBlockActive(editor, format) {
     const [match] = Editor.nodes(editor, {
-      match: (n) => Editor.isBlock(editor, n) && n.type === format,
+      match: (n) => n.type === format,
     });
 
     return !!match;
   },
 
-  isAlignActive(editor, align) {
+  isAlignActive(editor, format) {
     const [match] = Editor.nodes(editor, {
-      match: (n) => Editor.isBlock(editor, n) && n.align === align,
+      match: (n) => n.align === format,
     });
 
     return !!match;
+  },
+
+  isSelectionCollapsed(editor) {
+    const { selection } = editor;
+    return selection && Range.isCollapsed(selection);
   },
 
   toggleMark(editor, format) {
     const active = FlowEditor.isMarkActive(editor, format);
-    Transforms.setNodes(
-      editor,
-      {
-        [format]: active ? null : true,
-      },
-      {
-        match: (n) => Text.isText(n),
-        split: true,
-      }
-    );
+    const isCollapsed = FlowEditor.isSelectionCollapsed(editor);
+
+    if (!isCollapsed) {
+      Transforms.setNodes(
+        editor,
+        {
+          [format]: active ? null : true,
+        },
+        {
+          match: (n) => Text.isText(n),
+          split: true,
+        }
+      );
+    }
   },
 
   toggleBlock(editor, format) {
@@ -96,7 +110,6 @@ const FlowEditor = {
       },
       {
         match: (n) => Editor.isBlock(editor, n),
-        split: true,
       }
     );
   },
@@ -114,18 +127,121 @@ const FlowEditor = {
       }
     );
   },
+
+  insertLink(editor, url, text) {
+    if (url) {
+      Transforms.insertNodes(editor, {
+        type: "link",
+        url: url,
+        children: [{ text: text ? text : url }],
+      });
+    }
+  },
+
+  insertImage(editor, url) {
+    if (url) {
+      Transforms.insertNodes(editor, {
+        type: "image",
+        url: url,
+        children: [{ text: "" }],
+      });
+    }
+  },
+
+  openFullscreen() {
+    const element = document.documentElement;
+
+    if (element.requestFullscreen) {
+      element.requestFullscreen();
+    } else if (element.mozRequestFullScreen) {
+      element.mozRequestFullScreen();
+    } else if (element.webkitRequestFullscreen) {
+      element.webkitRequestFullscreen();
+    } else if (element.msRequestFullscreen) {
+      element.msRequestFullscreen();
+    }
+  },
+
+  closeFullscreen() {
+    if (document.exitFullscreen) {
+      document.exitFullscreen();
+    } else if (document.mozCancelFullScreen) {
+      document.mozCancelFullScreen();
+    } else if (document.webkitExitFullscreen) {
+      document.webkitExitFullscreen();
+    } else if (document.msExitFullscreen) {
+      document.msExitFullscreen();
+    }
+  },
+
+  isfullscreenActive() {
+    return !!(
+      document.fullscreenElement ||
+      document.mozFullScreenElement ||
+      document.webkitFullscreenElement ||
+      document.msFullscreenElement
+    );
+  },
+
+  toggleFullscreen() {
+    if (FlowEditor.isfullscreenActive()) {
+      FlowEditor.closeFullscreen();
+    } else {
+      FlowEditor.openFullscreen();
+    }
+  },
+
+  print() {
+    return window.print();
+  },
+
+  save(key, value) {
+    return window.localStorage.setItem(key, JSON.stringify(value));
+  },
+
+  load(key) {
+    return (
+      JSON.parse(window.localStorage.getItem(key)) || [
+        { children: [{ text: "" }] },
+      ]
+    );
+  },
+};
+
+const withFlow = (editor) => {
+  const { isVoid, isInline } = editor;
+
+  editor.isVoid = (element) => {
+    switch (element.type) {
+      case "image":
+        return true;
+      default:
+        return isVoid(element);
+    }
+  };
+
+  editor.isInline = (element) => {
+    switch (element.type) {
+      case "link":
+        return true;
+      default:
+        return isInline(element);
+    }
+  };
+
+  return editor;
 };
 
 const Flow = (props) => {
-  const editor = useMemo(() => withHistory(withReact(createEditor())), []);
-  const defaultValue = [{ children: [{ text: "" }] }];
-  const [value, setValue] = useState(
-    JSON.parse(window.localStorage.getItem("content")) || defaultValue
+  const editor = useMemo(
+    () => withFlow(withHistory(withReact(createEditor()))),
+    []
   );
+  const [value, setValue] = useState(FlowEditor.load("value"));
 
   const onChange = (value) => {
     setValue(value);
-    window.localStorage.setItem("content", JSON.stringify(value));
+    FlowEditor.save("value", value);
   };
 
   return (
@@ -208,6 +324,31 @@ const Element = (props) => {
           {children}
         </h6>
       );
+    case "link":
+      return (
+        <a
+          class={element.align}
+          href={element.url}
+          title={element.url}
+          {...attributes}
+        >
+          {children}
+        </a>
+      );
+    case "image":
+      return (
+        <div class={element.align + " mb-3"}>
+          <img
+            class="img-fluid rounded"
+            src={element.url}
+            title={element.url}
+            alt="image"
+            {...attributes}
+          >
+            {children}
+          </img>
+        </div>
+      );
     default:
       return (
         <div class={element.align + " text-monospace"} {...attributes}>
@@ -237,66 +378,63 @@ const Textbox = (props) => {
     if (modKey) {
       if (altKey) {
         switch (key) {
-          case "0": {
+          case "f":
+            event.preventDefault();
+            FlowEditor.toggleFullscreen();
+            break;
+          case "0":
             event.preventDefault();
             FlowEditor.toggleBlock(editor, "paragraph");
             break;
-          }
-          case "1": {
+          case "1":
             event.preventDefault();
             FlowEditor.toggleBlock(editor, "heading-one");
             break;
-          }
-          case "2": {
+          case "2":
             event.preventDefault();
             FlowEditor.toggleBlock(editor, "heading-two");
             break;
-          }
-          case "3": {
+          case "3":
             event.preventDefault();
             FlowEditor.toggleBlock(editor, "heading-three");
             break;
-          }
-          case "4": {
+          case "4":
             event.preventDefault();
             FlowEditor.toggleBlock(editor, "heading-four");
             break;
-          }
-          case "5": {
+          case "5":
             event.preventDefault();
             FlowEditor.toggleBlock(editor, "heading-five");
             break;
-          }
-          case "6": {
+          case "6":
             event.preventDefault();
             FlowEditor.toggleBlock(editor, "heading-six");
             break;
-          }
           default:
             break;
         }
       } else {
         switch (key) {
-          case "b": {
+          case "p":
+            event.preventDefault();
+            FlowEditor.print();
+            break;
+          case "b":
             event.preventDefault();
             FlowEditor.toggleMark(editor, "bold");
             break;
-          }
-          case "i": {
+          case "i":
             event.preventDefault();
             FlowEditor.toggleMark(editor, "italic");
             break;
-          }
-          case "u": {
+          case "u":
             event.preventDefault();
             FlowEditor.toggleMark(editor, "underline");
             break;
-          }
-          case "s": {
+          case "s":
             event.preventDefault();
             FlowEditor.toggleMark(editor, "strikethrough");
             break;
-          }
           default:
             break;
         }
@@ -324,8 +462,10 @@ const Toolbox = (props) => {
       class="d-flex flex-wrap p-3 d-print-none sticky-top bg-light text-dark"
       {...props}
     >
+      <FullscreenButton />
       <UndoButton />
       <RedoButton />
+      <PrintButton />
       <MarkButton format="bold" icon="bold" label="Bold" />
       <MarkButton format="italic" icon="italic" label="Italic" />
       <MarkButton format="underline" icon="underline" label="Underline" />
@@ -353,6 +493,8 @@ const Toolbox = (props) => {
         icon="align-justify"
         label="Align Justify"
       />
+      <LinkButton />
+      <ImageButton />
     </div>
   );
 };
@@ -369,7 +511,7 @@ const Button = (props) => {
       class={
         "btn mr-1" +
         (disabled
-          ? " disabled text-muted"
+          ? " disabled"
           : active
           ? " text-light bg-dark"
           : " text-dark bg-light")
@@ -377,6 +519,20 @@ const Button = (props) => {
     >
       <FontAwesomeIcon icon={icon} fixedWidth />
     </button>
+  );
+};
+
+const FullscreenButton = (props) => {
+  return (
+    <Button
+      icon="expand"
+      label="Fullscreen"
+      onMouseDown={(event) => {
+        event.preventDefault();
+        FlowEditor.toggleFullscreen();
+      }}
+      {...props}
+    />
   );
 };
 
@@ -414,12 +570,27 @@ const RedoButton = (props) => {
   );
 };
 
+const PrintButton = (props) => {
+  return (
+    <Button
+      icon="print"
+      label="Print"
+      onMouseDown={(event) => {
+        event.preventDefault();
+        FlowEditor.print();
+      }}
+      {...props}
+    />
+  );
+};
+
 const MarkButton = (props) => {
   const { format } = props;
   const editor = useSlate();
 
   return (
     <Button
+      disabled={FlowEditor.isSelectionCollapsed(editor)}
       active={FlowEditor.isMarkActive(editor, format)}
       label="Mark"
       onMouseDown={(event) => {
@@ -465,9 +636,47 @@ const AlignButton = (props) => {
   );
 };
 
+const LinkButton = (props) => {
+  const editor = useSlate();
+
+  return (
+    <Button
+      icon="link"
+      label="Link"
+      onMouseDown={(event) => {
+        event.preventDefault();
+        FlowEditor.insertLink(
+          editor,
+          window.prompt("URL"),
+          window.prompt("TEXT")
+        );
+      }}
+      {...props}
+    />
+  );
+};
+
+const ImageButton = (props) => {
+  const editor = useSlate();
+
+  return (
+    <Button
+      icon="image"
+      label="Image"
+      onMouseDown={(event) => {
+        event.preventDefault();
+        FlowEditor.insertImage(editor, window.prompt("URL"));
+      }}
+      {...props}
+    />
+  );
+};
+
 library.add(
+  faExpand,
   faUndo,
   faRedo,
+  faPrint,
   faBold,
   faItalic,
   faUnderline,
@@ -478,9 +687,13 @@ library.add(
   faAlignLeft,
   faAlignCenter,
   faAlignRight,
-  faAlignJustify
+  faAlignJustify,
+  faLink,
+  faImage
 );
+
 render(<Flow />, document.getElementById("app"));
+
 // If you want your app to work offline and load faster, you can uncoment
 // the code below. Note this comes with some pitfalls.
 // See the serviceWorker.js script for details.
