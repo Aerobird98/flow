@@ -105,6 +105,7 @@ const FlowEditor = {
       editor,
       {
         type: active ? null : format,
+        url: null,
       },
       {
         match: (n) => Editor.isBlock(editor, n),
@@ -196,11 +197,7 @@ const FlowEditor = {
   },
 
   load(key) {
-    return (
-      JSON.parse(window.localStorage.getItem(key)) || [
-        { children: [{ text: "" }] },
-      ]
-    );
+    return JSON.parse(window.localStorage.getItem(key));
   },
 };
 
@@ -224,7 +221,9 @@ const Flow = (props) => {
     () => withFlow(withHistory(withReact(createEditor()))),
     []
   );
-  const [value, setValue] = useState(FlowEditor.load("value"));
+  const [value, setValue] = useState(
+    FlowEditor.load("value") || [{ children: [{ text: "" }] }]
+  );
 
   const onChange = (value) => {
     setValue(value);
@@ -432,7 +431,7 @@ const Textbox = (props) => {
 const Toolbox = (props) => {
   return (
     <div
-      class="d-flex flex-wrap p-3 d-print-none sticky-top bg-light text-dark"
+      class="d-flex flex-wrap justify-content-center p-5 d-print-none sticky-top bg-light text-dark"
       {...props}
     >
       <FullscreenButton />
@@ -643,7 +642,7 @@ library.add(
   faImage
 );
 
-render(<Flow />, document.getElementById("app"));
+render(<Flow />, document.getElementById("root"));
 
 // If you want your app to work offline and load faster, you can uncoment
 // the code below. Note this comes with some pitfalls.
