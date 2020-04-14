@@ -5,7 +5,7 @@
   "private": true,
   "scripts": {
     "start": "npm run devel",
-    "clean": "rm -rf dist",
+    "clean": "rimraf dist",
     "devel": "npm run clean && parcel serve index.html --port 3000",
     "build": "npm run clean && parcel build index.html --public-url /flow",
     "deploy": "gh-pages -d dist",
@@ -29,8 +29,7 @@
     "preact": "^10.4.0",
     "slate": "^0.57.1",
     "slate-history": "^0.57.1",
-    "slate-react": "^0.57.1",
-    "typeface-quicksand": "^1.1.4"
+    "slate-react": "^0.57.1"
   },
   "alias": {
     "react": "preact/compat",
@@ -40,6 +39,7 @@
     "gh-pages": "^2.2.0",
     "parcel": "^1.12.4",
     "prettier": "^2.0.4",
+    "rimraf": "^3.0.2",
     "sass": "^1.26.3"
   }
 }

@@ -22,12 +22,10 @@ import {
   faAlignCenter,
   faAlignRight,
   faAlignJustify,
-  faLink,
   faImage,
 } from "@fortawesome/free-solid-svg-icons";
 
-import "typeface-quicksand";
-import "./app.scss";
+import "./index.scss";
 
 // If you want your app to work offline and load faster, you can uncoment
 // the code below. Note this comes with some pitfalls.
@@ -128,18 +126,16 @@ const FlowEditor = {
     );
   },
 
-  insertLink(editor, url, text) {
-    if (url) {
-      Transforms.insertNodes(editor, {
-        type: "link",
-        url: url,
-        children: [{ text: text ? text : url }],
-      });
-    }
+  isUrlValid(url) {
+    return /^(ftp|http|https):\/\/[^ "]+$/.test(url);
+  },
+
+  isOnMac() {
+    return /Mac|iPod|iPhone|iPad/.test(window.navigator.platform);
   },
 
   insertImage(editor, url) {
-    if (url) {
+    if (url && FlowEditor.isUrlValid(url)) {
       Transforms.insertNodes(editor, {
         type: "image",
         url: url,
@@ -209,7 +205,7 @@ const FlowEditor = {
 };
 
 const withFlow = (editor) => {
-  const { isVoid, isInline } = editor;
+  const { isVoid } = editor;
 
   editor.isVoid = (element) => {
     switch (element.type) {
@@ -217,15 +213,6 @@ const withFlow = (editor) => {
         return true;
       default:
         return isVoid(element);
-    }
-  };
-
-  editor.isInline = (element) => {
-    switch (element.type) {
-      case "link":
-        return true;
-      default:
-        return isInline(element);
     }
   };
 
@@ -278,8 +265,7 @@ const Leaf = (props) => {
 };
 
 const Element = (props) => {
-  const { attributes, element } = props;
-  let { children } = props;
+  const { attributes, children, element } = props;
 
   switch (element.type) {
     case "paragraph":
@@ -324,24 +310,12 @@ const Element = (props) => {
           {children}
         </h6>
       );
-    case "link":
-      return (
-        <a
-          class={element.align}
-          href={element.url}
-          title={element.url}
-          {...attributes}
-        >
-          {children}
-        </a>
-      );
     case "image":
       return (
         <div class={element.align + " mb-3"}>
           <img
-            class="img-fluid rounded"
+            class="img img-fluid rounded"
             src={element.url}
-            title={element.url}
             alt="image"
             {...attributes}
           >
@@ -370,9 +344,8 @@ const Textbox = (props) => {
   }, []);
 
   const onKeyDown = (event) => {
-    const ON_MAC = /Mac|iPod|iPhone|iPad/.test(window.navigator.platform);
     const key = event.key;
-    const modKey = ON_MAC ? event.metaKey : event.ctrlKey;
+    const modKey = FlowEditor.isOnMac() ? event.metaKey : event.ctrlKey;
     const altKey = event.altKey;
 
     if (modKey) {
@@ -493,7 +466,6 @@ const Toolbox = (props) => {
         icon="align-justify"
         label="Align Justify"
       />
-      <LinkButton />
       <ImageButton />
     </div>
   );
@@ -636,26 +608,6 @@ const AlignButton = (props) => {
   );
 };
 
-const LinkButton = (props) => {
-  const editor = useSlate();
-
-  return (
-    <Button
-      icon="link"
-      label="Link"
-      onMouseDown={(event) => {
-        event.preventDefault();
-        FlowEditor.insertLink(
-          editor,
-          window.prompt("URL"),
-          window.prompt("TEXT")
-        );
-      }}
-      {...props}
-    />
-  );
-};
-
 const ImageButton = (props) => {
   const editor = useSlate();
 
@@ -688,7 +640,6 @@ library.add(
   faAlignCenter,
   faAlignRight,
   faAlignJustify,
-  faLink,
   faImage
 );
 
