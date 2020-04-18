@@ -44,7 +44,7 @@ const Themes = {
       heading: "inherit",
       monospace: "'Fira code', Courier, monospace",
     },
-    fontSizes: [12, 14, 16, 20, 24, 32, 48, 64],
+    fontSizes: ["1rem", "1.25", "1.5", "1.75", "2rem", "2.5rem"],
     fontWeights: {
       light: 300,
       body: 400,
@@ -68,30 +68,32 @@ const Themes = {
         lineHeight: "body",
         fontWeight: "body",
       },
-      p: {},
+      p: {
+        fontSize: 0,
+      },
       h1: {
-        variant: "text.heading",
-        fontSize: 7,
-      },
-      h2: {
-        variant: "text.heading",
-        fontSize: 6,
-      },
-      h3: {
         variant: "text.heading",
         fontSize: 5,
       },
-      h4: {
+      h2: {
         variant: "text.heading",
         fontSize: 4,
       },
-      h5: {
+      h3: {
         variant: "text.heading",
         fontSize: 3,
       },
-      h6: {
+      h4: {
         variant: "text.heading",
         fontSize: 2,
+      },
+      h5: {
+        variant: "text.heading",
+        fontSize: 1,
+      },
+      h6: {
+        variant: "text.heading",
+        fontSize: 0,
       },
       div: {
         fontFamily: "monospace",
