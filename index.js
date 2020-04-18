@@ -42,9 +42,9 @@ const Themes = {
     fonts: {
       body: "'Quicksand', Arial, Helvetica, sans-serif",
       heading: "inherit",
-      monospace: "'Fira code', Courier, monospace",
+      monospace: "'Fira code', 'Courier New', Courier, monospace",
     },
-    fontSizes: ["1rem", "1.25", "1.5", "1.75", "2rem", "2.5rem"],
+    fontSizes: ["1rem", "1.25rem", "1.5rem", "1.75rem", "2rem", "2.5rem"],
     fontWeights: {
       light: 300,
       body: 400,
