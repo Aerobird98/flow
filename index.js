@@ -22,10 +22,83 @@ import {
   faAlignCenter,
   faAlignRight,
   faAlignJustify,
-  faImage,
 } from "@fortawesome/free-solid-svg-icons";
 
-import "./index.scss";
+import { Box, Button, Styled, ThemeProvider } from "theme-ui";
+
+const Themes = {
+  flow: {
+    space: [0, 4, 8, 16, 24, 48],
+    breakpoints: [576, 768, 992, 1200],
+    colors: {
+      text: "#212529",
+      background: "#fff",
+      primary: "#007bff",
+      secondary: "#6c757d",
+      accent: "",
+      highlight: "#b5d5fc",
+      muted: "#dee2e6",
+    },
+    fonts: {
+      body: "'Quicksand', Arial, Helvetica, sans-serif",
+      heading: "inherit",
+      monospace: "'Fira code', Courier, monospace",
+    },
+    fontSizes: [12, 14, 16, 20, 24, 32, 48, 64],
+    fontWeights: {
+      light: 300,
+      body: 400,
+      heading: 500,
+      bold: 700,
+    },
+    lineHeights: {
+      body: 1.5,
+      heading: 1.2,
+    },
+    text: {
+      heading: {
+        fontFamily: "heading",
+        fontWeight: "heading",
+        lineHeight: "heading",
+      },
+    },
+    styles: {
+      root: {
+        fontFamily: "body",
+        lineHeight: "body",
+        fontWeight: "body",
+      },
+      p: {},
+      h1: {
+        variant: "text.heading",
+        fontSize: 7,
+      },
+      h2: {
+        variant: "text.heading",
+        fontSize: 6,
+      },
+      h3: {
+        variant: "text.heading",
+        fontSize: 5,
+      },
+      h4: {
+        variant: "text.heading",
+        fontSize: 4,
+      },
+      h5: {
+        variant: "text.heading",
+        fontSize: 3,
+      },
+      h6: {
+        variant: "text.heading",
+        fontSize: 2,
+      },
+      div: {
+        fontFamily: "monospace",
+      },
+    },
+  },
+};
 
 // If you want your app to work offline and load faster, you can uncoment
 // the code below. Note this comes with some pitfalls.
@@ -51,12 +124,12 @@ const FlowEditor = {
   },
 
   isMarkActive(editor, format) {
-    const isCollapsed = FlowEditor.isSelectionCollapsed(editor);
+    const selection = FlowEditor.isSelectionActive(editor);
     const [match] = Editor.nodes(editor, {
       match: (n) => n[format] === true,
     });
 
-    return isCollapsed ? false : !!match;
+    return selection ? !!match : false;
   },
 
   isBlockActive(editor, format) {
@@ -75,16 +148,25 @@ const FlowEditor = {
     return !!match;
   },
 
-  isSelectionCollapsed(editor) {
+  isSelectionActive(editor) {
     const { selection } = editor;
-    return selection && Range.isCollapsed(selection);
+    return selection && !Range.isCollapsed(selection);
+  },
+
+  isfullscreenActive() {
+    return !!(
+      window.document.fullscreenElement ||
+      window.document.mozFullScreenElement ||
+      window.document.webkitFullscreenElement ||
+      window.document.msFullscreenElement
+    );
   },
 
   toggleMark(editor, format) {
     const active = FlowEditor.isMarkActive(editor, format);
-    const isCollapsed = FlowEditor.isSelectionCollapsed(editor);
+    const selection = FlowEditor.isSelectionActive(editor);
 
-    if (!isCollapsed) {
+    if (selection) {
       Transforms.setNodes(
         editor,
         {
@@ -105,7 +187,6 @@ const FlowEditor = {
       editor,
       {
         type: active ? null : format,
-        url: null,
       },
       {
         match: (n) => Editor.isBlock(editor, n),
@@ -127,65 +208,38 @@ const FlowEditor = {
     );
   },
 
+  toggleFullscreen() {
+    const element = window.document.documentElement;
+
+    if (FlowEditor.isfullscreenActive()) {
+      if (window.document.exitFullscreen) {
+        window.document.exitFullscreen();
+      } else if (window.document.mozCancelFullScreen) {
+        window.document.mozCancelFullScreen();
+      } else if (window.document.webkitExitFullscreen) {
+        window.document.webkitExitFullscreen();
+      } else if (window.document.msExitFullscreen) {
+        window.document.msExitFullscreen();
+      }
+    } else {
+      if (element.requestFullscreen) {
+        element.requestFullscreen();
+      } else if (element.mozRequestFullScreen) {
+        element.mozRequestFullScreen();
+      } else if (element.webkitRequestFullscreen) {
+        element.webkitRequestFullscreen();
+      } else if (element.msRequestFullscreen) {
+        element.msRequestFullscreen();
+      }
+    }
+  },
+
   isUrlValid(url) {
     return /^(ftp|http|https):\/\/[^ "]+$/.test(url);
   },
 
   isOnMac() {
     return /Mac|iPod|iPhone|iPad/.test(window.navigator.platform);
-  },
-
-  insertImage(editor, url) {
-    if (url && FlowEditor.isUrlValid(url)) {
-      Transforms.insertNodes(editor, {
-        type: "image",
-        url: url,
-        children: [{ text: "" }],
-      });
-    }
-  },
-
-  openFullscreen() {
-    const element = document.documentElement;
-
-    if (element.requestFullscreen) {
-      element.requestFullscreen();
-    } else if (element.mozRequestFullScreen) {
-      element.mozRequestFullScreen();
-    } else if (element.webkitRequestFullscreen) {
-      element.webkitRequestFullscreen();
-    } else if (element.msRequestFullscreen) {
-      element.msRequestFullscreen();
-    }
-  },
-
-  closeFullscreen() {
-    if (document.exitFullscreen) {
-      document.exitFullscreen();
-    } else if (document.mozCancelFullScreen) {
-      document.mozCancelFullScreen();
-    } else if (document.webkitExitFullscreen) {
-      document.webkitExitFullscreen();
-    } else if (document.msExitFullscreen) {
-      document.msExitFullscreen();
-    }
-  },
-
-  isfullscreenActive() {
-    return !!(
-      document.fullscreenElement ||
-      document.mozFullScreenElement ||
-      document.webkitFullscreenElement ||
-      document.msFullscreenElement
-    );
-  },
-
-  toggleFullscreen() {
-    if (FlowEditor.isfullscreenActive()) {
-      FlowEditor.closeFullscreen();
-    } else {
-      FlowEditor.openFullscreen();
-    }
   },
 
   print() {
@@ -202,41 +256,85 @@ const FlowEditor = {
 };
 
 const withFlow = (editor) => {
-  const { isVoid } = editor;
-
-  editor.isVoid = (element) => {
-    switch (element.type) {
-      case "image":
-        return true;
-      default:
-        return isVoid(element);
-    }
-  };
-
   return editor;
 };
 
-const Flow = (props) => {
-  const editor = useMemo(
-    () => withFlow(withHistory(withReact(createEditor()))),
-    []
-  );
-  const [value, setValue] = useState(
-    FlowEditor.load("value") || [{ children: [{ text: "" }] }]
-  );
-
-  const onChange = (value) => {
-    setValue(value);
-    FlowEditor.save("value", value);
-  };
-
+const Root = (props) => {
   return (
-    <Slate editor={editor} value={value} onChange={onChange}>
-      <div class="d-flex flex-column min-vh-100" {...props}>
-        <Toolbox />
-        <Textbox />
-      </div>
-    </Slate>
+    <ThemeProvider theme={Themes.flow}>
+      <Flow>
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+            minHeight: "100vh",
+            "@media print": {
+              display: "block",
+            },
+          }}
+          {...props}
+        >
+          <Toolbox>
+            <FullscreenButton />
+            <UndoButton />
+            <RedoButton />
+            <PrintButton />
+            <MarkButton format="bold" icon="bold" label="Bold" />
+            <MarkButton format="italic" icon="italic" label="Italic" />
+            <MarkButton format="underline" icon="underline" label="Underline" />
+            <MarkButton
+              format="strikethrough"
+              icon="strikethrough"
+              label="Strikethrough"
+            />
+            <BlockButton
+              format="paragraph"
+              icon="paragraph"
+              label="Paragraph"
+            />
+            <BlockButton
+              format="heading-six"
+              icon="heading"
+              label="Heading 6"
+            />
+            <BlockButton
+              format="heading-five"
+              icon="heading"
+              label="Heading 5"
+            />
+            <BlockButton
+              format="heading-four"
+              icon="heading"
+              label="Heading 4"
+            />
+            <BlockButton
+              format="heading-three"
+              icon="heading"
+              label="Heading 3"
+            />
+            <BlockButton
+              format="heading-two"
+              icon="heading"
+              label="Heading 2"
+            />
+            <BlockButton
+              format="heading-one"
+              icon="heading"
+              label="Heading 1"
+            />
+            <AlignButton format="left" icon="align-left" label="Left" />
+            <AlignButton format="center" icon="align-center" label="Center" />
+            <AlignButton format="right" icon="align-right" label="Right" />
+            <AlignButton
+              format="justify"
+              icon="align-justify"
+              label="Justify"
+            />
+          </Toolbox>
+          <Textbox />
+        </Box>
+      </Flow>
+    </ThemeProvider>
   );
 };
 
@@ -269,69 +367,128 @@ const Element = (props) => {
   switch (element.type) {
     case "paragraph":
       return (
-        <p class={element.align} {...attributes}>
+        <Box
+          as={Styled.p}
+          mb={3}
+          sx={{
+            textAlign: element.align,
+          }}
+          {...attributes}
+        >
           {children}
-        </p>
+        </Box>
       );
     case "heading-one":
       return (
-        <h1 class={element.align + " h1"} {...attributes}>
+        <Box
+          as={Styled.h1}
+          mb={2}
+          sx={{
+            textAlign: element.align,
+          }}
+          {...attributes}
+        >
           {children}
-        </h1>
+        </Box>
       );
     case "heading-two":
       return (
-        <h2 class={element.align + " h2"} {...attributes}>
+        <Box
+          as={Styled.h2}
+          mb={2}
+          sx={{
+            textAlign: element.align,
+          }}
+          {...attributes}
+        >
           {children}
-        </h2>
+        </Box>
       );
     case "heading-three":
       return (
-        <h3 class={element.align + " h3"} {...attributes}>
+        <Box
+          as={Styled.h3}
+          mb={2}
+          sx={{
+            textAlign: element.align,
+          }}
+          {...attributes}
+        >
           {children}
-        </h3>
+        </Box>
       );
     case "heading-four":
       return (
-        <h4 class={element.align + " h4"} {...attributes}>
+        <Box
+          as={Styled.h4}
+          mb={2}
+          sx={{
+            textAlign: element.align,
+          }}
+          {...attributes}
+        >
           {children}
-        </h4>
+        </Box>
       );
     case "heading-five":
       return (
-        <h5 class={element.align + " h5"} {...attributes}>
+        <Box
+          as={Styled.h5}
+          mb={2}
+          sx={{
+            textAlign: element.align,
+          }}
+          {...attributes}
+        >
           {children}
-        </h5>
+        </Box>
       );
     case "heading-six":
       return (
-        <h6 class={element.align + " h6"} {...attributes}>
+        <Box
+          as={Styled.h6}
+          mb={2}
+          sx={{
+            textAlign: element.align,
+          }}
+          {...attributes}
+        >
           {children}
-        </h6>
-      );
-    case "image":
-      return (
-        <div class={element.align + " mb-3"}>
-          <img
-            class="img img-fluid rounded"
-            src={element.url}
-            alt="image"
-            {...attributes}
-          >
-            {children}
-          </img>
-        </div>
+        </Box>
       );
     default:
       return (
-        <div class={element.align + " text-monospace"} {...attributes}>
+        <Box
+          as={Styled.div}
+          sx={{
+            textAlign: element.align,
+          }}
+          {...attributes}
+        >
           {children}
-        </div>
+        </Box>
       );
   }
 };
 
-const Textbox = (props) => {
+const Flow = (props) => {
+  const editor = useMemo(
+    () => withFlow(withHistory(withReact(createEditor()))),
+    []
+  );
+  const [value, setValue] = useState(
+    FlowEditor.load("value") || [{ children: [{ text: "" }] }]
+  );
+
+  const onChange = (value) => {
+    setValue(value);
+    FlowEditor.save("value", value);
+  };
+
+  return <Slate editor={editor} value={value} onChange={onChange} {...props} />;
+};
+
+const FlowEditable = (props) => {
   const editor = useSlate();
 
   const renderLeaf = useCallback((props) => {
@@ -416,13 +573,26 @@ const Textbox = (props) => {
 
   return (
     <Editable
-      as="div"
-      spellCheck
       autoFocus
       renderLeaf={renderLeaf}
       renderElement={renderElement}
       onKeyDown={onKeyDown}
-      class="d-flex flex-column flex-fill d-print-block d-print-p-0 p-5 bg-light text-dark"
+      {...props}
+    />
+  );
+};
+
+const Textbox = (props) => {
+  return (
+    <Box
+      as={FlowEditable}
+      sx={{
+        flex: "1 1 auto",
+        padding: 5,
+        "@media print": {
+          padding: 0,
+        },
+      }}
       {...props}
     />
   );
@@ -430,75 +600,63 @@ const Textbox = (props) => {
 
 const Toolbox = (props) => {
   return (
-    <div
-      class="d-flex flex-wrap justify-content-center p-5 d-print-none sticky-top bg-light text-dark"
+    <Box
+      bg="background"
+      p={5}
+      sx={{
+        flexWrap: "wrap",
+        padding: 5,
+        "@supports (position: sticky)": {
+          position: "sticky",
+        },
+        top: 0,
+        "@media print": {
+          display: "none",
+        },
+      }}
       {...props}
-    >
-      <FullscreenButton />
-      <UndoButton />
-      <RedoButton />
-      <PrintButton />
-      <MarkButton format="bold" icon="bold" label="Bold" />
-      <MarkButton format="italic" icon="italic" label="Italic" />
-      <MarkButton format="underline" icon="underline" label="Underline" />
-      <MarkButton
-        format="strikethrough"
-        icon="strikethrough"
-        label="Strikethrough"
-      />
-      <BlockButton format="paragraph" icon="paragraph" label="Paragraph" />
-      <BlockButton format="heading-six" icon="heading" label="Heading 6" />
-      <BlockButton format="heading-five" icon="heading" label="Heading 5" />
-      <BlockButton format="heading-four" icon="heading" label="Heading 4" />
-      <BlockButton format="heading-three" icon="heading" label="Heading 3" />
-      <BlockButton format="heading-two" icon="heading" label="Heading 2" />
-      <BlockButton format="heading-one" icon="heading" label="Heading 1" />
-      <AlignButton format="text-left" icon="align-left" label="Align Left" />
-      <AlignButton
-        format="text-center"
-        icon="align-center"
-        label="Align Center"
-      />
-      <AlignButton format="text-right" icon="align-right" label="Align Right" />
-      <AlignButton
-        format="text-justify"
-        icon="align-justify"
-        label="Align Justify"
-      />
-      <ImageButton />
-    </div>
+    />
   );
 };
 
-const Button = (props) => {
-  const { icon, label, active, disabled, onMouseDown } = props;
+const ActionButton = (props) => {
+  const { icon, label, active, disabled, action } = props;
 
   return (
-    <button
+    <Box
+      as={Button}
       title={label}
       aria-label={label}
-      onMouseDown={onMouseDown}
+      aria-pressed={active}
+      onMouseDown={action}
       disabled={disabled}
-      class={
-        "btn mr-1" +
-        (disabled
-          ? " disabled"
-          : active
-          ? " text-light bg-dark"
-          : " text-dark bg-light")
-      }
+      color={active ? "primary" : "text"}
+      bg={active ? "highlight" : "background"}
+      mb={1}
+      mr={1}
+      sx={{
+        "&:disabled": {
+          opacity: 0.5,
+        },
+        "&:focus": {
+          outline: 0,
+        },
+        "&:hover, &:focus": {
+          backgroundColor: active ? "highlight" : "muted",
+        },
+      }}
     >
       <FontAwesomeIcon icon={icon} fixedWidth />
-    </button>
+    </Box>
   );
 };
 
 const FullscreenButton = (props) => {
   return (
-    <Button
+    <ActionButton
       icon="expand"
       label="Fullscreen"
-      onMouseDown={(event) => {
+      action={(event) => {
         event.preventDefault();
         FlowEditor.toggleFullscreen();
       }}
@@ -511,11 +669,11 @@ const UndoButton = (props) => {
   const editor = useSlate();
 
   return (
-    <Button
+    <ActionButton
       disabled={editor.history.undos.length === 0}
       icon="undo"
       label="Undo"
-      onMouseDown={(event) => {
+      action={(event) => {
         event.preventDefault();
         HistoryEditor.undo(editor);
       }}
@@ -528,11 +686,11 @@ const RedoButton = (props) => {
   const editor = useSlate();
 
   return (
-    <Button
+    <ActionButton
       disabled={editor.history.redos.length === 0}
       icon="redo"
       label="Redo"
-      onMouseDown={(event) => {
+      action={(event) => {
         event.preventDefault();
         HistoryEditor.redo(editor);
       }}
@@ -543,10 +701,10 @@ const RedoButton = (props) => {
 
 const PrintButton = (props) => {
   return (
-    <Button
+    <ActionButton
       icon="print"
       label="Print"
-      onMouseDown={(event) => {
+      action={(event) => {
         event.preventDefault();
         FlowEditor.print();
       }}
@@ -560,11 +718,10 @@ const MarkButton = (props) => {
   const editor = useSlate();
 
   return (
-    <Button
-      disabled={FlowEditor.isSelectionCollapsed(editor)}
+    <ActionButton
       active={FlowEditor.isMarkActive(editor, format)}
       label="Mark"
-      onMouseDown={(event) => {
+      action={(event) => {
         event.preventDefault();
         FlowEditor.toggleMark(editor, format);
       }}
@@ -578,10 +735,10 @@ const BlockButton = (props) => {
   const editor = useSlate();
 
   return (
-    <Button
+    <ActionButton
       active={FlowEditor.isBlockActive(editor, format)}
       label="Block"
-      onMouseDown={(event) => {
+      action={(event) => {
         event.preventDefault();
         FlowEditor.toggleBlock(editor, format);
       }}
@@ -595,28 +752,12 @@ const AlignButton = (props) => {
   const editor = useSlate();
 
   return (
-    <Button
+    <ActionButton
       active={FlowEditor.isAlignActive(editor, format)}
       label="Align"
-      onMouseDown={(event) => {
+      action={(event) => {
         event.preventDefault();
         FlowEditor.toggleAlign(editor, format);
-      }}
-      {...props}
-    />
-  );
-};
-
-const ImageButton = (props) => {
-  const editor = useSlate();
-
-  return (
-    <Button
-      icon="image"
-      label="Image"
-      onMouseDown={(event) => {
-        event.preventDefault();
-        FlowEditor.insertImage(editor, window.prompt("URL"));
       }}
       {...props}
     />
@@ -638,11 +779,10 @@ library.add(
   faAlignLeft,
   faAlignCenter,
   faAlignRight,
-  faAlignJustify,
-  faImage
+  faAlignJustify
 );
 
-render(<Flow />, document.getElementById("root"));
+render(<Root />, window.document.getElementById("root"));
 
 // If you want your app to work offline and load faster, you can uncoment
 // the code below. Note this comes with some pitfalls.

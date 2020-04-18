@@ -1,42 +1,74 @@
 $font-family-sans-serif: "Quicksand", Arial, Helvetica, sans-serif;
 $font-family-monospace: "Fira code", Courier, monospace;
-// Functions.Variables.Mixins
-@import "node_modules/bootstrap/scss/functions";
-@import "node_modules/bootstrap/scss/variables";
-@import "node_modules/bootstrap/scss/mixins";
-// Optional
-@import "node_modules/bootstrap/scss/reboot";
-@import "node_modules/bootstrap/scss/type";
-@import "node_modules/bootstrap/scss/images";
-//@import "node_modules/bootstrap/scss/code";
-//@import "node_modules/bootstrap/scss/grid";
-// Utilities
-@import "node_modules/bootstrap/scss/utilities/align";
-@import "node_modules/bootstrap/scss/utilities/background";
-@import "node_modules/bootstrap/scss/utilities/borders";
-//@import "node_modules/bootstrap/scss/utilities/clearfix";
-@import "node_modules/bootstrap/scss/utilities/display";
-//@import "node_modules/bootstrap/scss/utilities/embed";
-@import "node_modules/bootstrap/scss/utilities/flex";
-//@import "node_modules/bootstrap/scss/utilities/float";
-//@import "node_modules/bootstrap/scss/utilities/overflow";
-@import "node_modules/bootstrap/scss/utilities/position";
-//@import "node_modules/bootstrap/scss/utilities/screenreaders";
-//@import "node_modules/bootstrap/scss/utilities/shadows";
-@import "node_modules/bootstrap/scss/utilities/sizing";
-//@import "node_modules/bootstrap/scss/utilities/stretched-link";
-@import "node_modules/bootstrap/scss/utilities/spacing";
-@import "node_modules/bootstrap/scss/utilities/text";
-//@import "node_modules/bootstrap/scss/utilities/visibility";
-// Components
-@import "node_modules/bootstrap/scss/buttons";
-// Custom
-@media print {
-  .d-print-p-0 {
-    padding: 0rem !important;
+@import "node_modules/bootstrap/scss/bootstrap-reboot";
+
+button,
+.btn {
+  display: inline-block;
+
+  margin: 0 0.25rem 0.25rem 0;
+  padding: 0.375rem 0.75rem;
+
+  font-family: inherit;
+  font-weight: $font-weight-normal;
+  font-size: $font-size-base;
+
+  line-height: $line-height-base;
+
+  color: $body-color;
+  background-color: $body-bg;
+
+  text-align: center;
+  vertical-align: middle;
+  white-space: null;
+
+  cursor: pointer;
+
+  border: $border-width solid transparent;
+  border-radius: $border-radius;
+
+  &:hover,
+  &.hover {
+    text-decoration: none;
+  }
+
+  &:focus,
+  &.focus {
+    outline: 0;
+  }
+
+  &:hover,
+  &.hover,
+  &:focus,
+  &.focus {
+    background: darken($body-bg, 10%);
+  }
+
+  &.disabled,
+  &:disabled {
+    opacity: 0.5;
+  }
+
+  &:not(:disabled):not(.disabled):active,
+  &:not(:disabled):not(.disabled).active {
+    color: $body-bg;
+    background: $body-color;
+
+    &:focus,
+    &.focus {
+      outline: 0;
+    }
+
+    &:hover,
+    &.hover,
+    &:focus,
+    &.focus {
+      background: darken($body-color, 10%);
+    }
   }
 }
 
-.img {
-  max-height: 20rem;
+a.btn.disabled,
+fieldset:disabled a.btn {
+  pointer-events: none;
 }

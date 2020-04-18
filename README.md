@@ -31,7 +31,7 @@ Use the buttons in the tools section at the top of the app or use _keyboard_ sor
 
 ## Development
 
-This app is using [Preact-js](https://preactjs.com/) a fast 3kB alternative to [React-js](https://reactjs.org/) with the same _modern_ **API**, bundled by [Parcel-js](https://parceljs.org/) a blazing fast, zero configuration web application bundler and currently using [Bootstrap](https://getbootstrap.com/) as an opinionated design system to build upon paired with [FontAwesome](https://fontawesome.com/)'s **awesome** icons.
+This app is using [Preact-js](https://preactjs.com/) a fast 3kB alternative to [React-js](https://reactjs.org/) with the same _modern_ **API**, bundled by [Parcel-js](https://parceljs.org/) a blazing fast, zero configuration web application bundler and currently using [Theme-ui](https://theme-ui.com/) backed opinionated design system to build upon paired with [FontAwesome](https://fontawesome.com/)'s **awesome** icons.
 
 Run `npm install` in the project directory to install all the dependencies and dev-tools so these commands will become available:
 
