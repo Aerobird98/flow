@@ -8,6 +8,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { library } from "@fortawesome/fontawesome-svg-core";
 import {
   faExpand,
+  faCompress,
   faUndo,
   faRedo,
   faPrint,
@@ -25,17 +26,36 @@ import { Box, Button, Styled, ThemeProvider } from "theme-ui";
 
 const Themes = {
   flow: {
-    space: [0, 4, 8, 16, 24, 48],
-    breakpoints: [576, 768, 992, 1200],
     colors: {
-      text: "#212529",
-      background: "#fff",
+      white: "#fff",
+      gray100: "#f8f9fa",
+      gray200: "#e9ecef",
+      gray300: "#dee2e6",
+      gray400: "#ced4da",
+      gray500: "#adb5bd",
+      gray600: "#6c757d",
+      gray700: "#495057",
+      gray800: "#343a40",
+      gray900: "#212529",
+      black: "#000",
+
+      blue: "#0d6efd",
+      indigo: "#6610f2",
+      purple: "#6f42c1",
+      pink: "#d63384",
+      red: "#dc3545",
+      orange: "#fd7e14",
+      yellow: "#ffc107",
+      green: "#28a745",
+      teal: "#20c997",
+      cyan: "#17a2b8",
+
+      text: "gray900",
+      background: "white",
       primary: "#007bff",
-      secondary: "#6c757d",
-      accent: "",
-      highlight: "#b5d5fc",
-      muted: "#dee2e6",
+      secondary: "gray600",
     },
+
     fonts: {
       body: "'Quicksand', Arial, Helvetica, sans-serif",
       heading: "inherit",
@@ -52,6 +72,10 @@ const Themes = {
       body: 1.5,
       heading: 1.2,
     },
+
+    space: ["0rem", "0.25rem", "0.5rem", "1rem", "1.5rem", "3rem"],
+    breakpoints: [576, 768, 992, 1200, 1400],
+
     text: {
       heading: {
         fontFamily: "heading",
@@ -59,6 +83,17 @@ const Themes = {
         lineHeight: "heading",
       },
     },
+    buttons: {
+      primary: {
+        color: "primary",
+        bg: "background",
+      },
+      secondary: {
+        color: "secondary",
+        bg: "background",
+      },
+    },
+
     styles: {
       root: {
         fontFamily: "body",
@@ -129,12 +164,11 @@ const FlowEditor = {
   },
 
   isMarkActive(editor, format) {
-    const selection = FlowEditor.isSelectionActive(editor);
     const [match] = Editor.nodes(editor, {
       match: (n) => n[format] === true,
     });
 
-    return selection ? !!match : false;
+    return !!match;
   },
 
   isBlockActive(editor, format) {
@@ -239,10 +273,6 @@ const FlowEditor = {
     }
   },
 
-  isUrlValid(url) {
-    return /^(ftp|http|https):\/\/[^ "]+$/.test(url);
-  },
-
   isOnMac() {
     return /Mac|iPod|iPhone|iPad/.test(window.navigator.platform);
   },
@@ -265,25 +295,59 @@ const withFlow = (editor) => {
 };
 
 const Root = (props) => {
+  const editor = useMemo(
+    () => withFlow(withHistory(withReact(createEditor()))),
+    []
+  );
+  const [value, setValue] = useState(
+    FlowEditor.load("value") || [{ children: [{ text: "" }] }]
+  );
+
+  const onChange = (value) => {
+    setValue(value);
+    FlowEditor.save("value", value);
+  };
+
   return (
     <ThemeProvider theme={Themes.flow}>
-      <Flow>
-        <Box
-          sx={{
-            display: "flex",
-            flexDirection: "column",
-            minHeight: "100vh",
-            "@media print": {
-              display: "block",
-            },
-          }}
-          {...props}
-        >
+      <Slate editor={editor} value={value} onChange={onChange}>
+        <Flow>
           <Toolbox>
-            <FullscreenButton />
-            <UndoButton />
-            <RedoButton />
-            <PrintButton />
+            <ActionButton
+              icon="expand"
+              label="Expand"
+              action={(event) => {
+                event.preventDefault();
+                FlowEditor.toggleFullscreen();
+              }}
+            />
+            <ActionButton
+              disabled={editor.history.undos.length === 0}
+              icon="undo"
+              label="Undo"
+              action={(event) => {
+                event.preventDefault();
+                HistoryEditor.undo(editor);
+              }}
+            />
+            <ActionButton
+              disabled={editor.history.redos.length === 0}
+              icon="redo"
+              label="Redo"
+              action={(event) => {
+                event.preventDefault();
+                HistoryEditor.redo(editor);
+              }}
+            />
+            <ActionButton
+              icon="print"
+              label="Print"
+              action={(event) => {
+                event.preventDefault();
+                FlowEditor.print();
+              }}
+              {...props}
+            />
             <MarkButton format="bold" icon="bold" label="Bold" />
             <MarkButton format="italic" icon="italic" label="Italic" />
             <BlockButton
@@ -307,9 +371,30 @@ const Root = (props) => {
             />
           </Toolbox>
           <Textbox />
-        </Box>
-      </Flow>
+        </Flow>
+      </Slate>
     </ThemeProvider>
+  );
+};
+
+const Flow = (props) => {
+  const { children } = props;
+
+  return (
+    <Box
+      as={Styled.root}
+      sx={{
+        display: "flex",
+        flexDirection: "column",
+        minHeight: "100vh",
+        "@media print": {
+          display: "block",
+        },
+      }}
+      {...props}
+    >
+      {children}
+    </Box>
   );
 };
 
@@ -438,24 +523,7 @@ const Element = (props) => {
   }
 };
 
-const Flow = (props) => {
-  const editor = useMemo(
-    () => withFlow(withHistory(withReact(createEditor()))),
-    []
-  );
-  const [value, setValue] = useState(
-    FlowEditor.load("value") || [{ children: [{ text: "" }] }]
-  );
-
-  const onChange = (value) => {
-    setValue(value);
-    FlowEditor.save("value", value);
-  };
-
-  return <Slate editor={editor} value={value} onChange={onChange} {...props} />;
-};
-
-const FlowEditable = (props) => {
+const Input = (props) => {
   const editor = useSlate();
 
   const renderLeaf = useCallback((props) => {
@@ -532,7 +600,8 @@ const FlowEditable = (props) => {
 
   return (
     <Editable
-      autoFocus
+      spellCheck={true}
+      autoFocus={true}
       renderLeaf={renderLeaf}
       renderElement={renderElement}
       onKeyDown={onKeyDown}
@@ -544,7 +613,7 @@ const FlowEditable = (props) => {
 const Textbox = (props) => {
   return (
     <Box
-      as={FlowEditable}
+      as={Input}
       sx={{
         flex: "1 1 auto",
         padding: 5,
@@ -558,6 +627,8 @@ const Textbox = (props) => {
 };
 
 const Toolbox = (props) => {
+  const { children } = props;
+
   return (
     <Box
       bg="background"
@@ -574,7 +645,9 @@ const Toolbox = (props) => {
         },
       }}
       {...props}
-    />
+    >
+      {children}
+    </Box>
   );
 };
 
@@ -582,93 +655,22 @@ const ActionButton = (props) => {
   const { icon, label, active, disabled, action } = props;
 
   return (
-    <Box
-      as={Button}
+    <Button
       title={label}
       aria-label={label}
-      aria-pressed={active}
       onMouseDown={action}
       disabled={disabled}
-      color={active ? "primary" : "text"}
-      bg={active ? "highlight" : "background"}
+      variant={active ? "primary" : "secondary"}
       mb={1}
       mr={1}
       sx={{
         "&:disabled": {
           opacity: 0.5,
         },
-        "&:focus": {
-          outline: 0,
-        },
-        "&:hover, &:focus": {
-          backgroundColor: active ? "highlight" : "muted",
-        },
       }}
     >
       <FontAwesomeIcon icon={icon} fixedWidth />
-    </Box>
-  );
-};
-
-const FullscreenButton = (props) => {
-  return (
-    <ActionButton
-      icon="expand"
-      label="Fullscreen"
-      action={(event) => {
-        event.preventDefault();
-        FlowEditor.toggleFullscreen();
-      }}
-      {...props}
-    />
-  );
-};
-
-const UndoButton = (props) => {
-  const editor = useSlate();
-
-  return (
-    <ActionButton
-      disabled={editor.history.undos.length === 0}
-      icon="undo"
-      label="Undo"
-      action={(event) => {
-        event.preventDefault();
-        HistoryEditor.undo(editor);
-      }}
-      {...props}
-    />
-  );
-};
-
-const RedoButton = (props) => {
-  const editor = useSlate();
-
-  return (
-    <ActionButton
-      disabled={editor.history.redos.length === 0}
-      icon="redo"
-      label="Redo"
-      action={(event) => {
-        event.preventDefault();
-        HistoryEditor.redo(editor);
-      }}
-      {...props}
-    />
-  );
-};
-
-const PrintButton = (props) => {
-  return (
-    <ActionButton
-      icon="print"
-      label="Print"
-      action={(event) => {
-        event.preventDefault();
-        FlowEditor.print();
-      }}
-      {...props}
-    />
+    </Button>
   );
 };
 
@@ -678,7 +680,6 @@ const MarkButton = (props) => {
 
   return (
     <ActionButton
-      disabled={!FlowEditor.isSelectionActive(editor)}
       active={FlowEditor.isMarkActive(editor, format)}
       label="Mark"
       action={(event) => {
@@ -726,6 +727,7 @@ const AlignButton = (props) => {
 
 library.add(
   faExpand,
+  faCompress,
   faUndo,
   faRedo,
   faPrint,
