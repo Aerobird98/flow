@@ -6,28 +6,26 @@ Flow (the app) is a _"standardized"_ or heavily _opinionated_ tool and by that I
 
 ## Usage
 
-Use the buttons in the tools section at the top of the app or use _keyboard_ sortcuts listed in the table below when text is selected to toggle _mark-style_ formating like **Bold**, _Italic_, <u>Underline</u>, ~~Strikethrough~~, or `code` on the selected text, _block-style_ formating however like Paragraphs and Heading types or Aligning don't need selection, just make sure to leave the cursor in the block that needs formating before pushing those buttons to toggle the needed styles. Flow (the app) will highlight buttons when their format is active on the selected text or on the block the cursor is in. The editor has an autosaving feature that saves your documents to your browser's _local-storage_ container which you can access through the developer-tools of your browser.
+Use the buttons in the tools section at the top of the app or use _keyboard_ sortcuts listed in the table below when text is selected to toggle _mark-style_ formating like **Bold** or _Italic_ on the selected text, _block-style_ formating however like Paragraphs and Heading types or Aligning don't need selection, just make sure to leave the cursor in the block that needs formating before pushing those buttons to toggle the needed styles. Flow (the app) will highlight buttons when their format is active on the selected text or on the block the cursor is in. The editor has an autosaving feature that saves your documents to your browser's _local-storage_ container which you can access through the developer-tools of your browser.
 
-| Shortcut                | Description                                         |
-| ----------------------- | --------------------------------------------------- |
-| `Ctrl or Cmd + z`       | Undo                                                |
-| `Ctrl or Cmd + y`       | Redo                                                |
-| `Ctrl or Cmd + c`       | Copy                                                |
-| `Ctrl or Cmd + x`       | Cut                                                 |
-| `Ctrl or Cmd + v`       | Paste                                               |
-| `Ctrl or Cmd + p`       | Print                                               |
-| `Ctrl or Cmd + b`       | Toggle format on selected text to **Bold**          |
-| `Ctrl or Cmd + i`       | Toggle format on selected text to _Italic_          |
-| `Ctrl or Cmd + u`       | Toggle format on selected text to <u>Underline</u>  |
-| `Ctrl or Cmd + s`       | Toggle format on selected text to ~~Strikethrough~~ |
-| `Ctrl or Cmd + Alt + f` | toggle fullscreen (expand/compress)                 |
-| `Ctrl or Cmd + Alt + 0` | Toggle format on block to <p>paragraph</p>          |
-| `Ctrl or Cmd + Alt + 1` | Toggle format on block to <h1>heading 1</h1>        |
-| `Ctrl or Cmd + Alt + 2` | Toggle format on block to <h2>heading 2</h2>        |
-| `Ctrl or Cmd + Alt + 3` | Toggle format on block to <h3>heading 3</h3>        |
-| `Ctrl or Cmd + Alt + 4` | Toggle format on block to <h4>heading 4</h4>        |
-| `Ctrl or Cmd + Alt + 5` | Toggle format on block to <h5>heading 5</h5>        |
-| `Ctrl or Cmd + Alt + 6` | Toggle format on block to <h6>heading 6</h6>        |
+| Shortcut                | Description                                  |
+| ----------------------- | -------------------------------------------- |
+| `Ctrl or Cmd + z`       | Undo                                         |
+| `Ctrl or Cmd + y`       | Redo                                         |
+| `Ctrl or Cmd + c`       | Copy                                         |
+| `Ctrl or Cmd + x`       | Cut                                          |
+| `Ctrl or Cmd + v`       | Paste                                        |
+| `Ctrl or Cmd + p`       | Print                                        |
+| `Ctrl or Cmd + b`       | Toggle format on selected text to **Bold**   |
+| `Ctrl or Cmd + i`       | Toggle format on selected text to _Italic_   |
+| `Ctrl or Cmd + Alt + f` | toggle fullscreen (expand/compress)          |
+| `Ctrl or Cmd + Alt + 0` | Toggle format on block to <p>paragraph</p>   |
+| `Ctrl or Cmd + Alt + 1` | Toggle format on block to <h1>heading 1</h1> |
+| `Ctrl or Cmd + Alt + 2` | Toggle format on block to <h2>heading 2</h2> |
+| `Ctrl or Cmd + Alt + 3` | Toggle format on block to <h3>heading 3</h3> |
+| `Ctrl or Cmd + Alt + 4` | Toggle format on block to <h4>heading 4</h4> |
+| `Ctrl or Cmd + Alt + 5` | Toggle format on block to <h5>heading 5</h5> |
+| `Ctrl or Cmd + Alt + 6` | Toggle format on block to <h6>heading 6</h6> |
 
 ## Development
 

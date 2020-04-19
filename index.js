@@ -13,9 +13,6 @@ import {
   faPrint,
   faBold,
   faItalic,
-  faUnderline,
-  faStrikethrough,
-  faRemoveFormat,
   faParagraph,
   faHeading,
   faAlignLeft,
@@ -97,6 +94,12 @@ const Themes = {
       },
       div: {
         fontFamily: "monospace",
+      },
+      i: {
+        fontWeight: "light",
+      },
+      b: {
+        fontWeight: "bold",
       },
     },
   },
@@ -283,47 +286,17 @@ const Root = (props) => {
             <PrintButton />
             <MarkButton format="bold" icon="bold" label="Bold" />
             <MarkButton format="italic" icon="italic" label="Italic" />
-            <MarkButton format="underline" icon="underline" label="Underline" />
-            <MarkButton
-              format="strikethrough"
-              icon="strikethrough"
-              label="Strikethrough"
-            />
             <BlockButton
               format="paragraph"
               icon="paragraph"
               label="Paragraph"
             />
-            <BlockButton
-              format="heading-six"
-              icon="heading"
-              label="Heading 6"
-            />
-            <BlockButton
-              format="heading-five"
-              icon="heading"
-              label="Heading 5"
-            />
-            <BlockButton
-              format="heading-four"
-              icon="heading"
-              label="Heading 4"
-            />
-            <BlockButton
-              format="heading-three"
-              icon="heading"
-              label="Heading 3"
-            />
-            <BlockButton
-              format="heading-two"
-              icon="heading"
-              label="Heading 2"
-            />
-            <BlockButton
-              format="heading-one"
-              icon="heading"
-              label="Heading 1"
-            />
+            <BlockButton format="heading6" icon="heading" label="Heading 6" />
+            <BlockButton format="heading5" icon="heading" label="Heading 5" />
+            <BlockButton format="heading4" icon="heading" label="Heading 4" />
+            <BlockButton format="heading3" icon="heading" label="Heading 3" />
+            <BlockButton format="heading2" icon="heading" label="Heading 2" />
+            <BlockButton format="heading1" icon="heading" label="Heading 1" />
             <AlignButton format="left" icon="align-left" label="Left" />
             <AlignButton format="center" icon="align-center" label="Center" />
             <AlignButton format="right" icon="align-right" label="Right" />
@@ -345,19 +318,11 @@ const Leaf = (props) => {
   let { children } = props;
 
   if (leaf.bold) {
-    children = <b>{children}</b>;
+    children = <Styled.b>{children}</Styled.b>;
   }
 
   if (leaf.italic) {
-    children = <i>{children}</i>;
-  }
-
-  if (leaf.underline) {
-    children = <u>{children}</u>;
-  }
-
-  if (leaf.strikethrough) {
-    children = <s>{children}</s>;
+    children = <Styled.i>{children}</Styled.i>;
   }
 
   return <span {...attributes}>{children}</span>;
@@ -380,7 +345,7 @@ const Element = (props) => {
           {children}
         </Box>
       );
-    case "heading-one":
+    case "heading1":
       return (
         <Box
           as={Styled.h1}
@@ -393,7 +358,7 @@ const Element = (props) => {
           {children}
         </Box>
       );
-    case "heading-two":
+    case "heading2":
       return (
         <Box
           as={Styled.h2}
@@ -406,7 +371,7 @@ const Element = (props) => {
           {children}
         </Box>
       );
-    case "heading-three":
+    case "heading3":
       return (
         <Box
           as={Styled.h3}
@@ -419,7 +384,7 @@ const Element = (props) => {
           {children}
         </Box>
       );
-    case "heading-four":
+    case "heading4":
       return (
         <Box
           as={Styled.h4}
@@ -432,7 +397,7 @@ const Element = (props) => {
           {children}
         </Box>
       );
-    case "heading-five":
+    case "heading5":
       return (
         <Box
           as={Styled.h5}
@@ -445,7 +410,7 @@ const Element = (props) => {
           {children}
         </Box>
       );
-    case "heading-six":
+    case "heading6":
       return (
         <Box
           as={Styled.h6}
@@ -519,27 +484,27 @@ const FlowEditable = (props) => {
             break;
           case "1":
             event.preventDefault();
-            FlowEditor.toggleBlock(editor, "heading-one");
+            FlowEditor.toggleBlock(editor, "heading1");
             break;
           case "2":
             event.preventDefault();
-            FlowEditor.toggleBlock(editor, "heading-two");
+            FlowEditor.toggleBlock(editor, "heading2");
             break;
           case "3":
             event.preventDefault();
-            FlowEditor.toggleBlock(editor, "heading-three");
+            FlowEditor.toggleBlock(editor, "heading3");
             break;
           case "4":
             event.preventDefault();
-            FlowEditor.toggleBlock(editor, "heading-four");
+            FlowEditor.toggleBlock(editor, "heading4");
             break;
           case "5":
             event.preventDefault();
-            FlowEditor.toggleBlock(editor, "heading-five");
+            FlowEditor.toggleBlock(editor, "heading5");
             break;
           case "6":
             event.preventDefault();
-            FlowEditor.toggleBlock(editor, "heading-six");
+            FlowEditor.toggleBlock(editor, "heading6");
             break;
           default:
             break;
@@ -557,14 +522,6 @@ const FlowEditable = (props) => {
           case "i":
             event.preventDefault();
             FlowEditor.toggleMark(editor, "italic");
-            break;
-          case "u":
-            event.preventDefault();
-            FlowEditor.toggleMark(editor, "underline");
-            break;
-          case "s":
-            event.preventDefault();
-            FlowEditor.toggleMark(editor, "strikethrough");
             break;
           default:
             break;
@@ -604,10 +561,10 @@ const Toolbox = (props) => {
   return (
     <Box
       bg="background"
-      p={5}
+      px={5}
+      py={3}
       sx={{
         flexWrap: "wrap",
-        padding: 5,
         "@supports (position: sticky)": {
           position: "sticky",
         },
@@ -721,6 +678,7 @@ const MarkButton = (props) => {
 
   return (
     <ActionButton
+      disabled={!FlowEditor.isSelectionActive(editor)}
       active={FlowEditor.isMarkActive(editor, format)}
       label="Mark"
       action={(event) => {
@@ -773,9 +731,6 @@ library.add(
   faPrint,
   faBold,
   faItalic,
-  faUnderline,
-  faStrikethrough,
-  faRemoveFormat,
   faParagraph,
   faHeading,
   faAlignLeft,
