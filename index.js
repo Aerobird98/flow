@@ -20,40 +20,57 @@ import {
   faAlignCenter,
   faAlignRight,
   faAlignJustify,
+  faMoon,
+  faSun,
 } from "@fortawesome/free-solid-svg-icons";
 
-import { Box, Button, Styled, ThemeProvider } from "theme-ui";
+import { ThemeProvider, useColorMode, Box, Button, Styled } from "theme-ui";
+
+const GrayScale = [
+  "#fff",
+  "#f8f9fa",
+  "#e9ecef",
+  "#dee2e6",
+  "#ced4da",
+  "#adb5bd",
+  "#6c757d",
+  "#495057",
+  "#343a40",
+  "#212529",
+  "#000",
+];
+
+const ColorScale = {
+  blue: "#0d6efd",
+  indigo: "#6610f2",
+  purple: "#6f42c1",
+  pink: "#d63384",
+  red: "#dc3545",
+  orange: "#fd7e14",
+  yellow: "#ffc107",
+  green: "#28a745",
+  teal: "#20c997",
+  cyan: "#17a2b8",
+};
 
 const Themes = {
   flow: {
+    initialColorMode: "light",
+
     colors: {
-      white: "#fff",
-      gray100: "#f8f9fa",
-      gray200: "#e9ecef",
-      gray300: "#dee2e6",
-      gray400: "#ced4da",
-      gray500: "#adb5bd",
-      gray600: "#6c757d",
-      gray700: "#495057",
-      gray800: "#343a40",
-      gray900: "#212529",
-      black: "#000",
+      text: GrayScale[8],
+      background: GrayScale[0],
+      primary: ColorScale.blue,
+      secondary: GrayScale[8],
 
-      blue: "#0d6efd",
-      indigo: "#6610f2",
-      purple: "#6f42c1",
-      pink: "#d63384",
-      red: "#dc3545",
-      orange: "#fd7e14",
-      yellow: "#ffc107",
-      green: "#28a745",
-      teal: "#20c997",
-      cyan: "#17a2b8",
-
-      text: "gray900",
-      background: "white",
-      primary: "#007bff",
-      secondary: "gray600",
+      modes: {
+        dark: {
+          text: GrayScale[0],
+          background: GrayScale[9],
+          primary: ColorScale.red,
+          secondary: GrayScale[4],
+        },
+      },
     },
 
     fonts: {
@@ -87,10 +104,30 @@ const Themes = {
       primary: {
         color: "primary",
         bg: "background",
+        border: "3px solid transparent",
+        borderRadius: "1rem",
+        "&:hover, &:focus": {
+          outline: 0,
+          borderColor: "primary",
+        },
+        "&:disabled": {
+          opacity: 0.5,
+          border: 0,
+        },
       },
       secondary: {
         color: "secondary",
         bg: "background",
+        border: "3px solid transparent",
+        borderRadius: "1rem",
+        "&:hover, &:focus": {
+          outline: 0,
+          borderColor: "secondary",
+        },
+        "&:disabled": {
+          opacity: 0.5,
+          border: 0,
+        },
       },
     },
 
@@ -294,7 +331,7 @@ const withFlow = (editor) => {
   return editor;
 };
 
-const Root = (props) => {
+const Root = () => {
   const editor = useMemo(
     () => withFlow(withHistory(withReact(createEditor()))),
     []
@@ -316,6 +353,8 @@ const Root = (props) => {
             <ActionButton
               icon="expand"
               label="Expand"
+              mb={1}
+              mr={1}
               action={(event) => {
                 event.preventDefault();
                 FlowEditor.toggleFullscreen();
@@ -325,6 +364,8 @@ const Root = (props) => {
               disabled={editor.history.undos.length === 0}
               icon="undo"
               label="Undo"
+              mb={1}
+              mr={1}
               action={(event) => {
                 event.preventDefault();
                 HistoryEditor.undo(editor);
@@ -334,6 +375,8 @@ const Root = (props) => {
               disabled={editor.history.redos.length === 0}
               icon="redo"
               label="Redo"
+              mb={1}
+              mr={1}
               action={(event) => {
                 event.preventDefault();
                 HistoryEditor.redo(editor);
@@ -342,33 +385,99 @@ const Root = (props) => {
             <ActionButton
               icon="print"
               label="Print"
+              mb={1}
+              mr={1}
               action={(event) => {
                 event.preventDefault();
                 FlowEditor.print();
               }}
-              {...props}
             />
-            <MarkButton format="bold" icon="bold" label="Bold" />
-            <MarkButton format="italic" icon="italic" label="Italic" />
+            <MarkButton format="bold" icon="bold" label="Bold" mb={1} mr={1} />
+            <MarkButton
+              format="italic"
+              icon="italic"
+              label="Italic"
+              mb={1}
+              mr={1}
+            />
             <BlockButton
               format="paragraph"
               icon="paragraph"
               label="Paragraph"
+              mb={1}
+              mr={1}
             />
-            <BlockButton format="heading6" icon="heading" label="Heading 6" />
-            <BlockButton format="heading5" icon="heading" label="Heading 5" />
-            <BlockButton format="heading4" icon="heading" label="Heading 4" />
-            <BlockButton format="heading3" icon="heading" label="Heading 3" />
-            <BlockButton format="heading2" icon="heading" label="Heading 2" />
-            <BlockButton format="heading1" icon="heading" label="Heading 1" />
-            <AlignButton format="left" icon="align-left" label="Left" />
-            <AlignButton format="center" icon="align-center" label="Center" />
-            <AlignButton format="right" icon="align-right" label="Right" />
+            <BlockButton
+              format="heading6"
+              icon="heading"
+              label="Heading 6"
+              mb={1}
+              mr={1}
+            />
+            <BlockButton
+              format="heading5"
+              icon="heading"
+              label="Heading 5"
+              mb={1}
+              mr={1}
+            />
+            <BlockButton
+              format="heading4"
+              icon="heading"
+              label="Heading 4"
+              mb={1}
+              mr={1}
+            />
+            <BlockButton
+              format="heading3"
+              icon="heading"
+              label="Heading 3"
+              mb={1}
+              mr={1}
+            />
+            <BlockButton
+              format="heading2"
+              icon="heading"
+              label="Heading 2"
+              mb={1}
+              mr={1}
+            />
+            <BlockButton
+              format="heading1"
+              icon="heading"
+              label="Heading 1"
+              mb={1}
+              mr={1}
+            />
+            <AlignButton
+              format="left"
+              icon="align-left"
+              label="Left"
+              mb={1}
+              mr={1}
+            />
+            <AlignButton
+              format="center"
+              icon="align-center"
+              label="Center"
+              mb={1}
+              mr={1}
+            />
+            <AlignButton
+              format="right"
+              icon="align-right"
+              label="Right"
+              mb={1}
+              mr={1}
+            />
             <AlignButton
               format="justify"
               icon="align-justify"
               label="Justify"
+              mb={1}
+              mr={1}
             />
+            <ColorSwitch mb={1} />
           </Toolbox>
           <Textbox />
         </Flow>
@@ -382,7 +491,6 @@ const Flow = (props) => {
 
   return (
     <Box
-      as={Styled.root}
       sx={{
         display: "flex",
         flexDirection: "column",
@@ -535,65 +643,24 @@ const Input = (props) => {
   }, []);
 
   const onKeyDown = (event) => {
-    const key = event.key;
     const modKey = FlowEditor.isOnMac() ? event.metaKey : event.ctrlKey;
-    const altKey = event.altKey;
 
     if (modKey) {
-      if (altKey) {
-        switch (key) {
-          case "f":
-            event.preventDefault();
-            FlowEditor.toggleFullscreen();
-            break;
-          case "0":
-            event.preventDefault();
-            FlowEditor.toggleBlock(editor, "paragraph");
-            break;
-          case "1":
-            event.preventDefault();
-            FlowEditor.toggleBlock(editor, "heading1");
-            break;
-          case "2":
-            event.preventDefault();
-            FlowEditor.toggleBlock(editor, "heading2");
-            break;
-          case "3":
-            event.preventDefault();
-            FlowEditor.toggleBlock(editor, "heading3");
-            break;
-          case "4":
-            event.preventDefault();
-            FlowEditor.toggleBlock(editor, "heading4");
-            break;
-          case "5":
-            event.preventDefault();
-            FlowEditor.toggleBlock(editor, "heading5");
-            break;
-          case "6":
-            event.preventDefault();
-            FlowEditor.toggleBlock(editor, "heading6");
-            break;
-          default:
-            break;
-        }
-      } else {
-        switch (key) {
-          case "p":
-            event.preventDefault();
-            FlowEditor.print();
-            break;
-          case "b":
-            event.preventDefault();
-            FlowEditor.toggleMark(editor, "bold");
-            break;
-          case "i":
-            event.preventDefault();
-            FlowEditor.toggleMark(editor, "italic");
-            break;
-          default:
-            break;
-        }
+      switch (event.key) {
+        case "p":
+          event.preventDefault();
+          FlowEditor.print();
+          break;
+        case "b":
+          event.preventDefault();
+          FlowEditor.toggleMark(editor, "bold");
+          break;
+        case "i":
+          event.preventDefault();
+          FlowEditor.toggleMark(editor, "italic");
+          break;
+        default:
+          break;
       }
     }
   };
@@ -661,13 +728,7 @@ const ActionButton = (props) => {
       onMouseDown={action}
       disabled={disabled}
       variant={active ? "primary" : "secondary"}
-      mb={1}
-      mr={1}
-      sx={{
-        "&:disabled": {
-          opacity: 0.5,
-        },
-      }}
+      {...props}
     >
       <FontAwesomeIcon icon={icon} fixedWidth />
     </Button>
@@ -725,6 +786,22 @@ const AlignButton = (props) => {
   );
 };
 
+const ColorSwitch = (props) => {
+  const [colorMode, setColorMode] = useColorMode();
+
+  return (
+    <ActionButton
+      label={(colorMode === "dark" ? "Light" : "Dark") + " Mode"}
+      icon={colorMode === "dark" ? "sun" : "moon"}
+      action={(event) => {
+        event.preventDefault();
+        setColorMode(colorMode === "dark" ? "light" : "dark");
+      }}
+      {...props}
+    />
+  );
+};
+
 library.add(
   faExpand,
   faCompress,
@@ -738,7 +815,9 @@ library.add(
   faAlignLeft,
   faAlignCenter,
   faAlignRight,
-  faAlignJustify
+  faAlignJustify,
+  faMoon,
+  faSun
 );
 
 render(<Root />, window.document.getElementById("root"));
