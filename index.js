@@ -686,6 +686,8 @@ const Textbox = (props) => {
         padding: 5,
         "@media print": {
           padding: 0,
+          color: GrayScale[10],
+          bg: GrayScale[0],
         },
       }}
       {...props}
