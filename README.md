@@ -1,6 +1,6 @@
 # Flow
 
-A compact web based rich-text editor that builds on top of [Slate-js](https://docs.slatejs.org/) with powerful, yet simple and accessible editing capabilities. It's using a design system not just for its beautiful **UI** but also for handling efficient and consistent document **styling**, this means that it may _lack_ some editing capabilities of other rich-text editors by design, typographic caracteristics like changing the _font-family_, _font-size_ or _line-height_, theme specific emphasis like changing text and bg colors, however in exchange you get consistent **styling** and possibly good typography across your documents. Please note that It's just a personal project of mine for serious things there are plenty of other more complex, non-opinionated rich-text editors out there that you can use on a daly basis.
+A compact web based rich-text editor that builds on top of [Slate-js](https://docs.slatejs.org/) with powerful, yet simple and accessible editing capabilities. It's using a design system not just for its beautiful **UI** but also for handling efficient and consistent document **styling**, this means that it may _lack_ some editing capabilities of other rich-text editors by design, typographic caracteristics like changing the _font-family_, _font-size_ or _line-height_, theme specific emphasis like changing text and bg colors, however in exchange you get consistent **styling** and possibly good typography across your documents.
 
 ## Usage
 

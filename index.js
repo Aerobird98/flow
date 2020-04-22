@@ -67,7 +67,6 @@ const Themes = {
         dark: {
           text: GrayScale[0],
           background: GrayScale[9],
-          primary: ColorScale.red,
           secondary: GrayScale[4],
         },
       },
@@ -104,29 +103,29 @@ const Themes = {
       primary: {
         color: "primary",
         bg: "background",
-        border: "3px solid transparent",
-        borderRadius: "1rem",
         "&:hover, &:focus": {
           outline: 0,
-          borderColor: "primary",
+        },
+        "&:focus": {
+          color: "background",
+          bg: "primary",
         },
         "&:disabled": {
           opacity: 0.5,
-          border: 0,
         },
       },
       secondary: {
         color: "secondary",
         bg: "background",
-        border: "3px solid transparent",
-        borderRadius: "1rem",
         "&:hover, &:focus": {
           outline: 0,
-          borderColor: "secondary",
+        },
+        "&:focus": {
+          color: "background",
+          bg: "secondary",
         },
         "&:disabled": {
           opacity: 0.5,
-          border: 0,
         },
       },
     },
