@@ -322,7 +322,11 @@ const FlowEditor = {
   },
 
   load(key) {
-    return JSON.parse(window.localStorage.getItem(key));
+    return (
+      JSON.parse(window.localStorage.getItem(key)) || [
+        { children: [{ text: "" }] },
+      ]
+    );
   },
 };
 
@@ -335,9 +339,7 @@ const Root = () => {
     () => withFlow(withHistory(withReact(createEditor()))),
     []
   );
-  const [value, setValue] = useState(
-    FlowEditor.load("value") || [{ children: [{ text: "" }] }]
-  );
+  const [value, setValue] = useState(FlowEditor.load("value"));
 
   const onChange = (value) => {
     setValue(value);
