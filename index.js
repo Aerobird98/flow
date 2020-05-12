@@ -26,21 +26,25 @@ import {
 
 import { ThemeProvider, useColorMode, Box, Button, Styled } from "theme-ui";
 
-const GrayScale = [
-  "#fff",
-  "#f8f9fa",
-  "#e9ecef",
-  "#dee2e6",
-  "#ced4da",
-  "#adb5bd",
-  "#6c757d",
-  "#495057",
-  "#343a40",
-  "#212529",
-  "#000",
-];
+// If you want your app to work offline and load faster, you can uncoment
+// the code below. Note this comes with some pitfalls.
+// See the serviceWorker.js script for details.
+//import * as serviceWorker from "./serviceWorker.js";
 
-const ColorScale = {
+const Colors = {
+  gray: [
+    "#fff",
+    "#f8f9fa",
+    "#e9ecef",
+    "#dee2e6",
+    "#ced4da",
+    "#adb5bd",
+    "#6c757d",
+    "#495057",
+    "#343a40",
+    "#212529",
+    "#000",
+  ],
   blue: "#0d6efd",
   indigo: "#6610f2",
   purple: "#6f42c1",
@@ -58,16 +62,16 @@ const Themes = {
     initialColorMode: "light",
 
     colors: {
-      text: GrayScale[8],
-      background: GrayScale[0],
-      primary: ColorScale.blue,
-      secondary: GrayScale[8],
+      text: Colors.gray[8],
+      background: Colors.gray[0],
+      primary: Colors.blue,
+      secondary: Colors.gray[8],
 
       modes: {
         dark: {
-          text: GrayScale[0],
-          background: GrayScale[9],
-          secondary: GrayScale[4],
+          text: Colors.gray[0],
+          background: Colors.gray[9],
+          secondary: Colors.gray[4],
         },
       },
     },
@@ -175,11 +179,6 @@ const Themes = {
     },
   },
 };
-
-// If you want your app to work offline and load faster, you can uncoment
-// the code below. Note this comes with some pitfalls.
-// See the serviceWorker.js script for details.
-//import * as serviceWorker from "./serviceWorker.js";
 
 const FlowEditor = {
   // Define a serializing function that takes a value and
@@ -322,7 +321,11 @@ const FlowEditor = {
   },
 
   load(key) {
-    return JSON.parse(window.localStorage.getItem(key));
+    return (
+      JSON.parse(window.localStorage.getItem(key)) || [
+        { children: [{ text: "" }] },
+      ]
+    );
   },
 };
 
@@ -335,9 +338,7 @@ const Root = () => {
     () => withFlow(withHistory(withReact(createEditor()))),
     []
   );
-  const [value, setValue] = useState(
-    FlowEditor.load("value") || [{ children: [{ text: "" }] }]
-  );
+  const [value, setValue] = useState(FlowEditor.load("value"));
 
   const onChange = (value) => {
     setValue(value);
@@ -685,8 +686,8 @@ const Textbox = (props) => {
         padding: 5,
         "@media print": {
           padding: 0,
-          color: GrayScale[10],
-          bg: GrayScale[0],
+          color: Colors.gray[10],
+          bg: Colors.gray[0],
         },
       }}
       {...props}
