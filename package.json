@@ -1,6 +1,6 @@
 {
   "name": "flow",
-  "version": "0.10.0",
+  "version": "0.10.1",
   "description": "A compact web based rich-text editor that builds on top of Slate-js with powerful, yet simple and accessible editing capabilities.",
   "private": true,
   "scripts": {
@@ -26,10 +26,10 @@
     "@fortawesome/free-solid-svg-icons": "^5.13.0",
     "@fortawesome/react-fontawesome": "^0.1.9",
     "bootstrap": "^4.4.1",
-    "preact": "^10.4.0",
-    "slate": "^0.57.1",
-    "slate-history": "^0.57.1",
-    "slate-react": "^0.57.1",
+    "preact": "^10.4.1",
+    "slate": "^0.57.3",
+    "slate-history": "^0.57.3",
+    "slate-react": "^0.57.3",
     "theme-ui": "^0.3.1"
   },
   "alias": {
@@ -39,8 +39,8 @@
   "devDependencies": {
     "gh-pages": "^2.2.0",
     "parcel": "^1.12.4",
-    "prettier": "^2.0.4",
+    "prettier": "^2.0.5",
     "rimraf": "^3.0.2",
-    "sass": "^1.26.3"
+    "sass": "^1.26.5"
   }
 }
