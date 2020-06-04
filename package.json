@@ -38,7 +38,7 @@
   },
   "devDependencies": {
     "gh-pages": "^2.2.0",
-    "parcel": "^2.0.0-alpha.3.2",
+    "parcel": "^2.0.0-nightly.278",
     "prettier": "^2.0.5",
     "rimraf": "^3.0.2",
     "sass": "^1.26.7"
