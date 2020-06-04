@@ -5,7 +5,7 @@ node_modules
 
 # development
 .cache
-dev
+.parcel-cache
 
 # production
 dist
