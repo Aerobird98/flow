@@ -316,11 +316,11 @@ const FlowEditor = {
     return window.print();
   },
 
-  save(key, value) {
+  setValue(key, value) {
     return window.localStorage.setItem(key, JSON.stringify(value));
   },
 
-  load(key) {
+  getValue(key) {
     return (
       JSON.parse(window.localStorage.getItem(key)) || [
         { children: [{ text: "" }] },
@@ -338,11 +338,11 @@ const Root = () => {
     () => withFlow(withHistory(withReact(createEditor()))),
     []
   );
-  const [value, setValue] = useState(FlowEditor.load("value"));
+  const [value, setValue] = useState(FlowEditor.getValue("value"));
 
   const onChange = (value) => {
     setValue(value);
-    FlowEditor.save("value", value);
+    FlowEditor.setValue("value", value);
   };
 
   return (
