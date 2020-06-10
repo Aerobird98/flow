@@ -1,7 +1,14 @@
 /** @jsx h */
 import { h, render } from "preact";
 import { useMemo, useState, useCallback } from "preact/hooks";
-import { createEditor, Transforms, Editor, Node, Text, Range } from "slate";
+import {
+  createEditor,
+  Transforms,
+  Editor,
+  Node,
+  Text as slateText,
+  Range as slateRange,
+} from "slate";
 import { Slate, useSlate, Editable, withReact } from "slate-react";
 import { withHistory, HistoryEditor } from "slate-history";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -24,7 +31,14 @@ import {
   faSun,
 } from "@fortawesome/free-solid-svg-icons";
 
-import { ThemeProvider, useColorMode, Box, Button, Styled } from "theme-ui";
+import {
+  ThemeProvider,
+  useColorMode,
+  Box,
+  Button,
+  Styled,
+  Text,
+} from "theme-ui";
 
 // If you want your app to work offline and load faster, you can uncoment
 // the code below. Note this comes with some pitfalls.
@@ -224,7 +238,7 @@ const FlowEditor = {
 
   isSelectionActive(editor) {
     const { selection } = editor;
-    return selection && !Range.isCollapsed(selection);
+    return selection && !slateRange.isCollapsed(selection);
   },
 
   isfullscreenActive() {
@@ -247,7 +261,7 @@ const FlowEditor = {
           [format]: active ? null : true,
         },
         {
-          match: (n) => Text.isText(n),
+          match: (n) => slateText.isText(n),
           split: true,
         }
       );
@@ -527,7 +541,7 @@ const Element = (props) => {
   switch (element.type) {
     case "paragraph":
       return (
-        <Box
+        <Text
           as={Styled.p}
           mb={3}
           sx={{
@@ -536,11 +550,11 @@ const Element = (props) => {
           {...attributes}
         >
           {children}
-        </Box>
+        </Text>
       );
     case "heading1":
       return (
-        <Box
+        <Text
           as={Styled.h1}
           mb={2}
           sx={{
@@ -549,11 +563,11 @@ const Element = (props) => {
           {...attributes}
         >
           {children}
-        </Box>
+        </Text>
       );
     case "heading2":
       return (
-        <Box
+        <Text
           as={Styled.h2}
           mb={2}
           sx={{
@@ -562,11 +576,11 @@ const Element = (props) => {
           {...attributes}
         >
           {children}
-        </Box>
+        </Text>
       );
     case "heading3":
       return (
-        <Box
+        <Text
           as={Styled.h3}
           mb={2}
           sx={{
@@ -575,11 +589,11 @@ const Element = (props) => {
           {...attributes}
         >
           {children}
-        </Box>
+        </Text>
       );
     case "heading4":
       return (
-        <Box
+        <Text
           as={Styled.h4}
           mb={2}
           sx={{
@@ -588,11 +602,11 @@ const Element = (props) => {
           {...attributes}
         >
           {children}
-        </Box>
+        </Text>
       );
     case "heading5":
       return (
-        <Box
+        <Text
           as={Styled.h5}
           mb={2}
           sx={{
@@ -601,11 +615,11 @@ const Element = (props) => {
           {...attributes}
         >
           {children}
-        </Box>
+        </Text>
       );
     case "heading6":
       return (
-        <Box
+        <Text
           as={Styled.h6}
           mb={2}
           sx={{
@@ -614,11 +628,11 @@ const Element = (props) => {
           {...attributes}
         >
           {children}
-        </Box>
+        </Text>
       );
     default:
       return (
-        <Box
+        <Text
           as={Styled.div}
           sx={{
             textAlign: element.align,
@@ -626,7 +640,7 @@ const Element = (props) => {
           {...attributes}
         >
           {children}
-        </Box>
+        </Text>
       );
   }
 };
@@ -701,7 +715,6 @@ const Toolbox = (props) => {
   return (
     <Box
       bg="background"
-      px={5}
       py={3}
       sx={{
         flexWrap: "wrap",
