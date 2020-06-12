@@ -1,6 +1,6 @@
 /** @jsx h */
 import { h, render } from "preact";
-import { useMemo, useState, useCallback } from "preact/hooks";
+import { useMemo, useState, useCallback, useLayoutEffect } from "preact/hooks";
 import {
   createEditor,
   Transforms,
@@ -241,15 +241,6 @@ const FlowEditor = {
     return selection && !slateRange.isCollapsed(selection);
   },
 
-  isfullscreenActive() {
-    return !!(
-      window.document.fullscreenElement ||
-      window.document.mozFullScreenElement ||
-      window.document.webkitFullscreenElement ||
-      window.document.msFullscreenElement
-    );
-  },
-
   toggleMark(editor, format) {
     const active = FlowEditor.isMarkActive(editor, format);
     const selection = FlowEditor.isSelectionActive(editor);
@@ -296,30 +287,58 @@ const FlowEditor = {
     );
   },
 
-  toggleFullscreen() {
-    const element = window.document.documentElement;
+  useFullcreen(element) {
+    const isfullscreenActive = () => {
+      return !!(
+        document.fullscreenElement ||
+        document.mozFullScreenElement ||
+        document.webkitFullscreenElement ||
+        document.msFullscreenElement
+      );
+    };
 
-    if (FlowEditor.isfullscreenActive()) {
-      if (window.document.exitFullscreen) {
-        window.document.exitFullscreen();
-      } else if (window.document.mozCancelFullScreen) {
-        window.document.mozCancelFullScreen();
-      } else if (window.document.webkitExitFullscreen) {
-        window.document.webkitExitFullscreen();
-      } else if (window.document.msExitFullscreen) {
-        window.document.msExitFullscreen();
-      }
-    } else {
+    const [isInFullscreen, setIsInFullscreen] = useState(isfullscreenActive());
+
+    const requestFullscreen = () => {
       if (element.requestFullscreen) {
-        element.requestFullscreen();
+        return element.requestFullscreen();
       } else if (element.mozRequestFullScreen) {
-        element.mozRequestFullScreen();
+        return element.mozRequestFullScreen();
       } else if (element.webkitRequestFullscreen) {
-        element.webkitRequestFullscreen();
+        return element.webkitRequestFullscreen();
       } else if (element.msRequestFullscreen) {
-        element.msRequestFullscreen();
+        return element.msRequestFullscreen();
       }
-    }
+    };
+
+    const exitFullscreen = () => {
+      if (document.exitFullscreen) {
+        return document.exitFullscreen();
+      } else if (document.mozCancelFullScreen) {
+        return document.mozCancelFullScreen();
+      } else if (document.webkitExitFullscreen) {
+        return document.webkitExitFullscreen();
+      } else if (document.msExitFullscreen) {
+        return document.msExitFullscreen();
+      }
+    };
+
+    const toggleFullscreen = () => {
+      if (isInFullscreen) {
+        exitFullscreen();
+      } else {
+        requestFullscreen();
+      }
+    };
+
+    useLayoutEffect(() => {
+      document.onfullscreenchange = () =>
+        setIsInFullscreen(isfullscreenActive());
+
+      return () => (document.onfullscreenchange = undefined);
+    });
+
+    return [isInFullscreen, toggleFullscreen];
   },
 
   isOnMac() {
@@ -364,16 +383,7 @@ const Root = () => {
       <Slate editor={editor} value={value} onChange={onChange}>
         <Flow>
           <Toolbox>
-            <ActionButton
-              icon="expand"
-              label="Expand"
-              mb={1}
-              mr={1}
-              action={(event) => {
-                event.preventDefault();
-                FlowEditor.toggleFullscreen();
-              }}
-            />
+            <FullscreenButton mb={1} mr={1} />
             <ActionButton
               disabled={editor.history.undos.length === 0}
               icon="undo"
@@ -750,6 +760,24 @@ const ActionButton = (props) => {
   );
 };
 
+const FullscreenButton = (props) => {
+  const [isInFullscreen, toggleFullscreen] = FlowEditor.useFullcreen(
+    document.documentElement
+  );
+
+  return (
+    <ActionButton
+      icon={isInFullscreen ? "compress" : "expand"}
+      label={isInFullscreen ? "Compress" : "Expand"}
+      action={(event) => {
+        event.preventDefault();
+        toggleFullscreen();
+      }}
+      {...props}
+    />
+  );
+};
+
 const MarkButton = (props) => {
   const { format } = props;
   const editor = useSlate();
@@ -835,7 +863,7 @@ library.add(
   faSun
 );
 
-render(<Root />, window.document.getElementById("root"));
+render(<Root />, document.getElementById("root"));
 
 // If you want your app to work offline and load faster, you can uncoment
 // the code below. Note this comes with some pitfalls.
