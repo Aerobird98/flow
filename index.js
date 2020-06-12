@@ -1,13 +1,13 @@
 /** @jsx h */
 import { h, render } from "preact";
-import { useMemo, useState, useCallback, useLayoutEffect } from "preact/hooks";
+import { useMemo, useState, useCallback, useEffect } from "preact/hooks";
 import {
   createEditor,
   Transforms,
   Editor,
   Node,
   Text as slateText,
-  Range as slateRange,
+  Range,
 } from "slate";
 import { Slate, useSlate, Editable, withReact } from "slate-react";
 import { withHistory, HistoryEditor } from "slate-history";
@@ -71,124 +71,135 @@ const Colors = {
   cyan: "#17a2b8",
 };
 
+const BaseTheme = {
+  initialColorMode: "light",
+  fonts: {
+    body: "'Quicksand', Arial, Helvetica, sans-serif",
+    heading: "inherit",
+    monospace: "'Fira code', 'Courier New', Courier, monospace",
+  },
+  fontSizes: ["1rem", "1.25rem", "1.5rem", "1.75rem", "2rem", "2.5rem"],
+  fontWeights: {
+    light: 300,
+    body: 400,
+    heading: 500,
+    bold: 700,
+  },
+  lineHeights: {
+    body: 1.5,
+    heading: 1.2,
+  },
+  space: ["0rem", "0.25rem", "0.5rem", "1rem", "1.5rem", "3rem"],
+  breakpoints: [576, 768, 992, 1200, 1400],
+  text: {
+    heading: {
+      fontFamily: "heading",
+      fontWeight: "heading",
+      lineHeight: "heading",
+    },
+  },
+  styles: {
+    root: {
+      fontFamily: "body",
+      lineHeight: "body",
+      fontWeight: "body",
+    },
+    p: {
+      fontSize: 0,
+    },
+    h1: {
+      variant: "text.heading",
+      fontSize: 5,
+    },
+    h2: {
+      variant: "text.heading",
+      fontSize: 4,
+    },
+    h3: {
+      variant: "text.heading",
+      fontSize: 3,
+    },
+    h4: {
+      variant: "text.heading",
+      fontSize: 2,
+    },
+    h5: {
+      variant: "text.heading",
+      fontSize: 1,
+    },
+    h6: {
+      variant: "text.heading",
+      fontSize: 0,
+    },
+    div: {
+      fontFamily: "monospace",
+    },
+    i: {
+      fontWeight: "light",
+    },
+    b: {
+      fontWeight: "bold",
+    },
+  },
+};
+
 const Themes = {
   flow: {
-    initialColorMode: "light",
-
+    ...BaseTheme,
     colors: {
       text: Colors.gray[8],
       background: Colors.gray[0],
       primary: Colors.blue,
       secondary: Colors.gray[8],
-
+      tertiary: Colors.gray[8],
       modes: {
         dark: {
           text: Colors.gray[0],
           background: Colors.gray[9],
+          primary: Colors.blue,
           secondary: Colors.gray[4],
+          tertiary: Colors.gray[4],
         },
-      },
-    },
-
-    fonts: {
-      body: "'Quicksand', Arial, Helvetica, sans-serif",
-      heading: "inherit",
-      monospace: "'Fira code', 'Courier New', Courier, monospace",
-    },
-    fontSizes: ["1rem", "1.25rem", "1.5rem", "1.75rem", "2rem", "2.5rem"],
-    fontWeights: {
-      light: 300,
-      body: 400,
-      heading: 500,
-      bold: 700,
-    },
-    lineHeights: {
-      body: 1.5,
-      heading: 1.2,
-    },
-
-    space: ["0rem", "0.25rem", "0.5rem", "1rem", "1.5rem", "3rem"],
-    breakpoints: [576, 768, 992, 1200, 1400],
-
-    text: {
-      heading: {
-        fontFamily: "heading",
-        fontWeight: "heading",
-        lineHeight: "heading",
       },
     },
     buttons: {
       primary: {
         color: "primary",
         bg: "background",
-        "&:hover, &:focus": {
-          outline: 0,
-        },
+        borderRadius: 0,
+        border: "3px solid",
+        borderColor: "primary",
         "&:focus": {
           color: "background",
           bg: "primary",
         },
+        "&:hover": {},
+        "&:focus, &:hover": {
+          outline: 0,
+        },
         "&:disabled": {
           opacity: 0.5,
+          color: "primary",
         },
       },
       secondary: {
         color: "secondary",
         bg: "background",
-        "&:hover, &:focus": {
-          outline: 0,
-        },
+        borderRadius: 0,
+        border: "3px solid",
+        borderColor: "transparent",
         "&:focus": {
           color: "background",
           bg: "secondary",
         },
+        "&:hover": {},
+        "&:focus, &:hover": {
+          outline: 0,
+        },
         "&:disabled": {
           opacity: 0.5,
+          color: "secondary",
         },
-      },
-    },
-
-    styles: {
-      root: {
-        fontFamily: "body",
-        lineHeight: "body",
-        fontWeight: "body",
-      },
-      p: {
-        fontSize: 0,
-      },
-      h1: {
-        variant: "text.heading",
-        fontSize: 5,
-      },
-      h2: {
-        variant: "text.heading",
-        fontSize: 4,
-      },
-      h3: {
-        variant: "text.heading",
-        fontSize: 3,
-      },
-      h4: {
-        variant: "text.heading",
-        fontSize: 2,
-      },
-      h5: {
-        variant: "text.heading",
-        fontSize: 1,
-      },
-      h6: {
-        variant: "text.heading",
-        fontSize: 0,
-      },
-      div: {
-        fontFamily: "monospace",
-      },
-      i: {
-        fontWeight: "light",
-      },
-      b: {
-        fontWeight: "bold",
       },
     },
   },
@@ -238,7 +249,7 @@ const FlowEditor = {
 
   isSelectionActive(editor) {
     const { selection } = editor;
-    return selection && !slateRange.isCollapsed(selection);
+    return selection && !Range.isCollapsed(selection);
   },
 
   toggleMark(editor, format) {
@@ -325,13 +336,25 @@ const FlowEditor = {
 
     const toggleFullscreen = () => {
       if (isInFullscreen) {
-        exitFullscreen();
+        exitFullscreen()
+          .then(() => {
+            setIsInFullscreen(isfullscreenActive());
+          })
+          .catch(() => {
+            setIsInFullscreen(true);
+          });
       } else {
-        requestFullscreen();
+        requestFullscreen()
+          .then(() => {
+            setIsInFullscreen(isfullscreenActive());
+          })
+          .catch(() => {
+            setIsInFullscreen(false);
+          });
       }
     };
 
-    useLayoutEffect(() => {
+    useEffect(() => {
       document.onfullscreenchange = () =>
         setIsInFullscreen(isfullscreenActive());
 
@@ -383,7 +406,7 @@ const Root = () => {
       <Slate editor={editor} value={value} onChange={onChange}>
         <Flow>
           <Toolbox>
-            <FullscreenButton mb={1} mr={1} />
+            <FullscreenButton mb={1} mr={1} ml={1} />
             <ActionButton
               disabled={editor.history.undos.length === 0}
               icon="undo"
@@ -501,7 +524,7 @@ const Root = () => {
               mb={1}
               mr={1}
             />
-            <ColorSwitch mb={1} />
+            <ColorSwitch mb={1} mr={1} />
           </Toolbox>
           <Textbox />
         </Flow>
