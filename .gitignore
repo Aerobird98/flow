@@ -8,7 +8,8 @@ node_modules
 .parcel-cache
 
 # production
-dist
+dist/*.js
+dist/*.js.map
 
 # other
 npm-debug.log*

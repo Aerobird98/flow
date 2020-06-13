@@ -4,12 +4,10 @@
   "description": "A compact web based rich-text editor that builds on top of Slate-js with powerful, yet simple and accessible editing capabilities.",
   "private": true,
   "scripts": {
-    "start": "npm run devel",
-    "clean": "rimraf dist",
-    "devel": "npm run clean && parcel serve index.html --port 3000",
-    "build": "npm run clean && parcel build index.html --public-url /flow",
-    "deploy": "gh-pages -d dist",
-    "release": "npm run build && npm run deploy"
+    "start": "npm run build-development",
+    "build-development": "esbuild index.js --bundle --outdir=dist --loader:.js=jsx '--define:process.env.NODE_ENV=\"development\"' --jsx-factory=h --jsx-fragment=Fragment",
+    "build-production": "esbuild index.js --bundle --minify --outdir=dist --loader:.js=jsx '--define:process.env.NODE_ENV=\"production\"' --jsx-factory=h --jsx-fragment=Fragment --sourcemap",
+    "release": "npm run build-production && gh-pages -d dist"
   },
   "repository": {
     "type": "git",
@@ -31,14 +29,9 @@
     "slate-react": "^0.58.3",
     "theme-ui": "^0.3.1"
   },
-  "alias": {
-    "react": "preact/compat",
-    "react-dom": "preact/compat"
-  },
   "devDependencies": {
+    "esbuild": "^0.5.3",
     "gh-pages": "^3.0.0",
-    "parcel": "^2.0.0-nightly.288",
-    "prettier": "^2.0.5",
-    "rimraf": "^3.0.2"
+    "prettier": "^2.0.5"
   }
 }

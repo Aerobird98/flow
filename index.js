@@ -1,6 +1,6 @@
 /** @jsx h */
 import { h, render } from "preact";
-import { useMemo, useState, useCallback, useEffect } from "preact/hooks";
+import { useMemo, useState, useCallback, useLayoutEffect } from "preact/hooks";
 import {
   createEditor,
   Transforms,
@@ -360,7 +360,7 @@ const FlowEditor = {
       }
     };
 
-    useEffect(() => {
+    useLayoutEffect(() => {
       document.onfullscreenchange = () =>
         setIsInFullscreen(isfullscreenActive());
 
