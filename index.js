@@ -154,9 +154,9 @@ const Themes = {
       tertiary: Colors.gray[8],
       modes: {
         dark: {
-          text: Colors.gray[0],
+          text: Colors.gray[4],
           background: Colors.gray[9],
-          primary: Colors.blue,
+          primary: Colors.yellow,
           secondary: Colors.gray[4],
           tertiary: Colors.gray[4],
         },
