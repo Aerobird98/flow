@@ -151,14 +151,14 @@ const Themes = {
       background: Colors.gray[0],
       primary: Colors.blue,
       secondary: Colors.gray[8],
-      tertiary: Colors.gray[8],
+      tertiary: Colors.blue,
       modes: {
         dark: {
           text: Colors.gray[4],
           background: Colors.gray[9],
           primary: Colors.yellow,
           secondary: Colors.gray[4],
-          tertiary: Colors.gray[4],
+          tertiary: Colors.yellow,
         },
       },
     },
@@ -169,17 +169,20 @@ const Themes = {
         borderRadius: 0,
         border: "3px solid",
         borderColor: "primary",
+        "&:hover": {
+          color: "tertiary",
+        },
         "&:focus": {
           color: "background",
           bg: "primary",
         },
-        "&:hover": {},
         "&:focus, &:hover": {
           outline: 0,
         },
         "&:disabled": {
           opacity: 0.5,
           color: "primary",
+          bg: "background",
         },
       },
       secondary: {
@@ -188,17 +191,20 @@ const Themes = {
         borderRadius: 0,
         border: "3px solid",
         borderColor: "transparent",
+        "&:hover": {
+          color: "tertiary",
+        },
         "&:focus": {
           color: "background",
           bg: "secondary",
         },
-        "&:hover": {},
         "&:focus, &:hover": {
           outline: 0,
         },
         "&:disabled": {
           opacity: 0.5,
           color: "secondary",
+          bg: "background",
         },
       },
     },
