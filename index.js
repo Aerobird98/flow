@@ -148,7 +148,7 @@ const Themes = {
     ...BaseTheme,
     colors: {
       text: Colors.gray[8],
-      background: Colors.gray[0],
+      background: Colors.gray[4],
       primary: Colors.blue,
       secondary: Colors.gray[8],
       tertiary: Colors.blue,
