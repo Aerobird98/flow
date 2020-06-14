@@ -461,44 +461,9 @@ const Root = () => {
               mr={1}
             />
             <BlockButton
-              format="heading6"
-              icon="heading"
-              label="Heading 6"
-              mb={1}
-              mr={1}
-            />
-            <BlockButton
-              format="heading5"
-              icon="heading"
-              label="Heading 5"
-              mb={1}
-              mr={1}
-            />
-            <BlockButton
-              format="heading4"
-              icon="heading"
-              label="Heading 4"
-              mb={1}
-              mr={1}
-            />
-            <BlockButton
               format="heading3"
               icon="heading"
-              label="Heading 3"
-              mb={1}
-              mr={1}
-            />
-            <BlockButton
-              format="heading2"
-              icon="heading"
-              label="Heading 2"
-              mb={1}
-              mr={1}
-            />
-            <BlockButton
-              format="heading1"
-              icon="heading"
-              label="Heading 1"
+              label="Heading"
               mb={1}
               mr={1}
             />
