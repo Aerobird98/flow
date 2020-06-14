@@ -3,13 +3,9 @@
 # dependencies
 node_modules
 
-# development
-.cache
-.parcel-cache
-
 # production
-dist/*.js
-dist/*.js.map
+build/*.js
+build/*.js.map
 
 # other
 npm-debug.log*

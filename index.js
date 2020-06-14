@@ -148,16 +148,16 @@ const Themes = {
     ...BaseTheme,
     colors: {
       text: Colors.gray[8],
-      background: Colors.gray[4],
+      background: Colors.gray[2],
       primary: Colors.blue,
       secondary: Colors.gray[8],
       tertiary: Colors.blue,
       modes: {
         dark: {
-          text: Colors.gray[4],
-          background: Colors.gray[9],
+          text: Colors.gray[2],
+          background: Colors.gray[8],
           primary: Colors.yellow,
-          secondary: Colors.gray[4],
+          secondary: Colors.gray[2],
           tertiary: Colors.yellow,
         },
       },
