@@ -38,6 +38,7 @@ import {
   Button,
   Styled,
   Text,
+  Heading,
 } from "theme-ui";
 
 // If you want your app to work offline and load faster, you can uncoment
@@ -74,9 +75,9 @@ const Colors = {
 const BaseTheme = {
   initialColorMode: "light",
   fonts: {
-    body: "'Quicksand', Arial, Helvetica, sans-serif",
+    body: "'Quicksand', Helvetica, sans-serif",
     heading: "inherit",
-    monospace: "'Fira code', 'Courier New', Courier, monospace",
+    monospace: "'Fira code', Courier, monospace",
   },
   fontSizes: ["1rem", "1.25rem", "1.5rem", "1.75rem", "2rem", "2.5rem"],
   fontWeights: {
@@ -92,6 +93,11 @@ const BaseTheme = {
   space: ["0rem", "0.25rem", "0.5rem", "1rem", "1.5rem", "3rem"],
   breakpoints: [576, 768, 992, 1200, 1400],
   text: {
+    paragraph: {
+      fontFamily: "body",
+      lineHeight: "body",
+      fontWeight: "body",
+    },
     heading: {
       fontFamily: "heading",
       fontWeight: "heading",
@@ -105,6 +111,7 @@ const BaseTheme = {
       fontWeight: "body",
     },
     p: {
+      variant: "text.paragraph",
       fontSize: 0,
     },
     h1: {
@@ -151,26 +158,24 @@ const Themes = {
       background: Colors.gray[2],
       primary: Colors.blue,
       secondary: Colors.gray[8],
-      tertiary: Colors.blue,
       modes: {
         dark: {
           text: Colors.gray[2],
           background: Colors.gray[8],
           primary: Colors.yellow,
           secondary: Colors.gray[2],
-          tertiary: Colors.yellow,
         },
       },
     },
     buttons: {
-      primary: {
+      on: {
         color: "primary",
         bg: "background",
         borderRadius: 0,
         border: "3px solid",
         borderColor: "primary",
         "&:hover": {
-          color: "tertiary",
+          color: "secondary",
         },
         "&:focus": {
           color: "background",
@@ -185,14 +190,14 @@ const Themes = {
           bg: "background",
         },
       },
-      secondary: {
+      off: {
         color: "secondary",
         bg: "background",
         borderRadius: 0,
         border: "3px solid",
         borderColor: "transparent",
         "&:hover": {
-          color: "tertiary",
+          color: "primary",
         },
         "&:focus": {
           color: "background",
@@ -370,8 +375,10 @@ const FlowEditor = {
     return [isInFullscreen, toggleFullscreen];
   },
 
-  isOnMac() {
-    return /Mac|iPod|iPhone|iPad/.test(window.navigator.platform);
+  modifier(event) {
+    return /Mac|iPod|iPhone|iPad/.test(window.navigator.platform)
+      ? event.metaKey
+      : event.ctrlKey;
   },
 
   print() {
@@ -410,7 +417,16 @@ const Root = () => {
   return (
     <ThemeProvider theme={Themes.flow}>
       <Slate editor={editor} value={value} onChange={onChange}>
-        <Flow>
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+            minHeight: "100vh",
+            "@media print": {
+              display: "block",
+            },
+          }}
+        >
           <Toolbox>
             <FullscreenButton mb={1} mr={1} ml={1} />
             <ActionButton
@@ -461,7 +477,7 @@ const Root = () => {
               mr={1}
             />
             <BlockButton
-              format="heading3"
+              format="heading"
               icon="heading"
               label="Heading"
               mb={1}
@@ -498,29 +514,9 @@ const Root = () => {
             <ColorSwitch mb={1} mr={1} />
           </Toolbox>
           <Textbox />
-        </Flow>
+        </Box>
       </Slate>
     </ThemeProvider>
-  );
-};
-
-const Flow = (props) => {
-  const { children } = props;
-
-  return (
-    <Box
-      sx={{
-        display: "flex",
-        flexDirection: "column",
-        minHeight: "100vh",
-        "@media print": {
-          display: "block",
-        },
-      }}
-      {...props}
-    >
-      {children}
-    </Box>
   );
 };
 
@@ -539,113 +535,66 @@ const Leaf = (props) => {
   return <span {...attributes}>{children}</span>;
 };
 
-const Element = (props) => {
+const DefaultElement = (props) => {
   const { attributes, children, element } = props;
+
+  return (
+    <Text
+      as={Styled.div}
+      sx={{
+        textAlign: element.align,
+      }}
+      {...attributes}
+    >
+      {children}
+    </Text>
+  );
+};
+
+const ParagraphElement = (props) => {
+  const { attributes, children, element } = props;
+
+  return (
+    <Text
+      as={Styled.p}
+      mb={3}
+      sx={{
+        textAlign: element.align,
+      }}
+      {...attributes}
+    >
+      {children}
+    </Text>
+  );
+};
+
+const HeadingElement = (props) => {
+  const { attributes, children, element } = props;
+
+  return (
+    <Heading
+      as={Styled.h3}
+      mb={2}
+      sx={{
+        textAlign: element.align,
+      }}
+      {...attributes}
+    >
+      {children}
+    </Heading>
+  );
+};
+
+const Element = (props) => {
+  const { element } = props;
 
   switch (element.type) {
     case "paragraph":
-      return (
-        <Text
-          as={Styled.p}
-          mb={3}
-          sx={{
-            textAlign: element.align,
-          }}
-          {...attributes}
-        >
-          {children}
-        </Text>
-      );
-    case "heading1":
-      return (
-        <Text
-          as={Styled.h1}
-          mb={2}
-          sx={{
-            textAlign: element.align,
-          }}
-          {...attributes}
-        >
-          {children}
-        </Text>
-      );
-    case "heading2":
-      return (
-        <Text
-          as={Styled.h2}
-          mb={2}
-          sx={{
-            textAlign: element.align,
-          }}
-          {...attributes}
-        >
-          {children}
-        </Text>
-      );
-    case "heading3":
-      return (
-        <Text
-          as={Styled.h3}
-          mb={2}
-          sx={{
-            textAlign: element.align,
-          }}
-          {...attributes}
-        >
-          {children}
-        </Text>
-      );
-    case "heading4":
-      return (
-        <Text
-          as={Styled.h4}
-          mb={2}
-          sx={{
-            textAlign: element.align,
-          }}
-          {...attributes}
-        >
-          {children}
-        </Text>
-      );
-    case "heading5":
-      return (
-        <Text
-          as={Styled.h5}
-          mb={2}
-          sx={{
-            textAlign: element.align,
-          }}
-          {...attributes}
-        >
-          {children}
-        </Text>
-      );
-    case "heading6":
-      return (
-        <Text
-          as={Styled.h6}
-          mb={2}
-          sx={{
-            textAlign: element.align,
-          }}
-          {...attributes}
-        >
-          {children}
-        </Text>
-      );
+      return <ParagraphElement {...props} />;
+    case "heading":
+      return <HeadingElement {...props} />;
     default:
-      return (
-        <Text
-          as={Styled.div}
-          sx={{
-            textAlign: element.align,
-          }}
-          {...attributes}
-        >
-          {children}
-        </Text>
-      );
+      return <DefaultElement {...props} />;
   }
 };
 
@@ -661,9 +610,7 @@ const Input = (props) => {
   }, []);
 
   const onKeyDown = (event) => {
-    const modKey = FlowEditor.isOnMac() ? event.metaKey : event.ctrlKey;
-
-    if (modKey) {
+    if (FlowEditor.modifier(event)) {
       switch (event.key) {
         case "p":
           event.preventDefault();
@@ -746,7 +693,7 @@ const ActionButton = (props) => {
       aria-label={label}
       onMouseDown={action}
       disabled={disabled}
-      variant={active ? "primary" : "secondary"}
+      variant={active ? "on" : "off"}
       {...props}
     >
       <FontAwesomeIcon icon={icon} fixedWidth />
