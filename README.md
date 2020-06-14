@@ -1,12 +1,12 @@
 # Flow
 
-A compact web based rich-text editor that builds on top of [Slate-js](https://docs.slatejs.org/) with powerful, yet simple and accessible editing capabilities. It's using a design system not just for its beautiful **UI** but also for handling efficient and consistent document **styling**, this means that it may _lack_ some editing capabilities of other rich-text editors by design, typographic caracteristics like changing the _font-family_, _font-size_ or _line-height_, theme specific emphasis like changing text and bg colors, however in exchange you get consistent **styling** and possibly good typography across all your documents.
+A compact web based **rich-text editor** that builds on top of [Slate-js](https://docs.slatejs.org/) with powerful, yet simple and accessible editing capabilities. It's using a design system not just for its beautiful UI but also for handling efficient and consistent document **styling**, this means that it may _lack_ some editing capabilities of other rich-text editors by design, typographic caracteristics like changing the _font-family_, _font-size_ or _line-height_, theme specific emphasis like changing _text and bg colors_, however in exchange you get consistent **styling** and possibly **good typography** across all your documents.
 
-This app is using [Preact-js](https://preactjs.com/) a fast 3kB alternative to [React-js](https://reactjs.org/) with the same _modern_ **API**, bundled by [esbuild](https://github.com/evanw/esbuild) a _truly fast_ **JavaScript** bundler and minifier that packages up **JavaScript** and **TypeScript** code for distribution to the web. Using [Theme-ui](https://theme-ui.com/) the Design Graph Framework to provide an opinionated design system paired with [FontAwesome](https://fontawesome.com/)'s **awesome** free solid icons (I wanted to use pro, but sadly that's not alowed for open-source projects...).
+Flow (the app) is using [Preact-js](https://preactjs.com/) a _fast 3kB alternative_ to [React-js](https://reactjs.org/) with the same _modern_ API, bundled by [esbuild](https://github.com/evanw/esbuild) a _truly fast_ **JavaScript** _bundler and minifier_ that packages up **JavaScript** and **TypeScript** code for distribution to the web. Using [Theme-ui](https://theme-ui.com/) the **Design Graph Framework** to provide an opinionated design system paired with [FontAwesome](https://fontawesome.com/)'s free **solid** icons.
 
 ## Usage
 
-Use the buttons in the tools section at the top of Flow (the app) or use _keyboard_ sortcuts listed in the table below to toggle _mark-style_ formating like **Bold** or _Italic_ on the selected text or _block-style_ formating like Paragraphs, Heading types or Aligning on the block the cursor is in. Flow (the app) will highlight buttons when their format is active on the selected text or on the block the cursor is in. Flow (the app) has an autosaving feature that saves your currently edited document to your browser's _local-storage_ container which you can access through the developer-tools of your browser.
+Use the buttons in the tools section at the top of Flow (the app) or use _keyboard_ sortcuts listed in the table below to toggle _mark-style_ formating like **Bold** or _Italic_ on the selected text or _block-style_ formating like Paragraphs, Heading types or Aligning on the block the cursor is in. Flow (the app) will highlight buttons when their format is active. Flow (the app) has an autosaving feature that saves your currently edited document to your browser's _local-storage_ container under a `value` key, which you can access through the developer-tools of your browser.
 
 | Shortcut          | Description                                |
 | ----------------- | ------------------------------------------ |
@@ -23,8 +23,8 @@ Use the buttons in the tools section at the top of Flow (the app) or use _keyboa
 
 1. Run `npm install` in the project directory to install all the dependencies and dev-dependencies;
 2. Run `npm run build-development` to build for development or `npm run build-production` to build for production;
-3. Open the `index.html` file in `build` to begin working (you need to refresh the page after each re-build for the changes to take effect);
-4. When ready run `npm run deploy` to deploy the contents of build to gh-pages or `npm run release` to re-build for production then deploy.
+3. Open the `index.html` file in the `build` folder to begin working (you need to refresh the page after each re-build for the changes to take effect);
+4. When ready run `npm run deploy` to deploy the contents of build to gh-pages or `npm run release` to also re-build for production.
 
 ## License
 
