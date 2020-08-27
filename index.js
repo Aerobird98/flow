@@ -237,6 +237,7 @@ const FlowEditor = {
   isMarkActive(editor, format) {
     const [match] = Editor.nodes(editor, {
       match: (n) => n[format] === true,
+      universal: true
     });
 
     return !!match;
@@ -265,20 +266,17 @@ const FlowEditor = {
 
   toggleMark(editor, format) {
     const active = FlowEditor.isMarkActive(editor, format);
-    const selection = FlowEditor.isSelectionActive(editor);
 
-    if (selection) {
-      Transforms.setNodes(
-        editor,
-        {
-          [format]: active ? null : true,
-        },
-        {
-          match: (n) => slateText.isText(n),
-          split: true,
-        }
-      );
-    }
+    Transforms.setNodes(
+      editor,
+      {
+        [format]: active ? null : true,
+      },
+      {
+        match: (n) => slateText.isText(n),
+        split: true,
+      }
+    );
   },
 
   toggleBlock(editor, format) {
