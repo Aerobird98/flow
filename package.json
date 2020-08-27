@@ -23,7 +23,7 @@
     "@fortawesome/fontawesome-svg-core": "^1.2.30",
     "@fortawesome/free-solid-svg-icons": "^5.14.0",
     "@fortawesome/react-fontawesome": "^0.1.11",
-    "preact": "^10.4.7",
+    "preact": "^10.4.8",
     "slate": "^0.58.4",
     "slate-history": "^0.58.4",
     "slate-react": "^0.58.4",
@@ -32,6 +32,6 @@
   "devDependencies": {
     "esbuild": "^0.5.26",
     "gh-pages": "^3.1.0",
-    "prettier": "^2.0.5"
+    "prettier": "^2.1.1"
   }
 }
