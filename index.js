@@ -266,17 +266,20 @@ const FlowEditor = {
 
   toggleMark(editor, format) {
     const active = FlowEditor.isMarkActive(editor, format);
+    const selection = FlowEditor.isSelectionActive(editor);
 
-    Transforms.setNodes(
-      editor,
-      {
-        [format]: active ? null : true,
-      },
-      {
-        match: (n) => slateText.isText(n),
-        split: true,
-      }
-    );
+    if (selection) {
+      Transforms.setNodes(
+        editor,
+        {
+          [format]: active ? null : true,
+        },
+        {
+          match: (n) => slateText.isText(n),
+          split: true,
+        }
+      );
+    }
   },
 
   toggleBlock(editor, format) {
