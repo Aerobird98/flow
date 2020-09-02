@@ -24,7 +24,7 @@ Use the buttons in the tools section at the top of Flow (the app) or use _keyboa
 1. Run `npm install` in the project directory to install all the dependencies and dev-dependencies;
 2. Run `npm run build-development` to build for development or `npm run build-production` to build for production;
 3. Open the `index.html` file in the `build` folder to begin working (you need to refresh the page after each re-build for the changes to take effect);
-4. When ready run `npm run deploy` to deploy the contents of build to gh-pages or `npm run release` to also re-build for production.
+4. When ready run `npm run deploy` to deploy the contents of `build` to gh-pages or `npm run release` to also re-build for production.
 
 ## License
 
