@@ -20,10 +20,10 @@
   },
   "homepage": "http://Aerobird98.github.io/flow",
   "dependencies": {
-    "@fortawesome/fontawesome-svg-core": "^1.2.31",
-    "@fortawesome/free-solid-svg-icons": "^5.15.0",
+    "@fortawesome/fontawesome-svg-core": "^1.2.32",
+    "@fortawesome/free-solid-svg-icons": "^5.15.1",
     "@fortawesome/react-fontawesome": "^0.1.11",
-    "preact": "^10.5.3",
+    "preact": "^10.5.5",
     "slate": "^0.58.4",
     "slate-history": "^0.58.4",
     "slate-react": "^0.58.4",
