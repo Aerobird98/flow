@@ -75,9 +75,9 @@ const Colors = {
 const BaseTheme = {
   initialColorMode: "light",
   fonts: {
-    body: "'Quicksand', Helvetica, sans-serif",
+    body: "minion, serif",
     heading: "inherit",
-    monospace: "'Fira code', Courier, monospace",
+    monospace: "fira, monospace",
   },
   fontSizes: ["1rem", "1.25rem", "1.5rem", "1.75rem", "2rem", "2.5rem"],
   fontWeights: {
