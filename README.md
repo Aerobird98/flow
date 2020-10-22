@@ -1,6 +1,8 @@
 # Flow
 
-A compact web based **rich-text editor** that builds on top of [Slate-js](https://docs.slatejs.org/) with powerful, yet simple and accessible editing capabilities. It's using a design system not just for its beautiful UI but also for handling efficient and consistent document **styling**, this means that it may _lack_ some editing capabilities of other rich-text editors by design, typographic caracteristics like changing the _font-family_, _font-size_ or _line-height_, theme specific emphasis like changing _text and bg colors_, however in exchange you get consistent **styling** and possibly **good typography** across all your documents.
+A compact web based **rich-text editor** that builds on top of [Slate-js](https://docs.slatejs.org/) with powerful, yet simple and accessible editing capabilities.
+
+It's using a design system not just for its beautiful UI but also for handling efficient and consistent document **styling**, this means that it may _lack_ some editing capabilities of other rich-text editors by design, typographic caracteristics like changing the _font-family_, _font-size_ or _line-height_, theme specific emphasis like changing _text and bg colors_, however in exchange you get consistent **styling** and possibly **good typography** across all your documents.
 
 Flow (the app) is using [Preact-js](https://preactjs.com/) a _fast 3kB alternative_ to [React-js](https://reactjs.org/) with the same _modern_ API, bundled by [esbuild](https://github.com/evanw/esbuild) a _truly fast_ **JavaScript** _bundler and minifier_ that packages up **JavaScript** and **TypeScript** code for distribution to the web. Using [Theme-ui](https://theme-ui.com/) the **Design Graph Framework** to provide an opinionated design system paired with [FontAwesome](https://fontawesome.com/)'s free **solid** icons.
 

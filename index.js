@@ -237,7 +237,7 @@ const FlowEditor = {
   isMarkActive(editor, format) {
     const [match] = Editor.nodes(editor, {
       match: (n) => n[format] === true,
-      universal: true
+      universal: true,
     });
 
     return !!match;
@@ -429,7 +429,7 @@ const Root = () => {
           }}
         >
           <Toolbox>
-            <FullscreenButton mb={1} mr={1} ml={1} />
+            <FullscreenButton mb={1} mr={1} />
             <ActionButton
               disabled={editor.history.undos.length === 0}
               icon="undo"
@@ -668,6 +668,7 @@ const Toolbox = (props) => {
     <Box
       bg="background"
       py={3}
+      ml={1}
       sx={{
         flexWrap: "wrap",
         "@supports (position: sticky)": {
