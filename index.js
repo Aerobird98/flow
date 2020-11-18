@@ -161,8 +161,8 @@ const Themes = {
       modes: {
         dark: {
           text: Colors.gray[2],
-          background: Colors.gray[8],
-          primary: Colors.yellow,
+          background: "#22173B",
+          primary: "#3AF937",
           secondary: Colors.gray[2],
         },
       },
