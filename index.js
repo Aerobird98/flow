@@ -75,15 +75,15 @@ const Colors = {
 const BaseTheme = {
   initialColorMode: "light",
   fonts: {
-    body: "minion, serif",
-    heading: "inherit",
+    light: "sailecLight, serif",
+    regular: "sailecRegular, serif",
+    bold: "sailecBold, serif",
     monospace: "fira, monospace",
   },
   fontSizes: ["1rem", "1.25rem", "1.5rem", "1.75rem", "2rem", "2.5rem"],
   fontWeights: {
     light: 300,
-    body: 400,
-    heading: 500,
+    regular: 400,
     bold: 700,
   },
   lineHeights: {
@@ -94,21 +94,21 @@ const BaseTheme = {
   breakpoints: [576, 768, 992, 1200, 1400],
   text: {
     paragraph: {
-      fontFamily: "body",
+      fontFamily: "light",
       lineHeight: "body",
-      fontWeight: "body",
+      fontWeight: "light",
     },
     heading: {
-      fontFamily: "heading",
-      fontWeight: "heading",
+      fontFamily: "regular",
+      fontWeight: "regular",
       lineHeight: "heading",
     },
   },
   styles: {
     root: {
-      fontFamily: "body",
+      fontFamily: "light",
       lineHeight: "body",
-      fontWeight: "body",
+      fontWeight: "light",
     },
     p: {
       variant: "text.paragraph",
@@ -145,6 +145,7 @@ const BaseTheme = {
       fontWeight: "light",
     },
     b: {
+      fontFamily: "bold",
       fontWeight: "bold",
     },
   },
@@ -160,10 +161,10 @@ const Themes = {
       secondary: Colors.gray[8],
       modes: {
         dark: {
-          text: Colors.gray[2],
-          background: "#22173B",
-          primary: "#3AF937",
-          secondary: Colors.gray[2],
+          text: "#ffede6",
+          background: "#050528",
+          primary: "#e9dd77",
+          secondary: "#ffede6",
         },
       },
     },

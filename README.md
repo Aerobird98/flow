@@ -2,7 +2,7 @@
 
 A compact web based **rich-text editor** that builds on top of [Slate-js](https://docs.slatejs.org/) with powerful, yet simple and accessible editing capabilities.
 
-It's using a design system not just for its simplified UI but also for handling efficient and consistent document **styling**, this means that it may _lack_ some editing capabilities of other rich-text editors by design, however in exchange you get consistent **styling** and possibly **good typography** across all your documents (As far as web-standards allow it).
+It's using a design system not just for its simplified UI but also for handling efficient and consistent document **styling**, this means that it may _lack_ some editing capabilities of other rich-text editors by design, however in exchange you get consistent **look** and possibly **good typography** across all your documents (As far as web-standards allow it).
 
 ## Usage
 
