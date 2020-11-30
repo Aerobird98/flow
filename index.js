@@ -75,16 +75,22 @@ const Colors = {
 const BaseTheme = {
   initialColorMode: "light",
   fonts: {
-    light: "sailecLight, serif",
-    regular: "sailecRegular, serif",
-    bold: "sailecBold, serif",
-    monospace: "fira, monospace",
+    light: "sailecLight, sans-serif",
+    regular: "sailecRegular, sans-serif",
+    bold: "sailecBold, sans-serif",
+    code: "firaCode, monospace",
   },
   fontSizes: ["1rem", "1.25rem", "1.5rem", "1.75rem", "2rem", "2.5rem"],
   fontWeights: {
+    extraThin: 100,
+    thin: 200,
     light: 300,
     regular: 400,
+    medium: 500,
+    semiBold: 600,
     bold: 700,
+    extraBold: 800,
+    ultraBold: 900,
   },
   lineHeights: {
     body: 1.5,
@@ -96,11 +102,9 @@ const BaseTheme = {
     paragraph: {
       fontFamily: "light",
       lineHeight: "body",
-      fontWeight: "light",
     },
     heading: {
       fontFamily: "regular",
-      fontWeight: "regular",
       lineHeight: "heading",
     },
   },
@@ -108,7 +112,6 @@ const BaseTheme = {
     root: {
       fontFamily: "light",
       lineHeight: "body",
-      fontWeight: "light",
     },
     p: {
       variant: "text.paragraph",
@@ -139,14 +142,57 @@ const BaseTheme = {
       fontSize: 0,
     },
     div: {
-      fontFamily: "monospace",
+      fontFamily: "code",
     },
     i: {
-      fontWeight: "light",
+      fontFamily: "light",
     },
     b: {
       fontFamily: "bold",
-      fontWeight: "bold",
+    },
+  },
+  buttons: {
+    on: {
+      color: "primary",
+      bg: "background",
+      borderRadius: "1rem",
+      borderColor: "transparent",
+      "&:hover": {
+        color: "primary",
+      },
+      "&:focus": {
+        color: "background",
+        bg: "primary",
+      },
+      "&:focus, &:hover": {
+        outline: 0,
+      },
+      "&:disabled": {
+        opacity: 0.5,
+        color: "primary",
+        bg: "background",
+      },
+    },
+    off: {
+      color: "secondary",
+      bg: "background",
+      borderRadius: "1rem",
+      borderColor: "transparent",
+      "&:hover": {
+        color: "secondary",
+      },
+      "&:focus": {
+        color: "background",
+        bg: "secondary",
+      },
+      "&:focus, &:hover": {
+        outline: 0,
+      },
+      "&:disabled": {
+        opacity: 0.5,
+        color: "secondary",
+        bg: "background",
+      },
     },
   },
 };
@@ -165,52 +211,6 @@ const Themes = {
           background: "#050528",
           primary: "#e9dd77",
           secondary: "#ffede6",
-        },
-      },
-    },
-    buttons: {
-      on: {
-        color: "primary",
-        bg: "background",
-        borderRadius: 0,
-        border: "3px solid",
-        borderColor: "primary",
-        "&:hover": {
-          color: "secondary",
-        },
-        "&:focus": {
-          color: "background",
-          bg: "primary",
-        },
-        "&:focus, &:hover": {
-          outline: 0,
-        },
-        "&:disabled": {
-          opacity: 0.5,
-          color: "primary",
-          bg: "background",
-        },
-      },
-      off: {
-        color: "secondary",
-        bg: "background",
-        borderRadius: 0,
-        border: "3px solid",
-        borderColor: "transparent",
-        "&:hover": {
-          color: "primary",
-        },
-        "&:focus": {
-          color: "background",
-          bg: "secondary",
-        },
-        "&:focus, &:hover": {
-          outline: 0,
-        },
-        "&:disabled": {
-          opacity: 0.5,
-          color: "secondary",
-          bg: "background",
         },
       },
     },
@@ -559,7 +559,7 @@ const ParagraphElement = (props) => {
   return (
     <Text
       as={Styled.p}
-      mb={3}
+      mb={4}
       sx={{
         textAlign: element.align,
       }}
@@ -576,7 +576,7 @@ const HeadingElement = (props) => {
   return (
     <Heading
       as={Styled.h3}
-      mb={2}
+      mb={3}
       sx={{
         textAlign: element.align,
       }}
