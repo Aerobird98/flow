@@ -29,6 +29,7 @@ import {
   faPrint,
   faBold,
   faItalic,
+  faCode,
   faParagraph,
   faHeading,
   faAlignLeft,
@@ -113,7 +114,7 @@ const BaseTheme = {
   },
   styles: {
     root: {
-      fontFamily: "light",
+      fontFamily: "code",
       lineHeight: "body",
     },
     p: {
@@ -224,18 +225,39 @@ const FlowEditor = {
   // Define a serializing function that takes a value and
   // returns the string content of each node in the value's children
   // then joins them all with line breaks denoting paragraphs.
-  serializePlainText(value) {
+  toPlainText(value) {
     return value.map((n) => SlateNode.string(n)).join("\n");
   },
 
   // Define a deserializing function that takes a string and
   // returns a value as an array of children derived by splitting the string.
-  deserializePlainText(string) {
-    return string.split("\n").map((paragraph) => {
+  fromPlainText(text) {
+    return text.split("\n").map((paragraph) => {
       return {
         children: [{ text: paragraph }],
       };
     });
+  },
+
+  getStatistics(value) {
+    const text = FlowEditor.toPlainText(value);
+
+    const isEmpty = (text) => {
+      return text === "\n" || text === "";
+    };
+
+    const regex = /\s+/gi;
+    const words = text.trim().replace(regex, " ").split(" ").length;
+    const chars = text.length;
+    const noTrailing = text.trim().length;
+    const noSpaces = text.replace(regex, "").length;
+
+    return {
+      words: isEmpty(text) ? 0 : words,
+      chars: isEmpty(text) ? 0 : chars,
+      noTrailing: isEmpty(text) ? 0 : noTrailing,
+      noSpaces: isEmpty(text) ? 0 : noSpaces,
+    };
   },
 
   isMarkActive(editor, format) {
@@ -292,7 +314,7 @@ const FlowEditor = {
     SlateTransforms.setNodes(
       editor,
       {
-        type: active ? null : format,
+        type: active ? "code" : format,
       },
       {
         match: (n) => SlateEditor.isBlock(editor, n),
@@ -306,7 +328,7 @@ const FlowEditor = {
     SlateTransforms.setNodes(
       editor,
       {
-        align: active ? null : format,
+        align: active ? "left" : format,
       },
       {
         match: (n) => SlateEditor.isBlock(editor, n),
@@ -397,7 +419,7 @@ const FlowEditor = {
   getValue(key) {
     return (
       JSON.parse(window.localStorage.getItem(key)) || [
-        { children: [{ text: "" }] },
+        { type: "code", align: "left", children: [{ text: "" }] },
       ]
     );
   },
@@ -419,6 +441,8 @@ const Root = () => {
     FlowEditor.setValue("value", value);
   };
 
+  const statistics = FlowEditor.getStatistics(value);
+
   return (
     <ThemeProvider theme={Themes.flow}>
       <Slate editor={editor} value={value} onChange={onChange}>
@@ -432,13 +456,28 @@ const Root = () => {
             },
           }}
         >
-          <Toolbox>
+          <Box
+            bg="background"
+            py={3}
+            ml={1}
+            sx={{
+              flexWrap: "wrap",
+              "@supports (position: sticky)": {
+                position: "sticky",
+              },
+              top: 0,
+              "@media print": {
+                display: "none",
+              },
+            }}
+          >
             <FullscreenButton />
             <UndoButton />
             <RedoButton />
             <PrintButton />
             <MarkButton format="bold" icon="bold" label="Bold" />
             <MarkButton format="italic" icon="italic" label="Italic" />
+            <BlockButton format="code" icon="code" label="Code" />
             <BlockButton
               format="paragraph"
               icon="paragraph"
@@ -454,8 +493,26 @@ const Root = () => {
               label="Justify"
             />
             <ColorSwitch />
-          </Toolbox>
+          </Box>
           <Textbox />
+          <Box
+            bg="background"
+            py={1}
+            px={3}
+            sx={{
+              flexWrap: "wrap",
+              "@supports (position: sticky)": {
+                position: "sticky",
+              },
+              bottom: 0,
+              "@media print": {
+                display: "none",
+              },
+            }}
+          >
+            Words: {statistics.words} | Chars: {statistics.chars} |{" "}
+            {statistics.noTrailing} | {statistics.noSpaces}
+          </Box>
         </Box>
       </Slate>
     </ThemeProvider>
@@ -535,6 +592,8 @@ const Element = (props) => {
       return <ParagraphElement {...props} />;
     case "heading":
       return <HeadingElement {...props} />;
+    case "code":
+      return <DefaultElement {...props} />;
     default:
       return <DefaultElement {...props} />;
   }
@@ -602,39 +661,31 @@ const Textbox = (props) => {
   );
 };
 
-const Toolbox = (props) => {
-  const { children } = props;
-
-  return (
-    <Box
-      bg="background"
-      py={3}
-      ml={1}
-      sx={{
-        flexWrap: "wrap",
-        "@supports (position: sticky)": {
-          position: "sticky",
-        },
-        top: 0,
-        "@media print": {
-          display: "none",
-        },
-      }}
-      {...props}
-    >
-      {children}
-    </Box>
-  );
-};
-
 const ActionButton = (props) => {
   const { icon, label, active, disabled, action } = props;
+
+  const mouseAction = (event) => {
+    event.preventDefault();
+    action(event);
+  };
+
+  const keyboardAction = (event) => {
+    switch (event.key) {
+      case "Enter":
+      case " ":
+        mouseAction(event);
+        break;
+      default:
+        break;
+    }
+  };
 
   return (
     <Button
       title={label}
       aria-label={label}
-      onMouseDown={action}
+      onMouseDown={mouseAction}
+      onKeyDown={keyboardAction}
       disabled={disabled}
       variant={active ? "on" : "off"}
       mb={1}
@@ -656,7 +707,6 @@ const FullscreenButton = (props) => {
       icon={isInFullscreen ? "compress" : "expand"}
       label={isInFullscreen ? "Compress" : "Expand"}
       action={(event) => {
-        event.preventDefault();
         toggleFullscreen();
       }}
       {...props}
@@ -673,7 +723,6 @@ const UndoButton = (props) => {
       icon="undo"
       label="Undo"
       action={(event) => {
-        event.preventDefault();
         SlateHistoryEditor.undo(editor);
       }}
       {...props}
@@ -690,7 +739,6 @@ const RedoButton = (props) => {
       icon="redo"
       label="Redo"
       action={(event) => {
-        event.preventDefault();
         SlateHistoryEditor.redo(editor);
       }}
       {...props}
@@ -704,7 +752,6 @@ const PrintButton = (props) => {
       icon="print"
       label="Print"
       action={(event) => {
-        event.preventDefault();
         FlowEditor.print();
       }}
       {...props}
@@ -721,7 +768,6 @@ const MarkButton = (props) => {
       active={FlowEditor.isMarkActive(editor, format)}
       label="Mark"
       action={(event) => {
-        event.preventDefault();
         FlowEditor.toggleMark(editor, format);
       }}
       {...props}
@@ -738,7 +784,6 @@ const BlockButton = (props) => {
       active={FlowEditor.isBlockActive(editor, format)}
       label="Block"
       action={(event) => {
-        event.preventDefault();
         FlowEditor.toggleBlock(editor, format);
       }}
       {...props}
@@ -755,7 +800,6 @@ const AlignButton = (props) => {
       active={FlowEditor.isAlignActive(editor, format)}
       label="Align"
       action={(event) => {
-        event.preventDefault();
         FlowEditor.toggleAlign(editor, format);
       }}
       {...props}
@@ -771,7 +815,6 @@ const ColorSwitch = (props) => {
       label={(colorMode === "dark" ? "Light" : "Dark") + " Mode"}
       icon={colorMode === "dark" ? "sun" : "moon"}
       action={(event) => {
-        event.preventDefault();
         setColorMode(colorMode === "dark" ? "light" : "dark");
       }}
       {...props}
@@ -787,6 +830,7 @@ library.add(
   faPrint,
   faBold,
   faItalic,
+  faCode,
   faParagraph,
   faHeading,
   faAlignLeft,
