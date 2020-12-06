@@ -38,6 +38,7 @@ import {
   faAlignJustify,
   faMoon,
   faSun,
+  faGlasses,
 } from "@fortawesome/free-solid-svg-icons";
 
 import {
@@ -243,20 +244,22 @@ const FlowEditor = {
     const text = FlowEditor.toPlainText(value);
 
     const isEmpty = (text) => {
-      return text === "\n" || text === "";
+      return text === "";
     };
 
-    const regex = /\s+/gi;
-    const words = text.trim().replace(regex, " ").split(" ").length;
-    const chars = text.length;
-    const noTrailing = text.trim().length;
-    const noSpaces = text.replace(regex, "").length;
+    const onlyWords = text
+      .replace(/(\r\n|\n|\r)/gm, " ")
+      .replace(/\s+/g, " ")
+      .trim();
+    const noBreaks = text.replace(/(\r\n|\n|\r)/gm, "");
+    const noTrailing = noBreaks.trim();
+    const noSpaces = noTrailing.replace(/\s+/g, "");
 
     return {
-      words: isEmpty(text) ? 0 : words,
-      chars: isEmpty(text) ? 0 : chars,
-      noTrailing: isEmpty(text) ? 0 : noTrailing,
-      noSpaces: isEmpty(text) ? 0 : noSpaces,
+      words: isEmpty(onlyWords) ? 0 : onlyWords.split(" ").length,
+      charsAll: isEmpty(text) ? 0 : noBreaks.length,
+      charsNoTrailing: isEmpty(text) ? 0 : noTrailing.length,
+      charsNoSpaces: isEmpty(text) ? 0 : noSpaces.length,
     };
   },
 
@@ -402,12 +405,6 @@ const FlowEditor = {
     return [isInFullscreen, toggleFullscreen];
   },
 
-  modifier(event) {
-    return /Mac|iPod|iPhone|iPad/.test(window.navigator.platform)
-      ? event.metaKey
-      : event.ctrlKey;
-  },
-
   print() {
     return window.print();
   },
@@ -434,6 +431,7 @@ const Root = () => {
     () => withFlow(withHistory(withReact(createEditor()))),
     []
   );
+
   const [value, setValue] = useState(FlowEditor.getValue("value"));
 
   const onChange = (value) => {
@@ -494,7 +492,18 @@ const Root = () => {
             />
             <ColorSwitch />
           </Box>
-          <Textbox />
+          <Box
+            as={Editable}
+            sx={{
+              flex: "1 1 auto",
+              padding: 5,
+              "@media print": {
+                padding: 0,
+                color: Colors.gray[10],
+                bg: Colors.gray[0],
+              },
+            }}
+          />
           <Box
             bg="background"
             py={1}
@@ -510,8 +519,24 @@ const Root = () => {
               },
             }}
           >
-            Words: {statistics.words} | Chars: {statistics.chars} |{" "}
-            {statistics.noTrailing} | {statistics.noSpaces}
+            <Icon name="glasses" title="Statistics" aria-label="Statistics" />{" "}
+            Words:{" "}
+            <Text as="span" title="All" aria-label="All">
+              {statistics.words} Chars:{" "}
+            </Text>
+            <Text as="span" title="All" aria-label="All">
+              {statistics.charsAll}
+            </Text>{" "}
+            <Text
+              as="span"
+              title="No Trailing Spaces"
+              aria-label="Without Trailing Spaces"
+            >
+              {statistics.charsNoTrailing}
+            </Text>{" "}
+            <Text as="span" title="Without Spaces" aria-label="No Spaces">
+              {statistics.charsNoSpaces}
+            </Text>
           </Box>
         </Box>
       </Slate>
@@ -524,14 +549,18 @@ const Leaf = (props) => {
   let { children } = props;
 
   if (leaf.bold) {
-    children = <Styled.b>{children}</Styled.b>;
+    children = <Text as={Styled.b}>{children}</Text>;
   }
 
   if (leaf.italic) {
-    children = <Styled.i>{children}</Styled.i>;
+    children = <Text as={Styled.i}>{children}</Text>;
   }
 
-  return <span {...attributes}>{children}</span>;
+  return (
+    <Text as="span" {...attributes}>
+      {children}
+    </Text>
+  );
 };
 
 const DefaultElement = (props) => {
@@ -611,7 +640,7 @@ const Editable = (props) => {
   }, []);
 
   const onKeyDown = (event) => {
-    if (FlowEditor.modifier(event)) {
+    if (event.ctrlKey || event.metaKey) {
       switch (event.key) {
         case "p":
           event.preventDefault();
@@ -643,25 +672,13 @@ const Editable = (props) => {
   );
 };
 
-const Textbox = (props) => {
-  return (
-    <Box
-      as={Editable}
-      sx={{
-        flex: "1 1 auto",
-        padding: 5,
-        "@media print": {
-          padding: 0,
-          color: Colors.gray[10],
-          bg: Colors.gray[0],
-        },
-      }}
-      {...props}
-    />
-  );
+const Icon = (props) => {
+  const { name } = props;
+
+  return <FontAwesomeIcon icon={name} fixedWidth {...props} />;
 };
 
-const ActionButton = (props) => {
+const IconButton = (props) => {
   const { icon, label, active, disabled, action } = props;
 
   const mouseAction = (event) => {
@@ -692,7 +709,7 @@ const ActionButton = (props) => {
       mr={1}
       {...props}
     >
-      <FontAwesomeIcon icon={icon} fixedWidth />
+      <Icon name={icon} />
     </Button>
   );
 };
@@ -703,7 +720,7 @@ const FullscreenButton = (props) => {
   );
 
   return (
-    <ActionButton
+    <IconButton
       icon={isInFullscreen ? "compress" : "expand"}
       label={isInFullscreen ? "Compress" : "Expand"}
       action={(event) => {
@@ -718,7 +735,7 @@ const UndoButton = (props) => {
   const editor = useSlate();
 
   return (
-    <ActionButton
+    <IconButton
       disabled={editor.history.undos.length === 0}
       icon="undo"
       label="Undo"
@@ -734,7 +751,7 @@ const RedoButton = (props) => {
   const editor = useSlate();
 
   return (
-    <ActionButton
+    <IconButton
       disabled={editor.history.redos.length === 0}
       icon="redo"
       label="Redo"
@@ -748,7 +765,7 @@ const RedoButton = (props) => {
 
 const PrintButton = (props) => {
   return (
-    <ActionButton
+    <IconButton
       icon="print"
       label="Print"
       action={(event) => {
@@ -764,7 +781,7 @@ const MarkButton = (props) => {
   const editor = useSlate();
 
   return (
-    <ActionButton
+    <IconButton
       active={FlowEditor.isMarkActive(editor, format)}
       label="Mark"
       action={(event) => {
@@ -780,7 +797,7 @@ const BlockButton = (props) => {
   const editor = useSlate();
 
   return (
-    <ActionButton
+    <IconButton
       active={FlowEditor.isBlockActive(editor, format)}
       label="Block"
       action={(event) => {
@@ -796,7 +813,7 @@ const AlignButton = (props) => {
   const editor = useSlate();
 
   return (
-    <ActionButton
+    <IconButton
       active={FlowEditor.isAlignActive(editor, format)}
       label="Align"
       action={(event) => {
@@ -811,7 +828,7 @@ const ColorSwitch = (props) => {
   const [colorMode, setColorMode] = useColorMode();
 
   return (
-    <ActionButton
+    <IconButton
       label={(colorMode === "dark" ? "Light" : "Dark") + " Mode"}
       icon={colorMode === "dark" ? "sun" : "moon"}
       action={(event) => {
@@ -838,7 +855,8 @@ library.add(
   faAlignRight,
   faAlignJustify,
   faMoon,
-  faSun
+  faSun,
+  faGlasses
 );
 
 render(<Root />, document.getElementById("root"));
