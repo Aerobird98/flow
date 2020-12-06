@@ -29,6 +29,7 @@ import {
   faPrint,
   faBold,
   faItalic,
+  faUnderline,
   faCode,
   faParagraph,
   faHeading,
@@ -155,6 +156,9 @@ const BaseTheme = {
     b: {
       fontFamily: "bold",
     },
+    em: {
+      fontFamily: "light",
+    },
   },
   buttons: {
     on: {
@@ -274,12 +278,9 @@ const FlowEditor = {
   },
 
   isMarkActive(editor, format) {
-    const [match] = SlateEditor.nodes(editor, {
-      match: (n) => n[format] === true,
-      universal: true,
-    });
+    const marks = SlateEditor.marks(editor);
 
-    return !!match;
+    return marks ? marks[format] === true : false;
   },
 
   isBlockActive(editor, format) {
@@ -298,26 +299,13 @@ const FlowEditor = {
     return !!match;
   },
 
-  isSelectionActive(editor) {
-    const { selection } = editor;
-    return selection && !SlateRange.isCollapsed(selection);
-  },
-
   toggleMark(editor, format) {
     const active = FlowEditor.isMarkActive(editor, format);
-    const selection = FlowEditor.isSelectionActive(editor);
 
-    if (selection) {
-      SlateTransforms.setNodes(
-        editor,
-        {
-          [format]: active ? null : true,
-        },
-        {
-          match: (n) => SlateText.isText(n),
-          split: true,
-        }
-      );
+    if (active) {
+      SlateEditor.removeMark(editor, format);
+    } else {
+      SlateEditor.addMark(editor, format, true);
     }
   },
 
@@ -485,6 +473,7 @@ const Root = () => {
             <PrintButton />
             <MarkButton format="bold" icon="bold" label="Bold" />
             <MarkButton format="italic" icon="italic" label="Italic" />
+            <MarkButton format="underline" icon="underline" label="Underline" />
             <BlockButton format="code" icon="code" label="Code" />
             <BlockButton
               format="paragraph"
@@ -564,6 +553,9 @@ const Leaf = (props) => {
 
   if (leaf.italic) {
     children = <Text as={Styled.i}>{children}</Text>;
+  }
+  if (leaf.underline) {
+    children = <Text as="u">{children}</Text>;
   }
 
   return (
@@ -652,10 +644,6 @@ const Editable = (props) => {
   const onKeyDown = (event) => {
     if (event.ctrlKey || event.metaKey) {
       switch (event.key) {
-        case "p":
-          event.preventDefault();
-          FlowEditor.print();
-          break;
         case "b":
           event.preventDefault();
           FlowEditor.toggleMark(editor, "bold");
@@ -663,6 +651,27 @@ const Editable = (props) => {
         case "i":
           event.preventDefault();
           FlowEditor.toggleMark(editor, "italic");
+          break;
+        case "u":
+          event.preventDefault();
+          FlowEditor.toggleMark(editor, "underline");
+          break;
+        default:
+          break;
+      }
+    } else if (event.altKey) {
+      switch (event.key) {
+        case "0":
+          event.preventDefault();
+          FlowEditor.toggleBlock(editor, "code");
+          break;
+        case "1":
+          event.preventDefault();
+          FlowEditor.toggleBlock(editor, "paragraph");
+          break;
+        case "2":
+          event.preventDefault();
+          FlowEditor.toggleBlock(editor, "heading");
           break;
         default:
           break;
@@ -672,9 +681,6 @@ const Editable = (props) => {
 
   return (
     <SlateEditable
-      autoCorrect={false}
-      spellCheck={false}
-      autoFocus={true}
       renderLeaf={renderLeaf}
       renderElement={renderElement}
       onKeyDown={onKeyDown}
@@ -858,6 +864,7 @@ library.add(
   faPrint,
   faBold,
   faItalic,
+  faUnderline,
   faCode,
   faParagraph,
   faHeading,
