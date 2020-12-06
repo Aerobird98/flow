@@ -249,6 +249,7 @@ const FlowEditor = {
 
     const onlyWords = text
       .replace(/(\r\n|\n|\r)/gm, " ")
+      .replace(/[.?!,;:\-—[\]{}()'"#&@><\*%\/\\^$%_`~|+=]/g, " ")
       .replace(/\s+/g, " ")
       .trim();
     const noBreaks = text.replace(/(\r\n|\n|\r)/gm, "");
