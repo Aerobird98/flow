@@ -252,7 +252,7 @@ const FlowEditor = {
       .replace(/(\r\n|\n|\r)/gm, " ")
       // treat all standard EN-ASCII puncturation as spaces too,
       .replace(/[.?!,;:\-—[\]{}()'"#&@><\*%\/\\^$%_`~|+=]/g, " ")
-      // replace all dublicate spaces with single spaces,
+      // collapses multiple adjacent spaces to single spaces,
       .replace(/\s+/g, " ")
       // trim trailing white-space (on both sides),
       .trim();
@@ -672,6 +672,7 @@ const Editable = (props) => {
 
   return (
     <SlateEditable
+      autoCorrect={false}
       spellCheck={false}
       autoFocus={true}
       renderLeaf={renderLeaf}
