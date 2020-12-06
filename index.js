@@ -248,14 +248,23 @@ const FlowEditor = {
     };
 
     const onlyWords = text
+      // Treat all 3 types of line-breaks as spaces,
       .replace(/(\r\n|\n|\r)/gm, " ")
+      // treat all standard EN-ASCII puncturation as spaces too,
       .replace(/[.?!,;:\-—[\]{}()'"#&@><\*%\/\\^$%_`~|+=]/g, " ")
+      // replace all dublicate spaces with single spaces,
       .replace(/\s+/g, " ")
+      // trim trailing white-space (on both sides),
       .trim();
+
+    // Remove all 3 types of line-breaks.
     const noBreaks = text.replace(/(\r\n|\n|\r)/gm, "");
+    // Trim trailing white-space (on both sides).
     const noTrailing = noBreaks.trim();
+    // Remove all remaining spaces.
     const noSpaces = noTrailing.replace(/\s+/g, "");
 
+    // Return a statistics object containing the results.
     return {
       words: isEmpty(onlyWords) ? 0 : onlyWords.split(" ").length,
       charsAll: isEmpty(text) ? 0 : noBreaks.length,
