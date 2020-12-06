@@ -3,14 +3,22 @@ import { h, render } from "preact";
 import { useMemo, useState, useCallback, useLayoutEffect } from "preact/hooks";
 import {
   createEditor,
-  Transforms,
-  Editor,
-  Node,
-  Text as slateText,
-  Range,
+  Transforms as SlateTransforms,
+  Editor as SlateEditor,
+  Node as SlateNode,
+  Text as SlateText,
+  Range as SlateRange,
 } from "slate";
-import { Slate, useSlate, Editable, withReact } from "slate-react";
-import { withHistory, HistoryEditor } from "slate-history";
+import {
+  Slate,
+  useSlate,
+  Editable as SlateEditable,
+  withReact,
+} from "slate-react";
+import {
+  withHistory,
+  HistoryEditor as SlateHistoryEditor,
+} from "slate-history";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { library } from "@fortawesome/fontawesome-svg-core";
 import {
@@ -40,11 +48,6 @@ import {
   Text,
   Heading,
 } from "theme-ui";
-
-// If you want your app to work offline and load faster, you can uncoment
-// the code below. Note this comes with some pitfalls.
-// See the serviceWorker.js script for details.
-//import * as serviceWorker from "./serviceWorker.js";
 
 const Colors = {
   gray: [
@@ -222,7 +225,7 @@ const FlowEditor = {
   // returns the string content of each node in the value's children
   // then joins them all with line breaks denoting paragraphs.
   serializePlainText(value) {
-    return value.map((n) => Node.string(n)).join("\n");
+    return value.map((n) => SlateNode.string(n)).join("\n");
   },
 
   // Define a deserializing function that takes a string and
@@ -236,7 +239,7 @@ const FlowEditor = {
   },
 
   isMarkActive(editor, format) {
-    const [match] = Editor.nodes(editor, {
+    const [match] = SlateEditor.nodes(editor, {
       match: (n) => n[format] === true,
       universal: true,
     });
@@ -245,7 +248,7 @@ const FlowEditor = {
   },
 
   isBlockActive(editor, format) {
-    const [match] = Editor.nodes(editor, {
+    const [match] = SlateEditor.nodes(editor, {
       match: (n) => n.type === format,
     });
 
@@ -253,7 +256,7 @@ const FlowEditor = {
   },
 
   isAlignActive(editor, format) {
-    const [match] = Editor.nodes(editor, {
+    const [match] = SlateEditor.nodes(editor, {
       match: (n) => n.align === format,
     });
 
@@ -262,7 +265,7 @@ const FlowEditor = {
 
   isSelectionActive(editor) {
     const { selection } = editor;
-    return selection && !Range.isCollapsed(selection);
+    return selection && !SlateRange.isCollapsed(selection);
   },
 
   toggleMark(editor, format) {
@@ -270,13 +273,13 @@ const FlowEditor = {
     const selection = FlowEditor.isSelectionActive(editor);
 
     if (selection) {
-      Transforms.setNodes(
+      SlateTransforms.setNodes(
         editor,
         {
           [format]: active ? null : true,
         },
         {
-          match: (n) => slateText.isText(n),
+          match: (n) => SlateText.isText(n),
           split: true,
         }
       );
@@ -286,13 +289,13 @@ const FlowEditor = {
   toggleBlock(editor, format) {
     const active = FlowEditor.isBlockActive(editor, format);
 
-    Transforms.setNodes(
+    SlateTransforms.setNodes(
       editor,
       {
         type: active ? null : format,
       },
       {
-        match: (n) => Editor.isBlock(editor, n),
+        match: (n) => SlateEditor.isBlock(editor, n),
       }
     );
   },
@@ -300,13 +303,13 @@ const FlowEditor = {
   toggleAlign(editor, format) {
     const active = FlowEditor.isAlignActive(editor, format);
 
-    Transforms.setNodes(
+    SlateTransforms.setNodes(
       editor,
       {
         align: active ? null : format,
       },
       {
-        match: (n) => Editor.isBlock(editor, n),
+        match: (n) => SlateEditor.isBlock(editor, n),
       }
     );
   },
@@ -430,90 +433,27 @@ const Root = () => {
           }}
         >
           <Toolbox>
-            <FullscreenButton mb={1} mr={1} />
-            <ActionButton
-              disabled={editor.history.undos.length === 0}
-              icon="undo"
-              label="Undo"
-              mb={1}
-              mr={1}
-              action={(event) => {
-                event.preventDefault();
-                HistoryEditor.undo(editor);
-              }}
-            />
-            <ActionButton
-              disabled={editor.history.redos.length === 0}
-              icon="redo"
-              label="Redo"
-              mb={1}
-              mr={1}
-              action={(event) => {
-                event.preventDefault();
-                HistoryEditor.redo(editor);
-              }}
-            />
-            <ActionButton
-              icon="print"
-              label="Print"
-              mb={1}
-              mr={1}
-              action={(event) => {
-                event.preventDefault();
-                FlowEditor.print();
-              }}
-            />
-            <MarkButton format="bold" icon="bold" label="Bold" mb={1} mr={1} />
-            <MarkButton
-              format="italic"
-              icon="italic"
-              label="Italic"
-              mb={1}
-              mr={1}
-            />
+            <FullscreenButton />
+            <UndoButton />
+            <RedoButton />
+            <PrintButton />
+            <MarkButton format="bold" icon="bold" label="Bold" />
+            <MarkButton format="italic" icon="italic" label="Italic" />
             <BlockButton
               format="paragraph"
               icon="paragraph"
               label="Paragraph"
-              mb={1}
-              mr={1}
             />
-            <BlockButton
-              format="heading"
-              icon="heading"
-              label="Heading"
-              mb={1}
-              mr={1}
-            />
-            <AlignButton
-              format="left"
-              icon="align-left"
-              label="Left"
-              mb={1}
-              mr={1}
-            />
-            <AlignButton
-              format="center"
-              icon="align-center"
-              label="Center"
-              mb={1}
-              mr={1}
-            />
-            <AlignButton
-              format="right"
-              icon="align-right"
-              label="Right"
-              mb={1}
-              mr={1}
-            />
+            <BlockButton format="heading" icon="heading" label="Heading" />
+            <AlignButton format="left" icon="align-left" label="Left" />
+            <AlignButton format="center" icon="align-center" label="Center" />
+            <AlignButton format="right" icon="align-right" label="Right" />
             <AlignButton
               format="justify"
               icon="align-justify"
               label="Justify"
-              mb={1}
-              mr={1}
             />
-            <ColorSwitch mb={1} mr={1} />
+            <ColorSwitch />
           </Toolbox>
           <Textbox />
         </Box>
@@ -600,7 +540,7 @@ const Element = (props) => {
   }
 };
 
-const Input = (props) => {
+const Editable = (props) => {
   const editor = useSlate();
 
   const renderLeaf = useCallback((props) => {
@@ -633,8 +573,8 @@ const Input = (props) => {
   };
 
   return (
-    <Editable
-      spellCheck={true}
+    <SlateEditable
+      spellCheck={false}
       autoFocus={true}
       renderLeaf={renderLeaf}
       renderElement={renderElement}
@@ -647,7 +587,7 @@ const Input = (props) => {
 const Textbox = (props) => {
   return (
     <Box
-      as={Input}
+      as={Editable}
       sx={{
         flex: "1 1 auto",
         padding: 5,
@@ -697,6 +637,8 @@ const ActionButton = (props) => {
       onMouseDown={action}
       disabled={disabled}
       variant={active ? "on" : "off"}
+      mb={1}
+      mr={1}
       {...props}
     >
       <FontAwesomeIcon icon={icon} fixedWidth />
@@ -716,6 +658,54 @@ const FullscreenButton = (props) => {
       action={(event) => {
         event.preventDefault();
         toggleFullscreen();
+      }}
+      {...props}
+    />
+  );
+};
+
+const UndoButton = (props) => {
+  const editor = useSlate();
+
+  return (
+    <ActionButton
+      disabled={editor.history.undos.length === 0}
+      icon="undo"
+      label="Undo"
+      action={(event) => {
+        event.preventDefault();
+        SlateHistoryEditor.undo(editor);
+      }}
+      {...props}
+    />
+  );
+};
+
+const RedoButton = (props) => {
+  const editor = useSlate();
+
+  return (
+    <ActionButton
+      disabled={editor.history.redos.length === 0}
+      icon="redo"
+      label="Redo"
+      action={(event) => {
+        event.preventDefault();
+        SlateHistoryEditor.redo(editor);
+      }}
+      {...props}
+    />
+  );
+};
+
+const PrintButton = (props) => {
+  return (
+    <ActionButton
+      icon="print"
+      label="Print"
+      action={(event) => {
+        event.preventDefault();
+        FlowEditor.print();
       }}
       {...props}
     />
@@ -808,8 +798,3 @@ library.add(
 );
 
 render(<Root />, document.getElementById("root"));
-
-// If you want your app to work offline and load faster, you can uncoment
-// the code below. Note this comes with some pitfalls.
-// See the serviceWorker.js script for details.
-//serviceWorker.register();

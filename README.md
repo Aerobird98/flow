@@ -2,7 +2,7 @@
 
 A compact web based **rich-text editor** that builds on top of [Slate-js](https://docs.slatejs.org/) with powerful, yet simple and accessible editing capabilities.
 
-It's using a design system not just for its simplified UI but also for handling efficient and consistent document **styling**, this means that it may _lack_ some editing capabilities of other rich-text editors by design, however in exchange you get consistent **look** and possibly **good typography** across all your documents (As far as web-standards allow it).
+It's using a design system not just for its simplified UI but also for handling efficient and consistent document **styling**, this means that it may _lack_ some capabilities of other rich-text editors by design, however in exchange you get consistent **look** and possibly **good typography** across all your documents (as far as web-standards allow it).
 
 ## Usage
 
@@ -27,10 +27,10 @@ Flow (the app) has an autosaving feature that saves your currently edited docume
 
 Flow (the app) is using [Preact-js](https://preactjs.com/) a _fast 3kB alternative_ to [React-js](https://reactjs.org/) with the same _modern_ API, bundled by [esbuild](https://github.com/evanw/esbuild) a _truly fast_ **JavaScript** _bundler and minifier_ that packages up **JavaScript** and **TypeScript** code for distribution to the web. Using [Theme-ui](https://theme-ui.com/) the **Design Graph Framework** to provide an opinionated design system paired with [FontAwesome](https://fontawesome.com/)'s free **solid** icons.
 
-1. Run `npm install` in the project directory to install all the dependencies and dev-dependencies;
-2. Run `npm run build-development` to build for development or `npm run build-production` to build for production;
-3. Open the `index.html` file in the `build` folder to begin working (you need to refresh the page after each re-build for the changes to take effect);
-4. When ready run `npm run deploy` to deploy the contents of `build` to gh-pages or `npm run release` to also re-build for production.
+- Run `npm install` in the project directory to install all the dependencies and dev-dependencies;
+- Run `npm run build-development` to build for development or `npm run build-production` to build for production;
+- Open the `index.html` file in the `build` folder to begin working (you need to refresh the page after each re-build for the changes to take effect);
+- When ready run `npm run deploy` to deploy the contents of `build` to gh-pages or `npm run release` to also re-build for production.
 
 ## License
 
