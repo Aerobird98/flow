@@ -9,3 +9,4 @@ build/*.js.map
 
 # other
 npm-debug.log*
+tmp
