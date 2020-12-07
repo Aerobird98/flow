@@ -99,7 +99,7 @@ const BaseTheme = {
     ultraBold: 900,
   },
   lineHeights: {
-    body: 1.5,
+    paragraph: 1.5,
     heading: 1.2,
   },
   space: ["0rem", "0.25rem", "0.5rem", "1rem", "1.5rem", "3rem"],
@@ -107,7 +107,7 @@ const BaseTheme = {
   text: {
     paragraph: {
       fontFamily: "light",
-      lineHeight: "body",
+      lineHeight: "paragraph",
     },
     heading: {
       fontFamily: "regular",
@@ -117,7 +117,7 @@ const BaseTheme = {
   styles: {
     root: {
       fontFamily: "code",
-      lineHeight: "body",
+      lineHeight: "paragraph",
     },
     p: {
       variant: "text.paragraph",
@@ -158,6 +158,9 @@ const BaseTheme = {
     },
     em: {
       fontFamily: "light",
+    },
+    strong: {
+      fontFamily: "bold",
     },
   },
   buttons: {
@@ -216,10 +219,10 @@ const Themes = {
       secondary: Colors.gray[8],
       modes: {
         dark: {
-          text: "#ffede6",
-          background: "#050528",
-          primary: "#e9dd77",
-          secondary: "#ffede6",
+          text: Colors.gray[0],
+          background: Colors.gray[10],
+          primary: Colors.green,
+          secondary: Colors.gray[0],
         },
       },
     },
@@ -247,33 +250,32 @@ const FlowEditor = {
   getStatistics(value) {
     const text = FlowEditor.toPlainText(value);
 
-    const isEmpty = (text) => {
-      return text === "";
-    };
-
-    const onlyWords = text
-      // Treat all 3 types of line-breaks as spaces,
-      .replace(/(\r\n|\n|\r)/gm, " ")
-      // Remove all standard ASCII and some special puncturation,
-      .replace(/[.?!,;:\-[\]{}()'"#&@><\*%\/\\^$%_`~|+=—’“”]/g, "")
-      // collapse multiple adjacent spaces to single spaces,
-      .replace(/\s+/g, " ")
-      // trim trailing white-space (on both sides),
-      .trim();
-
     // Remove all 3 types of line-breaks.
     const noBreaks = text.replace(/(\r\n|\n|\r)/gm, "");
     // Trim trailing white-space (on both sides).
     const noTrailing = noBreaks.trim();
     // Remove all remaining spaces.
     const noSpaces = noTrailing.replace(/\s+/g, "");
+    // Remove all standard ASCII and some special puncturation.
+    const noPuncturation = text.replace(
+      /[.?!,;:\-[\]{}()'"#&@><\*%\/\\^$%_`~|+=—’“”]/g,
+      ""
+    );
+
+    const onlyWords = noPuncturation
+      // Treat all 3 types of line-breaks as spaces,
+      .replace(/(\r\n|\n|\r)/gm, " ")
+      // collapse multiple adjacent spaces to single spaces,
+      .replace(/\s+/g, " ")
+      // trim trailing white-space (on both sides),
+      .trim();
 
     // Return a statistics object containing the results.
     return {
-      words: isEmpty(onlyWords) ? 0 : onlyWords.split(" ").length,
-      charsAll: isEmpty(text) ? 0 : noBreaks.length,
-      charsNoTrailing: isEmpty(text) ? 0 : noTrailing.length,
-      charsNoSpaces: isEmpty(text) ? 0 : noSpaces.length,
+      charsAll: noBreaks.length,
+      charsNoTrailing: noTrailing.length,
+      charsNoSpaces: noSpaces.length,
+      wordsAll: onlyWords === "" ? 0 : onlyWords.split(" ").length,
     };
   },
 
@@ -521,7 +523,7 @@ const Root = () => {
             <Icon name="glasses" title="Statistics" aria-label="Statistics" />{" "}
             Words:{" "}
             <Text as="span" title="All" aria-label="All">
-              {statistics.words} Chars:{" "}
+              {statistics.wordsAll} Chars:{" "}
             </Text>
             <Text as="span" title="All" aria-label="All">
               {statistics.charsAll}
