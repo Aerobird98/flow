@@ -26,7 +26,7 @@ Flow (the app) will highlight buttons when their format is active.
 
 Flow (the app) has an autosaving feature that saves your currently edited document to your browser's _local-storage_ container under a `value` key, which you can access through the developer-tools of your browser.
 
-Flow (the app) will display some editing statistics at the bottom like _accurate_ word counts, character counts with spaces, without trailing white-space and without spaces in that order. I said _accurate_ because it correctly skips standard ASCII puncturation, the `—` character or line breaks like `\r\n`, `\n` and `\n` when counting words.
+Flow (the app) will display some editing statistics at the bottom like _accurate_ word counts, character counts with spaces, without trailing white-space and without spaces in that order. I said _accurate_ because it correctly skips standard ASCII puncturation, special characters like `—`, `’`, `“` and `”` or line breaks like `\r\n`, `\n` and `\n` when counting words.
 
 ## Development
 
