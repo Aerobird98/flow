@@ -51,42 +51,6 @@ import {
   Heading,
 } from "theme-ui";
 
-const faH1 = {
-  prefix: "fas",
-  iconName: "h1",
-  icon: [
-    576,
-    512,
-    [],
-    "f313",
-    "M304 96h-98.94A13.06 13.06 0 0 0 192 109.06v37.88A13.06 13.06 0 0 0 205.06 160H224v64H96v-64h18.94A13.06 13.06 0 0 0 128 146.94V112a16 16 0 0 0-16-16H16a16 16 0 0 0-16 16v34.94A13.06 13.06 0 0 0 13.06 160H32v192H13.06A13.06 13.06 0 0 0 0 365.06V400a16 16 0 0 0 16 16h98.94A13.06 13.06 0 0 0 128 402.94v-37.88A13.06 13.06 0 0 0 114.94 352H96v-64h128v64h-18.94A13.06 13.06 0 0 0 192 365.06V400a16 16 0 0 0 16 16h96a16 16 0 0 0 16-16v-34.94A13.06 13.06 0 0 0 306.94 352H288V160h18.94A13.06 13.06 0 0 0 320 146.94V112a16 16 0 0 0-16-16zm256 256h-48V120a24 24 0 0 0-24-24h-40a24 24 0 0 0-21.44 13.26l-24 48A24 24 0 0 0 424 192h24v160h-48a16 16 0 0 0-16 16v32a16 16 0 0 0 16 16h160a16 16 0 0 0 16-16v-32a16 16 0 0 0-16-16z",
-  ],
-};
-
-const faH2 = {
-  prefix: "fas",
-  iconName: "h2",
-  icon: [
-    576,
-    512,
-    [],
-    "f314",
-    "M560 352H440.79c17-42.95 135.21-66.57 135.21-159.62C576 132.55 528.33 96 469.14 96c-43.83 0-81.41 21.38-103.42 57a15.66 15.66 0 0 0 4.75 21.4l28.26 18.6a16.15 16.15 0 0 0 21.86-3.83c10.77-14.86 24.94-26 43.85-26s38.22 10.46 38.22 33.84c0 52.18-142.1 73.21-142.1 184.56a155.06 155.06 0 0 0 1.71 20.66A15.94 15.94 0 0 0 378.14 416H560a16 16 0 0 0 16-16v-32a16 16 0 0 0-16-16zM304 96h-98.94A13.06 13.06 0 0 0 192 109.06v37.88A13.06 13.06 0 0 0 205.06 160H224v64H96v-64h18.94A13.06 13.06 0 0 0 128 146.94V112a16 16 0 0 0-16-16H16a16 16 0 0 0-16 16v34.94A13.06 13.06 0 0 0 13.06 160H32v192H13.06A13.06 13.06 0 0 0 0 365.06V400a16 16 0 0 0 16 16h98.94A13.06 13.06 0 0 0 128 402.94v-37.88A13.06 13.06 0 0 0 114.94 352H96v-64h128v64h-18.94A13.06 13.06 0 0 0 192 365.06V400a16 16 0 0 0 16 16h96a16 16 0 0 0 16-16v-34.94A13.06 13.06 0 0 0 306.94 352H288V160h18.94A13.06 13.06 0 0 0 320 146.94V112a16 16 0 0 0-16-16z",
-  ],
-};
-
-const faH3 = {
-  prefix: "fas",
-  iconName: "h3",
-  icon: [
-    576,
-    512,
-    [],
-    "f315",
-    "M499 217.69l64.4-72.31a15.48 15.48 0 0 0 4-10.31v-23.32A16 16 0 0 0 551.12 96H384a16 16 0 0 0-16 16v32a16 16 0 0 0 16 16h85.18c-2.29 2.45-4.65 5-7.19 7.9l-53.1 61.1a18 18 0 0 0-3.83 10.17 18.36 18.36 0 0 0 1.38 6.34l8.41 18.59c2.35 5.21 9 9.42 14.84 9.42h15.95c28.94 0 57.79 10.32 57.79 38.48 0 21.32-19.93 36.79-47.39 36.79-22.08 0-41.18-9.17-57.7-22.83a16.46 16.46 0 0 0-23.87 3.34l-19.75 28.8a15.46 15.46 0 0 0 2.53 20.35C384.9 403.21 422 416 459.51 416c71 0 116.49-48.86 116.49-106.06 0-47.3-32.73-80.89-77-92.25zM304 96h-98.94A13.06 13.06 0 0 0 192 109.06v37.88A13.06 13.06 0 0 0 205.06 160H224v64H96v-64h18.94A13.06 13.06 0 0 0 128 146.94V112a16 16 0 0 0-16-16H16a16 16 0 0 0-16 16v34.94A13.06 13.06 0 0 0 13.06 160H32v192H13.06A13.06 13.06 0 0 0 0 365.06V400a16 16 0 0 0 16 16h98.94A13.06 13.06 0 0 0 128 402.94v-37.88A13.06 13.06 0 0 0 114.94 352H96v-64h128v64h-18.94A13.06 13.06 0 0 0 192 365.06V400a16 16 0 0 0 16 16h96a16 16 0 0 0 16-16v-34.94A13.06 13.06 0 0 0 306.94 352H288V160h18.94A13.06 13.06 0 0 0 320 146.94V112a16 16 0 0 0-16-16z",
-  ],
-};
-
 const Colors = {
   gray: [
     "#fff",
@@ -517,9 +481,7 @@ const Root = () => {
               icon="paragraph"
               label="Paragraph"
             />
-            <BlockButton format="heading1" icon="h1" label="Heading 1" />
-            <BlockButton format="heading2" icon="h2" label="Heading 2" />
-            <BlockButton format="heading3" icon="h3" label="Heading 3" />
+            <BlockButton format="heading" icon="heading" label="Heading" />
             <AlignButton format="left" icon="align-left" label="Left" />
             <AlignButton format="center" icon="align-center" label="Center" />
             <AlignButton format="right" icon="align-right" label="Right" />
@@ -634,41 +596,7 @@ const ParagraphElement = (props) => {
   );
 };
 
-const Heading1Element = (props) => {
-  const { attributes, children, element } = props;
-
-  return (
-    <Heading
-      as={Styled.h1}
-      mb={3}
-      sx={{
-        textAlign: element.align,
-      }}
-      {...attributes}
-    >
-      {children}
-    </Heading>
-  );
-};
-
-const Heading2Element = (props) => {
-  const { attributes, children, element } = props;
-
-  return (
-    <Heading
-      as={Styled.h2}
-      mb={3}
-      sx={{
-        textAlign: element.align,
-      }}
-      {...attributes}
-    >
-      {children}
-    </Heading>
-  );
-};
-
-const Heading3Element = (props) => {
+const HeadingElement = (props) => {
   const { attributes, children, element } = props;
 
   return (
@@ -691,12 +619,8 @@ const Element = (props) => {
   switch (element.type) {
     case "paragraph":
       return <ParagraphElement {...props} />;
-    case "heading1":
-      return <Heading1Element {...props} />;
-    case "heading2":
-      return <Heading2Element {...props} />;
-    case "heading3":
-      return <Heading3Element {...props} />;
+    case "heading":
+      return <HeadingElement {...props} />;
     case "code":
       return <DefaultElement {...props} />;
     default:
@@ -745,15 +669,7 @@ const Editable = (props) => {
           break;
         case "2":
           event.preventDefault();
-          FlowEditor.toggleBlock(editor, "heading1");
-          break;
-        case "3":
-          event.preventDefault();
-          FlowEditor.toggleBlock(editor, "heading2");
-          break;
-        case "4":
-          event.preventDefault();
-          FlowEditor.toggleBlock(editor, "heading3");
+          FlowEditor.toggleBlock(editor, "heading");
           break;
         default:
           break;
@@ -949,9 +865,6 @@ library.add(
   faCode,
   faParagraph,
   faHeading,
-  faH1,
-  faH2,
-  faH3,
   faAlignLeft,
   faAlignCenter,
   faAlignRight,
