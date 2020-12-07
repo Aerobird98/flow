@@ -255,7 +255,7 @@ const FlowEditor = {
       // Treat all 3 types of line-breaks as spaces,
       .replace(/(\r\n|\n|\r)/gm, " ")
       // Remove all standard ASCII and some special puncturation,
-      .replace(/[.?!,;:\-[\]{}()'"#&@><\*%\/\\^$%_`~|+=—’“”]/g, " ")
+      .replace(/[.?!,;:\-[\]{}()'"#&@><\*%\/\\^$%_`~|+=—’“”]/g, "")
       // collapses multiple adjacent spaces to single spaces,
       .replace(/\s+/g, " ")
       // trim trailing white-space (on both sides),
