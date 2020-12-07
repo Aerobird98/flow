@@ -163,7 +163,7 @@ const BaseTheme = {
     },
   },
   buttons: {
-    on: {
+    primary: {
       color: "primary",
       bg: "background",
       borderRadius: "1rem",
@@ -184,7 +184,7 @@ const BaseTheme = {
         bg: "background",
       },
     },
-    off: {
+    secondary: {
       color: "secondary",
       bg: "background",
       borderRadius: "1rem",
@@ -718,7 +718,7 @@ const IconButton = (props) => {
       onMouseDown={mouseAction}
       onKeyDown={keyboardAction}
       disabled={disabled}
-      variant={active ? "on" : "off"}
+      variant={active ? "primary" : "secondary"}
       mb={1}
       mr={1}
       {...props}
