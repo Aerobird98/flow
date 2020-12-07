@@ -29,7 +29,6 @@ import {
   faPrint,
   faBold,
   faItalic,
-  faUnderline,
   faCode,
   faParagraph,
   faHeading,
@@ -475,7 +474,6 @@ const Root = () => {
             <PrintButton />
             <MarkButton format="bold" icon="bold" label="Bold" />
             <MarkButton format="italic" icon="italic" label="Italic" />
-            <MarkButton format="underline" icon="underline" label="Underline" />
             <BlockButton format="code" icon="code" label="Code" />
             <BlockButton
               format="paragraph"
@@ -555,9 +553,6 @@ const Leaf = (props) => {
 
   if (leaf.italic) {
     children = <Text as={Styled.i}>{children}</Text>;
-  }
-  if (leaf.underline) {
-    children = <Text as="u">{children}</Text>;
   }
 
   return (
@@ -866,7 +861,6 @@ library.add(
   faPrint,
   faBold,
   faItalic,
-  faUnderline,
   faCode,
   faParagraph,
   faHeading,
