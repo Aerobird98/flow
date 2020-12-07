@@ -528,7 +528,7 @@ const Root = () => {
             </Text>{" "}
             <Text
               as="span"
-              title="No Trailing Spaces"
+              title="Without Trailing Spaces"
               aria-label="Without Trailing Spaces"
             >
               {statistics.charsNoTrailing}
