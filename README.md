@@ -26,7 +26,7 @@ Flow (the app) will highlight buttons when their format is active.
 
 Flow (the app) has an autosaving feature that saves your currently edited document to your browser's _local-storage_ container under a `value` key, which you can access through the developer-tools of your browser.
 
-Flow (the app) will display some editing statistics at the bottom like _accurate_ word counts, character counts with spaces, without trailing white-space and without spaces in that order. I said _accurate_ because it correctly skips standard ASCII puncturation, special characters like `—`, `’`, `“` and `”` or line breaks like `\r\n`, `\n` and `\n` when counting words. But please note that it will only give honest results if you treat text correctly, type and grammar errors, mistyped sentences or puncturation misuse may result in inaccurate counts.
+Flow (the app) will display some editing statistics at the bottom like word counts, character counts with spaces, without trailing white-space and without spaces in that order. For character counts you can choose from three but for words I had to make a choice. The algorithm skips standard ASCII puncturation, special characters like `—`, `’`, `“` and `”` or line breaks like `\r\n`, `\r`, `\n` and it leaves out digits (`0-9`) as well when counting words. It will only give honest results if you treat text correctly, type and grammar errors, mistyped sentences or puncturation misuse may result in inaccurate counts. As a rule of thumb, always separate your words with spaces or line breaks, words separated by puncturation or digits will count as one.
 
 ## Development
 

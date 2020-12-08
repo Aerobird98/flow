@@ -46,6 +46,7 @@ import {
   useColorMode,
   Box,
   Button,
+  IconButton,
   Styled,
   Text,
   Heading,
@@ -261,8 +262,10 @@ const FlowEditor = {
       /[.?!,;:\-[\]{}()'"#&@><\*%\/\\^$%_`~|+=—’“”]/g,
       ""
     );
+    // Remove all digits.
+    const noNumbers = noPuncturation.replace(/\d+/g, "");
 
-    const onlyWords = noPuncturation
+    const words = noNumbers
       // Treat all 3 types of line-breaks as spaces,
       .replace(/(\r\n|\n|\r)/gm, " ")
       // collapse multiple adjacent spaces to single spaces,
@@ -275,7 +278,7 @@ const FlowEditor = {
       charsAll: noBreaks.length,
       charsNoTrailing: noTrailing.length,
       charsNoSpaces: noSpaces.length,
-      wordsAll: onlyWords === "" ? 0 : onlyWords.split(" ").length,
+      wordsAll: words === "" ? 0 : words.split(" ").length,
     };
   },
 
