@@ -231,15 +231,13 @@ const Themes = {
 };
 
 const FlowEditor = {
-  // Define a serializing function that takes a value and
-  // returns the string content of each node in the value's children
-  // then joins them all with line breaks denoting paragraphs.
+  // Take a value and return the string content of each node
+  // in the value's children then join them all with line breaks denoting paragraphs.
   toPlainText(value) {
     return value.map((n) => SlateNode.string(n)).join("\n");
   },
 
-  // Define a deserializing function that takes a string and
-  // returns a value as an array of children derived by splitting the string.
+  // Take a string and return a value as an array of children derived by splitting the string.
   fromPlainText(text) {
     return text.split("\n").map((paragraph) => {
       return {
@@ -257,29 +255,28 @@ const FlowEditor = {
     const noTrailing = noBreaks.trim();
     // Remove all remaining spaces.
     const noSpaces = noTrailing.replace(/\s+/g, "");
-    // Remove all standard ASCII and some special puncturation.
+    // Remove all standard ASCII, some special puncturation and digits.
     const noPuncturation = text.replace(
-      /[.?!,;:\-[\]{}()'"#&@><\*%\/\\^$%_`~|+=—’“”]/g,
+      /([.?!,;:\-[\]{}()'"#&@><\*%\/\\^$%_`~|+=—’“”]|\d+)/g,
       ""
     );
-    // Remove all digits.
-    const noNumbers = noPuncturation.replace(/\d+/g, "");
 
-    const words = noNumbers
-      // Treat all 3 types of line-breaks as spaces,
+    const words = noPuncturation
+      // Trim trailing white-space (on both sides),
+      .trim()
+      // treat all 3 types of line-breaks as spaces,
       .replace(/(\r\n|\n|\r)/gm, " ")
-      // collapse multiple adjacent spaces to single spaces,
-      .replace(/\s+/g, " ")
-      // trim trailing white-space (on both sides),
-      .trim();
+      // collapse multiple adjacent spaces to single spaces.
+      .replace(/\s+/g, " ");
 
-    // Return a statistics object containing the results.
-    return {
+    const statistics = {
       charsAll: noBreaks.length,
       charsNoTrailing: noTrailing.length,
       charsNoSpaces: noSpaces.length,
       wordsAll: words === "" ? 0 : words.split(" ").length,
     };
+
+    return statistics;
   },
 
   isMarkActive(editor, format) {
