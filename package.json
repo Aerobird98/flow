@@ -1,11 +1,11 @@
 {
   "name": "flow",
-  "version": "0.14.4",
+  "version": "0.14.5",
   "description": "A compact web based rich-text editor that builds on top of Slate-js with powerful, yet simple and accessible editing capabilities.",
   "private": true,
   "scripts": {
-    "build-development": "esbuild index.js --bundle --outdir=build --loader:.js=jsx --jsx-factory=h --jsx-fragment=Fragment --minify --sourcemap --define:process.env.NODE_ENV='\"development\"'",
-    "build-production": "esbuild index.js --bundle --outdir=build --loader:.js=jsx --jsx-factory=h --jsx-fragment=Fragment --minify --sourcemap --define:process.env.NODE_ENV='\"production\"'",
+    "build-development": "esbuild index.js --bundle --outdir=build --jsx-factory=h --jsx-fragment=Fragment --minify --sourcemap --define:process.env.NODE_ENV='\"development\"'",
+    "build-production": "esbuild index.js --bundle --outdir=build --jsx-factory=h --jsx-fragment=Fragment --minify --sourcemap --define:process.env.NODE_ENV='\"production\"'",
     "deploy": "gh-pages -d build",
     "release": "npm run build-production && npm run deploy"
   },
@@ -30,7 +30,7 @@
     "theme-ui": "^0.3.4"
   },
   "devDependencies": {
-    "esbuild": "^0.8.20",
+    "esbuild": "^0.8.21",
     "gh-pages": "^3.1.0",
     "prettier": "^2.2.1"
   }
