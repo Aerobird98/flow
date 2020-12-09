@@ -222,7 +222,7 @@ const Themes = {
         dark: {
           text: Colors.gray[0],
           background: Colors.gray[10],
-          primary: Colors.cyan,
+          primary: Colors.teal,
           secondary: Colors.gray[0],
         },
       },
