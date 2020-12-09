@@ -6,7 +6,7 @@ It's using a design system not just for its simplified UI but also for handling 
 
 ## Usage
 
-Use the buttons in the tools section at the top of Flow (the app) or use _keyboard_ sortcuts listed in the table below to toggle _mark-style_ formating like **Bold** and _Italic_ or _block-style_ formating like Paragraphs, Heading types and Aligning.
+Use the buttons in the tools section at the top of Flow or use _keyboard_ sortcuts listed in the table below to toggle _mark-style_ formating like **Bold** and _Italic_ or _block-style_ formating like Paragraphs, Heading types and Aligning.
 
 | Shortcut          | Description                             |
 | ----------------- | --------------------------------------- |
@@ -21,15 +21,15 @@ Use the buttons in the tools section at the top of Flow (the app) or use _keyboa
 | `Alt + 1`         | Turn block into paragraph               |
 | `Alt + 2`         | Turn block into heading                 |
 
-Flow (the app) will highlight buttons when their format is active.
+Flow will highlight buttons when their format is active.
 
-Flow (the app) has an autosaving feature that saves your currently edited document to your browser's _local-storage_ container under a `value` key, which you can access through the developer-tools of your browser.
+Flow has an autosaving feature that saves your currently edited document to your browser's _local-storage_ container under a `value` key, which you can access through the developer-tools of your browser.
 
-Flow (the app) will display some editing statistics at the bottom like word counts, character counts with spaces, without trailing white-space and without spaces in that order. For character counts you can choose from three but for words I had to make a choice. The algorithm skips standard ASCII puncturation, special characters like `—`, `’`, `“` and `”` or line breaks like `\r\n`, `\r`, `\n` and it leaves out digits (`0-9`) as well when counting words. It will only give honest results if you treat text correctly, type and grammar errors, mistyped sentences or puncturation misuse may result in inaccurate counts. As a rule of thumb, always separate your words with spaces or line breaks, words separated by puncturation or digits will count as one.
+Flow will display some editing statistics at the bottom like word counts, character counts with spaces, without trailing white-space and without spaces in that order. For character counts you can choose from three but for words I had to make a choice. The algorithm skips standard ASCII puncturation, special characters like `—`, `’`, `“` and `”` or line breaks like `\r\n`, `\r`, `\n` and it leaves out digits (`0-9`) as well when counting words. It will only give honest results if you treat text correctly, type and grammar errors, mistyped sentences or puncturation misuse may result in inaccurate counts. As a rule of thumb, always separate your words with spaces or line breaks, words separated by puncturation or digits will count as one.
 
 ## Development
 
-Flow (the app) is using [Preact-js](https://preactjs.com/) a _fast 3kB alternative_ to [React-js](https://reactjs.org/) with the same _modern_ API, bundled by [esbuild](https://github.com/evanw/esbuild) a _truly fast_ **JavaScript** _bundler and minifier_ that packages up **JavaScript** and **TypeScript** code for distribution to the web. Using [Theme-ui](https://theme-ui.com/) the **Design Graph Framework** to provide an opinionated design system paired with [FontAwesome](https://fontawesome.com/)'s free **solid** icons.
+Flow is using [Preact-js](https://preactjs.com/) a _fast 3kB alternative_ to [React-js](https://reactjs.org/) with the same _modern_ API, bundled by [esbuild](https://github.com/evanw/esbuild) a _truly fast_ **JavaScript** _bundler and minifier_ that packages up **JavaScript** and **TypeScript** code for distribution to the web. Using [Theme-ui](https://theme-ui.com/) the **Design Graph Framework** to provide an opinionated design system paired with [FontAwesome](https://fontawesome.com/)'s free **solid** icons.
 
 - Run `npm i` in the project directory to install all the dependencies and dev-dependencies;
 - Run `npm run build-development` to build for development or `npm run build-production` to build for production;
