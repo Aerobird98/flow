@@ -46,7 +46,6 @@ import {
   useColorMode,
   Box,
   Button,
-  IconButton,
   Styled,
   Text,
   Heading,
