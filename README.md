@@ -17,7 +17,6 @@ Use the buttons in the tools section at the top of Flow (the app) or use _keyboa
 | `Ctrl or Cmd + v` | Paste                                   |
 | `Ctrl or Cmd + b` | Toggle format on text to **Bold**       |
 | `Ctrl or Cmd + i` | Toggle format on text to _Italic_       |
-| `Ctrl or Cmd + u` | Toggle format on text to Underline      |
 | `Alt + 0`         | Turn block into code (monospaced block) |
 | `Alt + 1`         | Turn block into paragraph               |
 | `Alt + 2`         | Turn block into heading                 |
