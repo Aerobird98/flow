@@ -164,45 +164,45 @@ const BaseTheme = {
     },
   },
   buttons: {
-    primary: {
-      color: "primary",
+    up: {
+      color: "color",
       bg: "background",
       borderRadius: "1rem",
       borderColor: "transparent",
       "&:hover": {
-        color: "primary",
+        color: "color",
       },
       "&:focus": {
         color: "background",
-        bg: "primary",
+        bg: "color",
       },
       "&:focus, &:hover": {
         outline: 0,
       },
       "&:disabled": {
-        opacity: 0.5,
-        color: "primary",
+        opacity: 0.2,
+        color: "color",
         bg: "background",
       },
     },
-    secondary: {
-      color: "secondary",
+    down: {
+      color: "text",
       bg: "background",
       borderRadius: "1rem",
       borderColor: "transparent",
       "&:hover": {
-        color: "secondary",
+        color: "text",
       },
       "&:focus": {
         color: "background",
-        bg: "secondary",
+        bg: "text",
       },
       "&:focus, &:hover": {
         outline: 0,
       },
       "&:disabled": {
-        opacity: 0.5,
-        color: "secondary",
+        opacity: 0.2,
+        color: "text",
         bg: "background",
       },
     },
@@ -215,14 +215,12 @@ const Themes = {
     colors: {
       text: Colors.gray[8],
       background: Colors.gray[2],
-      primary: Colors.blue,
-      secondary: Colors.gray[8],
+      color: Colors.blue,
       modes: {
         dark: {
-          text: Colors.gray[0],
+          text: Colors.gray[2],
           background: Colors.gray[10],
-          primary: Colors.teal,
-          secondary: Colors.gray[0],
+          color: Colors.blue,
         },
       },
     },
@@ -718,7 +716,7 @@ const ActionButton = (props) => {
       onMouseDown={mouseAction}
       onKeyDown={keyboardAction}
       disabled={disabled}
-      variant={active ? "primary" : "secondary"}
+      variant={active ? "up" : "down"}
       mb={1}
       mr={1}
       {...props}
