@@ -38,7 +38,6 @@ import {
   faAlignJustify,
   faMoon,
   faSun,
-  faTerminal,
 } from "@fortawesome/free-solid-svg-icons";
 
 import {
@@ -117,7 +116,6 @@ const BaseTheme = {
   styles: {
     root: {
       fontFamily: "code",
-      lineHeight: "paragraph",
     },
     p: {
       variant: "text.paragraph",
@@ -165,45 +163,25 @@ const BaseTheme = {
   },
   buttons: {
     up: {
-      color: "color",
-      bg: "background",
-      borderRadius: "1rem",
-      borderColor: "transparent",
-      "&:hover": {
-        color: "color",
-      },
-      "&:focus": {
-        color: "background",
-        bg: "color",
-      },
+      color: "text",
+      bg: "transparent",
       "&:focus, &:hover": {
         outline: 0,
       },
       "&:disabled": {
-        opacity: 0.2,
-        color: "color",
-        bg: "background",
+        opacity: 0.1,
       },
     },
     down: {
       color: "text",
-      bg: "background",
-      borderRadius: "1rem",
-      borderColor: "transparent",
-      "&:hover": {
-        color: "text",
-      },
-      "&:focus": {
-        color: "background",
-        bg: "text",
-      },
+      bg: "transparent",
+      opacity: 0.4,
       "&:focus, &:hover": {
         outline: 0,
+        opacity: 1,
       },
       "&:disabled": {
-        opacity: 0.2,
-        color: "text",
-        bg: "background",
+        opacity: 0.1,
       },
     },
   },
@@ -215,12 +193,10 @@ const Themes = {
     colors: {
       text: Colors.gray[8],
       background: Colors.gray[2],
-      color: Colors.blue,
       modes: {
         dark: {
           text: Colors.gray[2],
           background: Colors.gray[10],
-          color: Colors.blue,
         },
       },
     },
@@ -516,11 +492,19 @@ const Root = () => {
               },
             }}
           >
-            <Icon name="terminal" title="Statistics" aria-label="Statistics" />{" "}
-            Words:{" "}
+            <Text as="span" title="Word Count" aria-label="Word Count">
+              Words:
+            </Text>{" "}
             <Text as="span" title="All" aria-label="All">
-              {statistics.wordsAll} Chars:{" "}
-            </Text>
+              {statistics.wordsAll}
+            </Text>{" "}
+            <Text
+              as="span"
+              title="Character Count"
+              aria-label="Character Count"
+            >
+              Chars:
+            </Text>{" "}
             <Text as="span" title="All" aria-label="All">
               {statistics.charsAll}
             </Text>{" "}
@@ -867,8 +851,7 @@ library.add(
   faAlignRight,
   faAlignJustify,
   faMoon,
-  faSun,
-  faTerminal
+  faSun
 );
 
 render(<Root />, document.getElementById("root"));
