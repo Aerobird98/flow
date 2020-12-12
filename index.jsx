@@ -266,8 +266,8 @@ const themes = {
   flow: {
     ...BaseTheme,
     colors: {
-      text: "#0d1117",
-      background: "#c8e1ff",
+      text: colors.gray[8],
+      background: colors.gray[2],
       modes: {
         dark: {
           text: "#c8e1ff",
