@@ -50,190 +50,178 @@ import {
   Heading,
 } from "theme-ui";
 
-const colors = {
-  black: "#1b1f23",
-  white: "#fff",
-  gray: [
-    "#fafbfc",
-    "#f6f8fa",
-    "#e1e4e8",
-    "#d1d5da",
-    "#959da5",
-    "#6a737d",
-    "#586069",
-    "#444d56",
-    "#2f363d",
-    "#24292e",
-  ],
-  blue: [
-    "#f1f8ff",
-    "#dbedff",
-    "#c8e1ff",
-    "#79b8ff",
-    "#2188ff",
-    "#0366d6",
-    "#005cc5",
-    "#044289",
-    "#032f62",
-    "#05264c",
-  ],
-  green: [
-    "#f0fff4",
-    "#dcffe4",
-    "#bef5cb",
-    "#85e89d",
-    "#34d058",
-    "#28a745",
-    "#22863a",
-    "#176f2c",
-    "#165c26",
-    "#144620",
-  ],
-  yellow: [
-    "#fffdef",
-    "#fffbdd",
-    "#fff5b1",
-    "#ffea7f",
-    "#ffdf5d",
-    "#ffd33d",
-    "#f9c513",
-    "#dbab09",
-    "#b08800",
-    "#735c0f",
-  ],
-  orange: [
-    "#fff8f2",
-    "#ffebda",
-    "#ffd1ac",
-    "#ffab70",
-    "#fb8532",
-    "#f66a0a",
-    "#e36209",
-    "#d15704",
-    "#c24e00",
-    "#a04100",
-  ],
-  red: [
-    "#ffeef0",
-    "#ffdce0",
-    "#fdaeb7",
-    "#f97583",
-    "#ea4a5a",
-    "#d73a49",
-    "#cb2431",
-    "#b31d28",
-    "#9e1c23",
-    "#86181d",
-  ],
-  purple: [
-    "#f5f0ff",
-    "#e6dcfd",
-    "#d1bcf9",
-    "#b392f0",
-    "#8a63d2",
-    "#6f42c1",
-    "#5a32a3",
-    "#4c2889",
-    "#3a1d6e",
-    "#29134e",
-  ],
-  pink: [
-    "#ffeef8",
-    "#fedbf0",
-    "#f9b3dd",
-    "#f692ce",
-    "#ec6cb9",
-    "#ea4aaa",
-    "#d03592",
-    "#b93a86",
-    "#99306f",
-    "#6d224f",
-  ],
-};
-
-const BaseTheme = {
+const baseTheme = {
   initialColorMode: "light",
+  colors: {
+    black: "#1b1f23",
+    white: "#fff",
+    gray: [
+      "#fafbfc",
+      "#f6f8fa",
+      "#e1e4e8",
+      "#d1d5da",
+      "#959da5",
+      "#6a737d",
+      "#586069",
+      "#444d56",
+      "#2f363d",
+      "#24292e",
+    ],
+    blue: [
+      "#f1f8ff",
+      "#dbedff",
+      "#c8e1ff",
+      "#79b8ff",
+      "#2188ff",
+      "#0366d6",
+      "#005cc5",
+      "#044289",
+      "#032f62",
+      "#05264c",
+    ],
+    green: [
+      "#f0fff4",
+      "#dcffe4",
+      "#bef5cb",
+      "#85e89d",
+      "#34d058",
+      "#28a745",
+      "#22863a",
+      "#176f2c",
+      "#165c26",
+      "#144620",
+    ],
+    yellow: [
+      "#fffdef",
+      "#fffbdd",
+      "#fff5b1",
+      "#ffea7f",
+      "#ffdf5d",
+      "#ffd33d",
+      "#f9c513",
+      "#dbab09",
+      "#b08800",
+      "#735c0f",
+    ],
+    orange: [
+      "#fff8f2",
+      "#ffebda",
+      "#ffd1ac",
+      "#ffab70",
+      "#fb8532",
+      "#f66a0a",
+      "#e36209",
+      "#d15704",
+      "#c24e00",
+      "#a04100",
+    ],
+    red: [
+      "#ffeef0",
+      "#ffdce0",
+      "#fdaeb7",
+      "#f97583",
+      "#ea4a5a",
+      "#d73a49",
+      "#cb2431",
+      "#b31d28",
+      "#9e1c23",
+      "#86181d",
+    ],
+    purple: [
+      "#f5f0ff",
+      "#e6dcfd",
+      "#d1bcf9",
+      "#b392f0",
+      "#8a63d2",
+      "#6f42c1",
+      "#5a32a3",
+      "#4c2889",
+      "#3a1d6e",
+      "#29134e",
+    ],
+    pink: [
+      "#ffeef8",
+      "#fedbf0",
+      "#f9b3dd",
+      "#f692ce",
+      "#ec6cb9",
+      "#ea4aaa",
+      "#d03592",
+      "#b93a86",
+      "#99306f",
+      "#6d224f",
+    ],
+  },
   fonts: {
-    light: "sailecLight, sans-serif",
-    regular: "sailecRegular, sans-serif",
-    bold: "sailecBold, sans-serif",
-    italic: "sailecLight, sans-serif",
+    heading: "zillaSlab, serif",
+    paragraph: "zillaSlab, serif",
     code: "firaCode, monospace",
   },
-  fontSizes: ["1rem", "1.25rem", "1.5rem", "1.75rem", "2rem", "2.5rem"],
+  fontSizes: ["1rem", "1.335rem", "1.5rem", "1.75rem", "2rem", "2.5rem"],
   fontWeights: {
-    extraThin: 100,
-    thin: 200,
+    thin: 100,
     light: 300,
     regular: 400,
     medium: 500,
     semiBold: 600,
     bold: 700,
-    extraBold: 800,
-    ultraBold: 900,
+    black: 900,
   },
-  lineHeights: {
-    paragraph: 1.5,
-    heading: 1.2,
-  },
-  space: ["0rem", "0.25rem", "0.5rem", "1rem", "1.5rem", "3rem"],
+  lineHeights: ["1rem", "1.335rem", "1.5rem", "1.75rem", "2rem", "2.5rem"],
+  space: ["0rem", "0.335rem", "0.5rem", "1rem", "1.5rem", "3rem"],
   breakpoints: [576, 768, 992, 1200, 1400],
   text: {
     paragraph: {
-      fontFamily: "light",
-      lineHeight: "paragraph",
+      fontFamily: "paragraph",
+      fontWeight: "regular",
+      fontStyle: "normal",
+      fontKerning: "normal",
+      lineHeight: 2,
+      fontSize: 0,
     },
     heading: {
-      fontFamily: "regular",
-      lineHeight: "heading",
+      fontFamily: "heading",
+      fontWeight: "medium",
+      fontStyle: "normal",
+      fontKerning: "normal",
+      lineHeight: 4,
+      fontSize: 1,
+    },
+    code: {
+      fontFamily: "code",
+      fontWeight: "regular",
+      fontStyle: "normal",
+      fontKerning: "normal",
+      lineHeight: 2,
+      fontSize: 0,
     },
   },
   styles: {
     root: {
-      fontFamily: "code",
+      variant: "text.code",
     },
     p: {
       variant: "text.paragraph",
-      fontSize: 0,
-    },
-    h1: {
-      variant: "text.heading",
-      fontSize: 5,
-    },
-    h2: {
-      variant: "text.heading",
-      fontSize: 4,
-    },
-    h3: {
-      variant: "text.heading",
-      fontSize: 3,
-    },
-    h4: {
-      variant: "text.heading",
-      fontSize: 2,
     },
     h5: {
       variant: "text.heading",
-      fontSize: 1,
-    },
-    h6: {
-      variant: "text.heading",
-      fontSize: 0,
     },
     div: {
-      fontFamily: "code",
-    },
-    i: {
-      fontFamily: "italic",
+      variant: "text.code",
     },
     b: {
-      fontFamily: "bold",
-    },
-    em: {
-      fontFamily: "italic",
+      fontWeight: "bold",
     },
     strong: {
-      fontFamily: "bold",
+      fontWeight: "bold",
+    },
+    i: {
+      fontWeight: "light",
+      fontStyle: "italic",
+    },
+    em: {
+      fontWeight: "light",
+      fontStyle: "italic",
     },
   },
   buttons: {
@@ -262,22 +250,6 @@ const BaseTheme = {
   },
 };
 
-const themes = {
-  flow: {
-    ...BaseTheme,
-    colors: {
-      text: colors.gray[8],
-      background: colors.gray[2],
-      modes: {
-        dark: {
-          text: "#c8e1ff",
-          background: "#0d1117",
-        },
-      },
-    },
-  },
-};
-
 const FlowEditor = {
   // Take a value and return the string content of each node
   // in the value's children then join them all with line breaks denoting paragraphs.
@@ -294,7 +266,19 @@ const FlowEditor = {
     });
   },
 
-  getStatistics(value) {
+  fromJSON(value) {
+    return JSON.stringify(value);
+  },
+
+  toJSON(text) {
+    return (
+      JSON.parse(text) || [
+        { type: "code", align: "left", children: [{ text: "" }] },
+      ]
+    );
+  },
+
+  statistics(value) {
     const text = FlowEditor.toPlainText(value);
 
     // Remove all 3 types of line-breaks.
@@ -390,10 +374,10 @@ const FlowEditor = {
   useFullcreen(element) {
     const isfullscreenActive = () => {
       return !!(
-        document.fullscreenElement ||
-        document.mozFullScreenElement ||
-        document.webkitFullscreenElement ||
-        document.msFullscreenElement
+        window.document.fullscreenElement ||
+        window.document.mozFullScreenElement ||
+        window.document.webkitFullscreenElement ||
+        window.document.msFullscreenElement
       );
     };
 
@@ -412,14 +396,14 @@ const FlowEditor = {
     };
 
     const exitFullscreen = () => {
-      if (document.exitFullscreen) {
-        return document.exitFullscreen();
-      } else if (document.mozCancelFullScreen) {
-        return document.mozCancelFullScreen();
-      } else if (document.webkitExitFullscreen) {
-        return document.webkitExitFullscreen();
-      } else if (document.msExitFullscreen) {
-        return document.msExitFullscreen();
+      if (window.document.exitFullscreen) {
+        return window.document.exitFullscreen();
+      } else if (window.document.mozCancelFullScreen) {
+        return window.document.mozCancelFullScreen();
+      } else if (window.document.webkitExitFullscreen) {
+        return window.document.webkitExitFullscreen();
+      } else if (window.document.msExitFullscreen) {
+        return window.document.msExitFullscreen();
       }
     };
 
@@ -444,29 +428,13 @@ const FlowEditor = {
     };
 
     useLayoutEffect(() => {
-      document.onfullscreenchange = () =>
+      window.document.onfullscreenchange = () =>
         setIsInFullscreen(isfullscreenActive());
 
-      return () => (document.onfullscreenchange = undefined);
+      return () => (window.document.onfullscreenchange = undefined);
     });
 
     return [isInFullscreen, toggleFullscreen];
-  },
-
-  print() {
-    return window.print();
-  },
-
-  setValue(key, value) {
-    return window.localStorage.setItem(key, JSON.stringify(value));
-  },
-
-  getValue(key) {
-    return (
-      JSON.parse(window.localStorage.getItem(key)) || [
-        { type: "code", align: "left", children: [{ text: "" }] },
-      ]
-    );
   },
 };
 
@@ -480,17 +448,34 @@ const Root = () => {
     []
   );
 
-  const [value, setValue] = useState(FlowEditor.getValue("value"));
+  const [value, setValue] = useState(
+    FlowEditor.toJSON(window.localStorage.getItem("value"))
+  );
 
   const onChange = (value) => {
     setValue(value);
-    FlowEditor.setValue("value", value);
+    window.localStorage.setItem("value", FlowEditor.fromJSON(value));
   };
 
-  const statistics = FlowEditor.getStatistics(value);
+  const theme = {
+    ...baseTheme,
+    colors: {
+      text: "#332222",
+      background: "#fff9f9",
+      primary: "#ea333b",
+      modes: {
+        dark: {
+          text: "#c8e1ff",
+          background: "#0d1117",
+        },
+      },
+    },
+  };
+
+  const statistics = FlowEditor.statistics(value);
 
   return (
-    <ThemeProvider theme={themes.flow}>
+    <ThemeProvider theme={theme}>
       <Slate editor={editor} value={value} onChange={onChange}>
         <Box
           sx={{
@@ -547,8 +532,8 @@ const Root = () => {
               padding: 5,
               "@media print": {
                 padding: 0,
-                color: colors.gray[10],
-                bg: colors.gray[0],
+                color: "#000000",
+                bg: "#ffffff",
               },
             }}
           />
@@ -641,7 +626,7 @@ const ParagraphElement = (props) => {
   return (
     <Text
       as={Styled.p}
-      mb={4}
+      mb={3}
       sx={{
         textAlign: element.align,
       }}
@@ -657,7 +642,7 @@ const HeadingElement = (props) => {
 
   return (
     <Heading
-      as={Styled.h3}
+      as={Styled.h5}
       mb={3}
       sx={{
         textAlign: element.align,
@@ -705,10 +690,6 @@ const Editable = (props) => {
         case "i":
           event.preventDefault();
           FlowEditor.toggleMark(editor, "italic");
-          break;
-        case "u":
-          event.preventDefault();
-          FlowEditor.toggleMark(editor, "underline");
           break;
         default:
           break;
@@ -787,7 +768,7 @@ const ActionButton = (props) => {
 
 const FullscreenButton = (props) => {
   const [isInFullscreen, toggleFullscreen] = FlowEditor.useFullcreen(
-    document.documentElement
+    window.document.documentElement
   );
 
   return (
@@ -840,7 +821,7 @@ const PrintButton = (props) => {
       icon="print"
       label="Print"
       action={(event) => {
-        FlowEditor.print();
+        window.print();
       }}
       {...props}
     />
@@ -929,4 +910,4 @@ library.add(
   faSun
 );
 
-render(<Root />, document.getElementById("root"));
+render(<Root />, window.document.getElementById("root"));
