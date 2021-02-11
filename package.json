@@ -4,10 +4,9 @@
   "description": "A compact web based rich-text editor that builds on top of Slate-js with powerful, yet simple and accessible editing capabilities.",
   "private": true,
   "scripts": {
-    "build-development": "esbuild index.jsx --bundle --outdir=build --jsx-factory=h --jsx-fragment=Fragment --minify --sourcemap --define:process.env.NODE_ENV='\"development\"'",
-    "build-production": "esbuild index.jsx --bundle --outdir=build --jsx-factory=h --jsx-fragment=Fragment --minify --sourcemap --define:process.env.NODE_ENV='\"production\"'",
+    "build": "node esbuild.js",
     "deploy": "gh-pages -d build",
-    "release": "npm run build-production && npm run deploy"
+    "release": "npm run build && npm run deploy"
   },
   "repository": {
     "type": "git",

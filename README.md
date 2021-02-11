@@ -8,18 +8,15 @@ It’s using a design system not just for its simplified UI but also for handlin
 
 Use the buttons in the tools section at the top of Flow or use _keyboard_ sortcuts listed in the table below to toggle _mark-style_ formating like **Bold** and _Italic_ or _block-style_ formating like Paragraphs, Heading types and Aligning.
 
-| Shortcut          | Description                             |
-| ----------------- | --------------------------------------- |
-| `Ctrl or Cmd + z` | Undo                                    |
-| `Ctrl or Cmd + y` | Redo                                    |
-| `Ctrl or Cmd + c` | Copy                                    |
-| `Ctrl or Cmd + x` | Cut                                     |
-| `Ctrl or Cmd + v` | Paste                                   |
-| `Ctrl or Cmd + b` | Toggle format on text to **Bold**       |
-| `Ctrl or Cmd + i` | Toggle format on text to _Italic_       |
-| `Alt + 0`         | Turn block into code (monospaced block) |
-| `Alt + 1`         | Turn block into paragraph               |
-| `Alt + 2`         | Turn block into heading                 |
+| Shortcut          | Description                       |
+| ----------------- | --------------------------------- |
+| `Ctrl or Cmd + z` | Undo                              |
+| `Ctrl or Cmd + y` | Redo                              |
+| `Ctrl or Cmd + c` | Copy                              |
+| `Ctrl or Cmd + x` | Cut                               |
+| `Ctrl or Cmd + v` | Paste                             |
+| `Ctrl or Cmd + b` | Toggle format on text to **Bold** |
+| `Ctrl or Cmd + i` | Toggle format on text to _Italic_ |
 
 Flow will highlight buttons when their format is active.
 
@@ -32,7 +29,7 @@ Flow will display some editing statistics at the bottom like word counts, charac
 Flow is using [Preact-js][] a _fast 3kB alternative_ to [React-js][] with the same _modern_ API, bundled by [esbuild][] a _truly fast_ **JavaScript** _bundler and minifier_ that packages up **JavaScript** and **TypeScript** code for distribution to the web. Using [Theme-ui][] the **Design Graph Framework** to provide an opinionated design system paired with [FontAwesome][]’s free **solid** icons. It also makes use of [ZillaSlab][], **Mozilla**’s core typeface and [FiraCode][], a monospaced font containing ligatures for common programming multi-character combinations for a realy exotic typographic experience.
 
 - Run `npm i` in the project directory to install all the dependencies and dev-dependencies;
-- Run `npm run build-development` to build for development or `npm run build-production` to build for production;
+- Run `npm run build` to build for production;
 - Open the `index.html` file in the `build` folder to begin working (you need to refresh the page after each re-build for the changes to take effect);
 - When ready run `npm run deploy` to deploy the contents of `build` to gh-pages or `npm run release` to also re-build for production.
 
