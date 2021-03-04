@@ -578,6 +578,17 @@ const Root = () => {
             <Text as="span" title="Without Spaces" aria-label="No Spaces">
               {statistics.charsNoSpaces}
             </Text>
+            <Text
+              as="span"
+              title="Version"
+              aria-label="Version"
+              sx={{
+                float: "right",
+              }}
+            >
+              {" "}
+              v.0.14.15
+            </Text>
           </Box>
         </Box>
       </Slate>
