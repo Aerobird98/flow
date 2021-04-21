@@ -6,7 +6,7 @@
     <meta lang="en" />
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="theme-color" content="#ea333b" />
+    <meta name="theme-color" content="#3bb5ff" />
     <meta
       name="description"
       content="A compact web based rich-text editor that builds on top of Slate-js with powerful, yet simple and accessible editing capabilities."
@@ -17,99 +17,163 @@
       }
 
       @font-face {
-        font-family: zillaSlab;
+        font-family: Garet;
         font-style: normal;
         font-kerning: normal;
-        src: url("ZillaSlabLight.otf") format("opentype");
+        src: url("Garet-Book.ttf") format("truetype");
+        font-weight: 50;
+      }
+
+      @font-face {
+        font-family: Garet;
+        font-style: normal;
+        font-kerning: normal;
+        src: url("Garet-Book.ttf") format("truetype");
+        font-weight: 100;
+      }
+
+      @font-face {
+        font-family: Garet;
+        font-style: normal;
+        font-kerning: normal;
+        src: url("Garet-Book.ttf") format("truetype");
+        font-weight: 200;
+      }
+
+      @font-face {
+        font-family: Garet;
+        font-style: normal;
+        font-kerning: normal;
+        src: url("Garet-Book.ttf") format("truetype");
         font-weight: 300;
       }
 
       @font-face {
-        font-family: zillaSlab;
+        font-family: Garet;
         font-style: normal;
         font-kerning: normal;
-        src: url("ZillaSlabRegular.otf") format("opentype");
+        src: url("Garet-Book.ttf") format("truetype");
         font-weight: 400;
       }
 
       @font-face {
-        font-family: zillaSlab;
+        font-family: Garet;
         font-style: normal;
         font-kerning: normal;
-        src: url("ZillaSlabMedium.otf") format("opentype");
+        src: url("Garet-Heavy.ttf") format("truetype");
         font-weight: 500;
       }
 
       @font-face {
-        font-family: zillaSlab;
+        font-family: Garet;
         font-style: normal;
         font-kerning: normal;
-        src: url("ZillaSlabBold.otf") format("opentype");
+        src: url("Garet-Heavy.ttf") format("truetype");
+        font-weight: 600;
+      }
+
+      @font-face {
+        font-family: Garet;
+        font-style: normal;
+        font-kerning: normal;
+        src: url("Garet-Heavy.ttf") format("truetype");
         font-weight: 700;
       }
 
       @font-face {
-        font-family: zillaSlab;
-        font-style: italic;
+        font-family: Garet;
+        font-style: normal;
         font-kerning: normal;
-        src: url("ZillaSlabLightItalic.otf") format("opentype");
+        src: url("Garet-Heavy.ttf") format("truetype");
+        font-weight: 800;
+      }
+
+      @font-face {
+        font-family: Garet;
+        font-style: normal;
+        font-kerning: normal;
+        src: url("Garet-Heavy.ttf") format("truetype");
+        font-weight: 900;
+      }
+
+      @font-face {
+        font-family: FiraCode;
+        font-style: normal;
+        font-kerning: normal;
+        src: url("FiraCode-Light.ttf") format("truetype");
+        font-weight: 50;
+      }
+
+      @font-face {
+        font-family: FiraCode;
+        font-style: normal;
+        font-kerning: normal;
+        src: url("FiraCode-Light.ttf") format("truetype");
+        font-weight: 100;
+      }
+
+      @font-face {
+        font-family: FiraCode;
+        font-style: normal;
+        font-kerning: normal;
+        src: url("FiraCode-Light.ttf") format("truetype");
+        font-weight: 200;
+      }
+
+      @font-face {
+        font-family: FiraCode;
+        font-style: normal;
+        font-kerning: normal;
+        src: url("FiraCode-Medium.ttf") format("truetype");
         font-weight: 300;
       }
 
       @font-face {
-        font-family: zillaSlab;
-        font-style: italic;
+        font-family: FiraCode;
+        font-style: normal;
         font-kerning: normal;
-        src: url("ZillaSlabRegularItalic.otf") format("opentype");
+        src: url("FiraCode-Regular.ttf") format("truetype");
         font-weight: 400;
       }
 
       @font-face {
-        font-family: zillaSlab;
-        font-style: italic;
+        font-family: FiraCode;
+        font-style: normal;
         font-kerning: normal;
-        src: url("ZillaSlabMediumItalic.otf") format("opentype");
+        src: url("FiraCode-Bold.ttf") format("truetype");
         font-weight: 500;
       }
 
       @font-face {
-        font-family: zillaSlab;
-        font-style: italic;
+        font-family: FiraCode;
+        font-style: normal;
         font-kerning: normal;
-        src: url("ZillaSlabBoldItalic.otf") format("opentype");
+        src: url("FiraCode-Bold.ttf") format("truetype");
+        font-weight: 600;
+      }
+
+      @font-face {
+        font-family: FiraCode;
+        font-style: normal;
+        font-kerning: normal;
+        src: url("FiraCode-Bold.ttf") format("truetype");
         font-weight: 700;
       }
 
       @font-face {
-        font-family: firaCode;
+        font-family: FiraCode;
         font-style: normal;
         font-kerning: normal;
-        src: url("FiraCodeLight.ttf") format("truetype");
-        font-weight: 300;
+        src: url("FiraCode-Bold.ttf") format("truetype");
+        font-weight: 800;
       }
 
       @font-face {
-        font-family: firaCode;
+        font-family: FiraCode;
         font-style: normal;
         font-kerning: normal;
-        src: url("FiraCodeRegular.ttf") format("truetype");
-        font-weight: 400;
-      }
-
-      @font-face {
-        font-family: firaCode;
-        font-style: normal;
-        font-kerning: normal;
-        src: url("FiraCodeMedium.ttf") format("truetype");
-        font-weight: 500;
-      }
-
-      @font-face {
-        font-family: firaCode;
-        font-style: normal;
-        font-kerning: normal;
-        src: url("FiraCodeBold.ttf") format("truetype");
-        font-weight: 700;
+        src: url("FiraCode-Bold.ttf") format("truetype");
+        font-weight: 900;
       }
     </style>
     <link rel="icon" href="favicon.svg" type="image/svg+xml" />
