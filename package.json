@@ -1,6 +1,6 @@
 {
   "name": "flow",
-  "version": "0.14.15",
+  "version": "0.15.0",
   "description": "A compact web based rich-text editor that builds on top of Slate-js with powerful, yet simple and accessible editing capabilities.",
   "private": true,
   "scripts": {
@@ -19,17 +19,17 @@
   },
   "homepage": "http://Aerobird98.github.io/flow",
   "dependencies": {
-    "@fortawesome/fontawesome-svg-core": "^1.2.34",
-    "@fortawesome/free-solid-svg-icons": "^5.15.2",
+    "@fortawesome/fontawesome-svg-core": "^1.2.35",
+    "@fortawesome/free-solid-svg-icons": "^5.15.3",
     "@fortawesome/react-fontawesome": "^0.1.14",
-    "preact": "^10.5.12",
-    "slate": "^0.59.0",
-    "slate-history": "^0.59.0",
-    "slate-react": "^0.59.0",
-    "theme-ui": "^0.3.5"
+    "preact": "^10.5.13",
+    "slate": "^0.62.0",
+    "slate-history": "^0.62.0",
+    "slate-react": "^0.62.0",
+    "theme-ui": "^0.7.2"
   },
   "devDependencies": {
-    "esbuild": "^0.8.54",
+    "esbuild": "^0.11.12",
     "gh-pages": "^3.1.0",
     "prettier": "^2.2.1"
   }

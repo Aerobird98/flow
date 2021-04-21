@@ -2,23 +2,15 @@
 import { h, render } from "preact";
 import { useMemo, useState, useCallback, useLayoutEffect } from "preact/hooks";
 import {
-  createEditor,
+  createEditor as createSlateEditor,
   Transforms as SlateTransforms,
   Editor as SlateEditor,
   Node as SlateNode,
-  Text as SlateText,
-  Range as SlateRange,
+  //Text as SlateText,
+  //Range as SlateRange,
 } from "slate";
-import {
-  Slate,
-  useSlate,
-  Editable as SlateEditable,
-  withReact,
-} from "slate-react";
-import {
-  withHistory,
-  HistoryEditor as SlateHistoryEditor,
-} from "slate-history";
+import { Slate, useSlate, Editable, withReact } from "slate-react";
+import { withHistory, HistoryEditor } from "slate-history";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { library } from "@fortawesome/fontawesome-svg-core";
 import {
@@ -45,210 +37,10 @@ import {
   useColorMode,
   Box,
   Button,
-  Styled,
+  Themed,
   Text,
   Heading,
 } from "theme-ui";
-
-const baseTheme = {
-  initialColorMode: "light",
-  colors: {
-    black: "#1b1f23",
-    white: "#fff",
-    gray: [
-      "#fafbfc",
-      "#f6f8fa",
-      "#e1e4e8",
-      "#d1d5da",
-      "#959da5",
-      "#6a737d",
-      "#586069",
-      "#444d56",
-      "#2f363d",
-      "#24292e",
-    ],
-    blue: [
-      "#f1f8ff",
-      "#dbedff",
-      "#c8e1ff",
-      "#79b8ff",
-      "#2188ff",
-      "#0366d6",
-      "#005cc5",
-      "#044289",
-      "#032f62",
-      "#05264c",
-    ],
-    green: [
-      "#f0fff4",
-      "#dcffe4",
-      "#bef5cb",
-      "#85e89d",
-      "#34d058",
-      "#28a745",
-      "#22863a",
-      "#176f2c",
-      "#165c26",
-      "#144620",
-    ],
-    yellow: [
-      "#fffdef",
-      "#fffbdd",
-      "#fff5b1",
-      "#ffea7f",
-      "#ffdf5d",
-      "#ffd33d",
-      "#f9c513",
-      "#dbab09",
-      "#b08800",
-      "#735c0f",
-    ],
-    orange: [
-      "#fff8f2",
-      "#ffebda",
-      "#ffd1ac",
-      "#ffab70",
-      "#fb8532",
-      "#f66a0a",
-      "#e36209",
-      "#d15704",
-      "#c24e00",
-      "#a04100",
-    ],
-    red: [
-      "#ffeef0",
-      "#ffdce0",
-      "#fdaeb7",
-      "#f97583",
-      "#ea4a5a",
-      "#d73a49",
-      "#cb2431",
-      "#b31d28",
-      "#9e1c23",
-      "#86181d",
-    ],
-    purple: [
-      "#f5f0ff",
-      "#e6dcfd",
-      "#d1bcf9",
-      "#b392f0",
-      "#8a63d2",
-      "#6f42c1",
-      "#5a32a3",
-      "#4c2889",
-      "#3a1d6e",
-      "#29134e",
-    ],
-    pink: [
-      "#ffeef8",
-      "#fedbf0",
-      "#f9b3dd",
-      "#f692ce",
-      "#ec6cb9",
-      "#ea4aaa",
-      "#d03592",
-      "#b93a86",
-      "#99306f",
-      "#6d224f",
-    ],
-  },
-  fonts: {
-    heading: "zillaSlab, serif",
-    paragraph: "zillaSlab, serif",
-    code: "firaCode, monospace",
-  },
-  fontSizes: ["1rem", "1.335rem", "1.5rem", "1.75rem", "2rem", "2.5rem"],
-  fontWeights: {
-    thin: 100,
-    light: 300,
-    regular: 400,
-    medium: 500,
-    semiBold: 600,
-    bold: 700,
-    black: 900,
-  },
-  lineHeights: ["1rem", "1.335rem", "1.5rem", "1.75rem", "2rem", "2.5rem"],
-  space: ["0rem", "0.335rem", "0.5rem", "1rem", "1.5rem", "3rem"],
-  breakpoints: [576, 768, 992, 1200, 1400],
-  text: {
-    paragraph: {
-      fontFamily: "paragraph",
-      fontWeight: "regular",
-      fontStyle: "normal",
-      fontKerning: "normal",
-      lineHeight: 2,
-      fontSize: 0,
-    },
-    heading: {
-      fontFamily: "heading",
-      fontWeight: "medium",
-      fontStyle: "normal",
-      fontKerning: "normal",
-      lineHeight: 4,
-      fontSize: 1,
-    },
-    code: {
-      fontFamily: "code",
-      fontWeight: "regular",
-      fontStyle: "normal",
-      fontKerning: "normal",
-      lineHeight: 2,
-      fontSize: 0,
-    },
-  },
-  styles: {
-    root: {
-      variant: "text.code",
-    },
-    p: {
-      variant: "text.paragraph",
-    },
-    h5: {
-      variant: "text.heading",
-    },
-    div: {
-      variant: "text.code",
-    },
-    b: {
-      fontWeight: "bold",
-    },
-    strong: {
-      fontWeight: "bold",
-    },
-    i: {
-      fontWeight: "light",
-      fontStyle: "italic",
-    },
-    em: {
-      fontWeight: "light",
-      fontStyle: "italic",
-    },
-  },
-  buttons: {
-    up: {
-      color: "text",
-      bg: "transparent",
-      "&:focus, &:hover": {
-        outline: 0,
-      },
-      "&:disabled": {
-        opacity: 0.1,
-      },
-    },
-    down: {
-      color: "text",
-      bg: "transparent",
-      opacity: 0.4,
-      "&:focus, &:hover": {
-        outline: 0,
-        opacity: 1,
-      },
-      "&:disabled": {
-        opacity: 0.1,
-      },
-    },
-  },
-};
 
 const FlowEditor = {
   // Take a value and return the string content of each node
@@ -278,7 +70,7 @@ const FlowEditor = {
     );
   },
 
-  statistics(value) {
+  getStatistics(value) {
     const text = FlowEditor.toPlainText(value);
 
     // Remove all 3 types of line-breaks.
@@ -443,8 +235,123 @@ const withFlow = (editor) => {
 };
 
 const Root = () => {
+  const theme = {
+    initialColorMode: "light",
+    colors: {
+      text: "#040f1b",
+      background: "#ffffff",
+      primary: "#3bb5ff",
+      modes: {
+        dark: {
+          text: "#abbcdc",
+          background: "#040f1b",
+        },
+      },
+    },
+    fonts: {
+      heading: "Garet, sans-serif",
+      paragraph: "Garet, sans-serif",
+      code: "FiraCode, monospace",
+    },
+    fontSizes: ["1rem", "1.335rem", "1.5rem", "1.75rem", "2rem", "2.5rem"],
+    fontWeights: {
+      thin: 50,
+      light: 100,
+      book: 200,
+      medium: 300,
+      regular: 400,
+      bold: 500,
+      extraBold: 600,
+      heavy: 700,
+      black: 800,
+      fat: 900,
+    },
+    lineHeights: ["1rem", "1.335rem", "1.5rem", "1.75rem", "2rem", "2.5rem"],
+    space: ["0rem", "0.335rem", "0.5rem", "1rem", "1.5rem", "3rem"],
+    breakpoints: ["576px", "768px", "992px", "1200px", "1400px"],
+    text: {
+      paragraph: {
+        fontFamily: "paragraph",
+        fontWeight: "book",
+        fontStyle: "normal",
+        fontKerning: "normal",
+        lineHeight: 2,
+        fontSize: 0,
+      },
+      heading: {
+        fontFamily: "heading",
+        fontWeight: "book",
+        fontStyle: "normal",
+        fontKerning: "normal",
+        lineHeight: 4,
+        fontSize: 1,
+      },
+      code: {
+        fontFamily: "code",
+        fontWeight: "regular",
+        fontStyle: "normal",
+        fontKerning: "normal",
+        lineHeight: 2,
+        fontSize: 0,
+      },
+    },
+    styles: {
+      root: {
+        variant: "text.code",
+      },
+      p: {
+        variant: "text.paragraph",
+      },
+      h5: {
+        variant: "text.heading",
+      },
+      div: {
+        variant: "text.code",
+      },
+      b: {
+        fontWeight: "bold",
+      },
+      strong: {
+        fontWeight: "bold",
+      },
+      i: {
+        fontWeight: "light",
+        fontStyle: "italic",
+      },
+      em: {
+        fontWeight: "light",
+        fontStyle: "italic",
+      },
+    },
+    buttons: {
+      up: {
+        color: "primary",
+        bg: "transparent",
+        opacity: 1,
+        "&:focus, &:hover": {
+          outline: 0,
+        },
+        "&:disabled": {
+          opacity: 0.1,
+        },
+      },
+      down: {
+        color: "text",
+        bg: "transparent",
+        opacity: 1,
+        "&:focus, &:hover": {
+          outline: 0,
+          color: "primary",
+        },
+        "&:disabled": {
+          opacity: 0.1,
+        },
+      },
+    },
+  };
+
   const editor = useMemo(
-    () => withFlow(withHistory(withReact(createEditor()))),
+    () => withFlow(withHistory(withReact(createSlateEditor()))),
     []
   );
 
@@ -457,22 +364,7 @@ const Root = () => {
     window.localStorage.setItem("value", FlowEditor.fromJSON(value));
   };
 
-  const theme = {
-    ...baseTheme,
-    colors: {
-      text: "#332222",
-      background: "#fff9f9",
-      primary: "#ea333b",
-      modes: {
-        dark: {
-          text: "#c8e1ff",
-          background: "#0d1117",
-        },
-      },
-    },
-  };
-
-  const statistics = FlowEditor.statistics(value);
+  const statistics = FlowEditor.getStatistics(value);
 
   return (
     <ThemeProvider theme={theme}>
@@ -481,6 +373,7 @@ const Root = () => {
           sx={{
             display: "flex",
             flexDirection: "column",
+            position: "static",
             minHeight: "100vh",
             "@media print": {
               display: "block",
@@ -488,11 +381,11 @@ const Root = () => {
           }}
         >
           <Box
-            bg="background"
             py={3}
-            ml={1}
             sx={{
+              bg: "background",
               flexWrap: "wrap",
+              position: "static",
               "@supports (position: sticky)": {
                 position: "sticky",
               },
@@ -526,9 +419,10 @@ const Root = () => {
             <ColorSwitch />
           </Box>
           <Box
-            as={Editable}
+            as={Textfield}
             sx={{
               flex: "1 1 auto",
+              position: "static",
               padding: 5,
               "@media print": {
                 padding: 0,
@@ -538,11 +432,12 @@ const Root = () => {
             }}
           />
           <Box
-            bg="background"
             py={1}
             px={3}
             sx={{
+              bg: "background",
               flexWrap: "wrap",
+              position: "static",
               "@supports (position: sticky)": {
                 position: "sticky",
               },
@@ -555,29 +450,16 @@ const Root = () => {
             <Text as="span" title="Word Count" aria-label="Word Count">
               Words:
             </Text>{" "}
-            <Text as="span" title="All" aria-label="All">
-              {statistics.wordsAll}
-            </Text>{" "}
+            {statistics.wordsAll} all{" "}
             <Text
               as="span"
               title="Character Count"
               aria-label="Character Count"
             >
-              Chars:
+              Characters:
             </Text>{" "}
-            <Text as="span" title="All" aria-label="All">
-              {statistics.charsAll}
-            </Text>{" "}
-            <Text
-              as="span"
-              title="Without Trailing Spaces"
-              aria-label="Without Trailing Spaces"
-            >
-              {statistics.charsNoTrailing}
-            </Text>{" "}
-            <Text as="span" title="Without Spaces" aria-label="No Spaces">
-              {statistics.charsNoSpaces}
-            </Text>
+            {statistics.charsNoTrailing} all, {statistics.charsNoSpaces}{" "}
+            spaceless
             <Text
               as="span"
               title="Version"
@@ -587,7 +469,7 @@ const Root = () => {
               }}
             >
               {" "}
-              v.0.14.15
+              v.0.15.0
             </Text>
           </Box>
         </Box>
@@ -597,78 +479,67 @@ const Root = () => {
 };
 
 const Leaf = (props) => {
-  const { attributes, leaf } = props;
-  let { children } = props;
-
-  if (leaf.bold) {
-    children = <Text as={Styled.b}>{children}</Text>;
+  if (props.leaf.bold) {
+    props.children = <Text as={Themed.b}>{props.children}</Text>;
   }
 
-  if (leaf.italic) {
-    children = <Text as={Styled.i}>{children}</Text>;
+  if (props.leaf.italic) {
+    props.children = <Text as={Themed.i}>{props.children}</Text>;
   }
 
   return (
-    <Text as="span" {...attributes}>
-      {children}
+    <Text as="span" {...props.attributes}>
+      {props.children}
     </Text>
   );
 };
 
 const DefaultElement = (props) => {
-  const { attributes, children, element } = props;
-
   return (
     <Text
-      as={Styled.div}
+      as={Themed.div}
       sx={{
-        textAlign: element.align,
+        textAlign: props.element.align,
       }}
-      {...attributes}
+      {...props.attributes}
     >
-      {children}
+      {props.children}
     </Text>
   );
 };
 
 const ParagraphElement = (props) => {
-  const { attributes, children, element } = props;
-
   return (
     <Text
-      as={Styled.p}
+      as={Themed.p}
       mb={3}
       sx={{
-        textAlign: element.align,
+        textAlign: props.element.align,
       }}
-      {...attributes}
+      {...props.attributes}
     >
-      {children}
+      {props.children}
     </Text>
   );
 };
 
 const HeadingElement = (props) => {
-  const { attributes, children, element } = props;
-
   return (
     <Heading
-      as={Styled.h5}
+      as={Themed.h5}
       mb={3}
       sx={{
-        textAlign: element.align,
+        textAlign: props.element.align,
       }}
-      {...attributes}
+      {...props.attributes}
     >
-      {children}
+      {props.children}
     </Heading>
   );
 };
 
 const Element = (props) => {
-  const { element } = props;
-
-  switch (element.type) {
+  switch (props.element.type) {
     case "paragraph":
       return <ParagraphElement {...props} />;
     case "heading":
@@ -680,7 +551,7 @@ const Element = (props) => {
   }
 };
 
-const Editable = (props) => {
+const Textfield = (props) => {
   const editor = useSlate();
 
   const renderLeaf = useCallback((props) => {
@@ -726,27 +597,26 @@ const Editable = (props) => {
   };
 
   return (
-    <SlateEditable
+    <Editable
       renderLeaf={renderLeaf}
       renderElement={renderElement}
       onKeyDown={onKeyDown}
+      style={{
+        position: "static",
+      }}
       {...props}
     />
   );
 };
 
 const Icon = (props) => {
-  const { name } = props;
-
-  return <FontAwesomeIcon icon={name} fixedWidth {...props} />;
+  return <FontAwesomeIcon icon={props.name} fixedWidth {...props} />;
 };
 
 const ActionButton = (props) => {
-  const { icon, label, active, disabled, action } = props;
-
   const mouseAction = (event) => {
     event.preventDefault();
-    action(event);
+    props.action(event);
   };
 
   const keyboardAction = (event) => {
@@ -762,17 +632,17 @@ const ActionButton = (props) => {
 
   return (
     <Button
-      title={label}
-      aria-label={label}
+      title={props.label}
+      aria-label={props.label}
       onMouseDown={mouseAction}
       onKeyDown={keyboardAction}
-      disabled={disabled}
-      variant={active ? "up" : "down"}
-      mb={1}
-      mr={1}
+      disabled={props.disabled}
+      variant={props.active ? "up" : "down"}
+      py={2}
+      px={3}
       {...props}
     >
-      <Icon name={icon} />
+      <Icon name={props.icon} />
     </Button>
   );
 };
@@ -803,7 +673,7 @@ const UndoButton = (props) => {
       icon="undo"
       label="Undo"
       action={(event) => {
-        SlateHistoryEditor.undo(editor);
+        HistoryEditor.undo(editor);
       }}
       {...props}
     />
@@ -819,7 +689,7 @@ const RedoButton = (props) => {
       icon="redo"
       label="Redo"
       action={(event) => {
-        SlateHistoryEditor.redo(editor);
+        HistoryEditor.redo(editor);
       }}
       {...props}
     />
@@ -840,15 +710,14 @@ const PrintButton = (props) => {
 };
 
 const MarkButton = (props) => {
-  const { format } = props;
   const editor = useSlate();
 
   return (
     <ActionButton
-      active={FlowEditor.isMarkActive(editor, format)}
+      active={FlowEditor.isMarkActive(editor, props.format)}
       label="Mark"
       action={(event) => {
-        FlowEditor.toggleMark(editor, format);
+        FlowEditor.toggleMark(editor, props.format);
       }}
       {...props}
     />
@@ -856,15 +725,14 @@ const MarkButton = (props) => {
 };
 
 const BlockButton = (props) => {
-  const { format } = props;
   const editor = useSlate();
 
   return (
     <ActionButton
-      active={FlowEditor.isBlockActive(editor, format)}
+      active={FlowEditor.isBlockActive(editor, props.format)}
       label="Block"
       action={(event) => {
-        FlowEditor.toggleBlock(editor, format);
+        FlowEditor.toggleBlock(editor, props.format);
       }}
       {...props}
     />
@@ -872,15 +740,14 @@ const BlockButton = (props) => {
 };
 
 const AlignButton = (props) => {
-  const { format } = props;
   const editor = useSlate();
 
   return (
     <ActionButton
-      active={FlowEditor.isAlignActive(editor, format)}
+      active={FlowEditor.isAlignActive(editor, props.format)}
       label="Align"
       action={(event) => {
-        FlowEditor.toggleAlign(editor, format);
+        FlowEditor.toggleAlign(editor, props.format);
       }}
       {...props}
     />
