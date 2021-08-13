@@ -2,7 +2,7 @@ require("esbuild")
   .build({
     bundle: true,
     entryPoints: ["index.jsx"],
-    outdir: "build",
+    outdir: "./build",
     jsxFactory: "h",
     jsxFragment: "Fragment",
     minify: true,
