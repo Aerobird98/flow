@@ -49,3 +49,4 @@ It is distributed under the [MIT license][], a short and simple permissive licen
 [zillaslab]: https://github.com/mozilla/zilla-slab
 [firacode]: https://github.com/tonsky/FiraCode
 [mit license]: https://raw.githubusercontent.com/Aerobird98/flow/master/LICENSE
+[garet]: https://garet.spacetype.co/
