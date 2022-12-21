@@ -37,7 +37,6 @@ import {
   useColorMode,
   Box,
   Button,
-  Themed,
   Text,
   Heading,
 } from "theme-ui";
@@ -469,7 +468,7 @@ const Root = () => {
               }}
             >
               {" "}
-              v.0.18.2
+              v.0.19.0
             </Text>
           </Box>
         </Box>
@@ -480,11 +479,11 @@ const Root = () => {
 
 const Leaf = (props) => {
   if (props.leaf.bold) {
-    props.children = <Text as={Themed.b}>{props.children}</Text>;
+    props.children = <Text as="b">{props.children}</Text>;
   }
 
   if (props.leaf.italic) {
-    props.children = <Text as={Themed.i}>{props.children}</Text>;
+    props.children = <Text as="i">{props.children}</Text>;
   }
 
   return (
@@ -497,7 +496,7 @@ const Leaf = (props) => {
 const DefaultElement = (props) => {
   return (
     <Text
-      as={Themed.div}
+      as="div"
       sx={{
         textAlign: props.element.align,
       }}
@@ -511,7 +510,7 @@ const DefaultElement = (props) => {
 const ParagraphElement = (props) => {
   return (
     <Text
-      as={Themed.p}
+      as="p"
       mb={3}
       sx={{
         textAlign: props.element.align,
@@ -526,7 +525,7 @@ const ParagraphElement = (props) => {
 const HeadingElement = (props) => {
   return (
     <Heading
-      as={Themed.h5}
+      as="h5"
       mb={3}
       sx={{
         textAlign: props.element.align,
