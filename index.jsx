@@ -497,6 +497,7 @@ const DefaultElement = (props) => {
   return (
     <Text
       as="div"
+      variant="code"
       sx={{
         textAlign: props.element.align,
       }}
@@ -511,6 +512,7 @@ const ParagraphElement = (props) => {
   return (
     <Text
       as="p"
+      variant="paragraph"
       mb={3}
       sx={{
         textAlign: props.element.align,
@@ -526,6 +528,7 @@ const HeadingElement = (props) => {
   return (
     <Heading
       as="h5"
+      variant="heading"
       mb={3}
       sx={{
         textAlign: props.element.align,
