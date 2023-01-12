@@ -29,7 +29,7 @@ Flow will display some editing statistics at the bottom like word counts, charac
 
 ## Development
 
-Flow is using [Preact-js][] a _fast 3kB alternative_ to [React-js][] with the same _modern_ API, bundled by [esbuild][] a _truly fast_ **JavaScript** _bundler and minifier_ that packages up **JavaScript** and **TypeScript** code for distribution to the web. Using [Theme-ui][] the **Design Graph Framework** to provide an opinionated design system paired with [FontAwesome][]’s free **solid** icons. It also makes use of [Garet][], **SpaceType**’s cool sans-serif typeface and [FiraCode][], a monospaced font containing ligatures for common programming multi-character combinations for a realy exotic typographic experience.
+Flow is using [Preact-js][] a _fast 3kB alternative_ to [React-js][] with the same _modern_ API, bundled by [esbuild][] a _truly fast_ **JavaScript** _bundler and minifier_ that packages up **JavaScript** and **TypeScript** code for distribution to the web. Using [Theme-ui][] the **Design Graph Framework** to provide an opinionated design system paired with [FontAwesome][]’s free **solid** icons. It also makes use of [Inria Sans][], a sans-serif typeface designed by **Grégori Vincens** and **Jérémie Hornus** and [JetBrains Mono][], a monospaced font containing ligatures for common programming multi-character combinations for a realy exotic typographic experience.
 
 - Run `npm i` in the project directory to install all the dependencies and dev-dependencies;
 - Run `npm run build` to build for production;
@@ -46,7 +46,6 @@ It is distributed under the [MIT license][], a short and simple permissive licen
 [esbuild]: https://github.com/evanw/esbuild
 [theme-ui]: https://theme-ui.com/
 [fontawesome]: https://fontawesome.com/
-[zillaslab]: https://github.com/mozilla/zilla-slab
-[firacode]: https://github.com/tonsky/FiraCode
+[jetbrains mono]: https://www.jetbrains.com/lp/mono/
 [mit license]: https://raw.githubusercontent.com/Aerobird98/flow/master/LICENSE
-[garet]: https://garet.spacetype.co/
+[inria sans]: https://fonts.google.com/specimen/Inria+Sans

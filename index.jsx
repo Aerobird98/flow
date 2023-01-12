@@ -1,4 +1,5 @@
 /** @jsx h */
+import { version } from "version";
 import { h, render } from "preact";
 import { useMemo, useState, useCallback, useLayoutEffect } from "preact/hooks";
 import {
@@ -248,9 +249,9 @@ const Root = () => {
       },
     },
     fonts: {
-      heading: "Garet, sans-serif",
-      paragraph: "Garet, sans-serif",
-      code: "FiraCode, monospace",
+      heading: "'Inria Sans', sans-serif",
+      paragraph: "'Inria Sans', sans-serif",
+      code: "'JetBrains Mono', monospace",
     },
     fontSizes: ["1rem", "1.335rem", "1.5rem", "1.75rem", "2rem", "2.5rem"],
     fontWeights: {
@@ -271,7 +272,7 @@ const Root = () => {
     text: {
       paragraph: {
         fontFamily: "paragraph",
-        fontWeight: "book",
+        fontWeight: "regular",
         fontStyle: "normal",
         fontKerning: "normal",
         lineHeight: 2,
@@ -279,7 +280,7 @@ const Root = () => {
       },
       heading: {
         fontFamily: "heading",
-        fontWeight: "book",
+        fontWeight: "regular",
         fontStyle: "normal",
         fontKerning: "normal",
         lineHeight: 4,
@@ -314,11 +315,9 @@ const Root = () => {
         fontWeight: "bold",
       },
       i: {
-        fontWeight: "light",
         fontStyle: "italic",
       },
       em: {
-        fontWeight: "light",
         fontStyle: "italic",
       },
     },
@@ -468,7 +467,7 @@ const Root = () => {
               }}
             >
               {" "}
-              v.0.19.1
+              v.{version}
             </Text>
           </Box>
         </Box>
