@@ -73,12 +73,12 @@ const FlowEditor = {
   getStatistics(value) {
     const text = FlowEditor.toPlainText(value);
 
-    // Remove all 3 types of line-breaks.
-    const noBreaks = text.replace(/(\r\n|\n|\r)/gm, "");
     // Trim trailing white-space (on both sides).
-    const noTrailing = noBreaks.trim();
+    const noTrailing = text.trim();
     // Remove all remaining spaces.
     const noSpaces = noTrailing.replace(/\s+/g, "");
+    // Remove all 3 types of line-breaks.
+    const noBreaks = noSpaces.replace(/(\r\n|\n|\r)/gm, "");
     // Remove all standard ASCII, some special puncturation and digits.
     const noPuncturation = text.replace(
       /([.?!,;:\-[\]{}()'"#&@><\*%\/\\^$%_`~|+=—’“”]|\d+)/g,
@@ -93,11 +93,18 @@ const FlowEditor = {
       // collapse multiple adjacent spaces to single spaces.
       .replace(/\s+/g, " ");
 
+    const paragraphs = text
+      // Treat all 3 types of line-breaks as new-lines,
+      .replace(/(\r\n|\n|\r)/gm, "\n")
+      // trim trailing empty new-lines.
+      .replace(/\n$/gm, "");
+
     const statistics = {
       charsAll: noBreaks.length,
       charsNoTrailing: noTrailing.length,
       charsNoSpaces: noSpaces.length,
       wordsAll: words === "" ? 0 : words.split(" ").length,
+      paragraphsAll: paragraphs === "" ? 0 : paragraphs.split(/\n/).length,
     };
 
     return statistics;
@@ -238,13 +245,14 @@ const Root = () => {
   const theme = {
     initialColorMode: "light",
     colors: {
-      text: "#040f1b",
-      background: "#ffffff",
-      primary: "#3bb5ff",
+      text: "#000",
+      background: "#fff",
+      primary: "#44a12b",
       modes: {
         dark: {
-          text: "#abbcdc",
-          background: "#040f1b",
+          text: "#fff",
+          background: "#000",
+          primary: "#44a12b",
         },
       },
     },
@@ -322,7 +330,7 @@ const Root = () => {
       },
     },
     buttons: {
-      up: {
+      active: {
         color: "primary",
         bg: "transparent",
         opacity: 1,
@@ -333,13 +341,12 @@ const Root = () => {
           opacity: 0.1,
         },
       },
-      down: {
+      inactive: {
         color: "text",
         bg: "transparent",
         opacity: 1,
         "&:focus, &:hover": {
           outline: 0,
-          color: "primary",
         },
         "&:disabled": {
           opacity: 0.1,
@@ -445,6 +452,14 @@ const Root = () => {
               },
             }}
           >
+            <Text
+              as="span"
+              title="Paragraph Count"
+              aria-label="Paragraph Count"
+            >
+              Paragraphs:
+            </Text>{" "}
+            {statistics.paragraphsAll} all{" "}
             <Text as="span" title="Word Count" aria-label="Word Count">
               Words:
             </Text>{" "}
@@ -615,6 +630,14 @@ const Icon = (props) => {
 };
 
 const ActionButton = (props) => {
+  const [hover, setHover] = useState(false);
+  const [focus, setFocus] = useState(false);
+
+  const mouseOver = (_) => setHover(true);
+  const mouseOut = (_) => setHover(false);
+  const onFocus = (_) => setFocus(true);
+  const onBlur = (_) => setFocus(false);
+
   const mouseAction = (event) => {
     event.preventDefault();
     props.action(event);
@@ -635,15 +658,19 @@ const ActionButton = (props) => {
     <Button
       title={props.label}
       aria-label={props.label}
+      onMouseOver={mouseOver}
+      onMouseOut={mouseOut}
       onMouseDown={mouseAction}
       onKeyDown={keyboardAction}
+      onFocus={onFocus}
+      onBlur={onBlur}
       disabled={props.disabled}
-      variant={props.active ? "up" : "down"}
+      variant={props.active ? "active" : "inactive"}
       py={2}
       px={3}
       {...props}
     >
-      <Icon name={props.icon} />
+      <Icon name={props.icon} beat={hover | focus} />
     </Button>
   );
 };
@@ -689,7 +716,7 @@ const RedoButton = (props) => {
       disabled={editor.history.redos.length === 0}
       icon="redo"
       label="Redo"
-      action={(event) => {
+      action={(_) => {
         HistoryEditor.redo(editor);
       }}
       {...props}
@@ -702,7 +729,7 @@ const PrintButton = (props) => {
     <ActionButton
       icon="print"
       label="Print"
-      action={(event) => {
+      action={(_) => {
         window.print();
       }}
       {...props}
