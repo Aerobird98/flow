@@ -257,9 +257,8 @@ const Root = () => {
       },
     },
     fonts: {
-      heading: "'Inria Sans', sans-serif",
-      paragraph: "'Inria Sans', sans-serif",
-      code: "'JetBrains Mono', monospace",
+      sans: "'Recursive', monospace",
+      mono: "'JetBrains Mono', 'Recursive', monospace",
     },
     fontSizes: ["1rem", "1.335rem", "1.5rem", "1.75rem", "2rem", "2.5rem"],
     fontWeights: {
@@ -279,54 +278,38 @@ const Root = () => {
     breakpoints: ["576px", "768px", "992px", "1200px", "1400px"],
     text: {
       paragraph: {
-        fontFamily: "paragraph",
+        fontFamily: "sans",
         fontWeight: "regular",
         fontStyle: "normal",
+        fontVariationSettings: "'MONO' 0",
         fontKerning: "normal",
         lineHeight: 2,
         fontSize: 0,
       },
       heading: {
-        fontFamily: "heading",
+        fontFamily: "sans",
         fontWeight: "regular",
         fontStyle: "normal",
+        fontVariationSettings: "'CASL' 1",
         fontKerning: "normal",
-        lineHeight: 4,
+        lineHeight: 5,
         fontSize: 1,
       },
       code: {
-        fontFamily: "code",
+        fontFamily: "mono",
         fontWeight: "regular",
         fontStyle: "normal",
+        fontVariationSettings: "'MONO' 1",
         fontKerning: "normal",
         lineHeight: 2,
         fontSize: 0,
       },
-    },
-    styles: {
-      root: {
-        variant: "text.code",
-      },
-      p: {
-        variant: "text.paragraph",
-      },
-      h5: {
-        variant: "text.heading",
-      },
-      div: {
-        variant: "text.code",
-      },
-      b: {
-        fontWeight: "bold",
-      },
-      strong: {
-        fontWeight: "bold",
-      },
-      i: {
+      italic: {
         fontStyle: "italic",
+        fontVariationSettings: "'CRSV' 1, 'CASL' 1",
       },
-      em: {
-        fontStyle: "italic",
+      bold: {
+        fontWeight: "bold",
       },
     },
     buttons: {
@@ -454,35 +437,50 @@ const Root = () => {
           >
             <Text
               as="span"
-              title="Paragraph Count"
-              aria-label="Paragraph Count"
+              variant="code"
+              title="Statistics"
+              aria-label="Statistics"
             >
-              Paragraphs:
-            </Text>{" "}
-            {statistics.paragraphsAll} all{" "}
-            <Text as="span" title="Word Count" aria-label="Word Count">
-              Words:
-            </Text>{" "}
-            {statistics.wordsAll} all{" "}
-            <Text
-              as="span"
-              title="Character Count"
-              aria-label="Character Count"
-            >
-              Characters:
-            </Text>{" "}
-            {statistics.charsNoTrailing} all, {statistics.charsNoSpaces}{" "}
-            spaceless
-            <Text
-              as="span"
-              title="Version"
-              aria-label="Version"
-              sx={{
-                float: "right",
-              }}
-            >
-              {" "}
-              v.{version}
+              <Text
+                as="span"
+                variant="code"
+                title="Paragraph Count"
+                aria-label="Paragraph Count"
+              >
+                Paragraphs:
+              </Text>{" "}
+              {statistics.paragraphsAll} all{" "}
+              <Text
+                as="span"
+                variant="code"
+                title="Word Count"
+                aria-label="Word Count"
+              >
+                Words:
+              </Text>{" "}
+              {statistics.wordsAll} all{" "}
+              <Text
+                as="span"
+                variant="code"
+                title="Character Count"
+                aria-label="Character Count"
+              >
+                Characters:
+              </Text>{" "}
+              {statistics.charsNoTrailing} all, {statistics.charsNoSpaces}{" "}
+              spaceless
+              <Text
+                as="span"
+                variant="code"
+                title="Version"
+                aria-label="Version"
+                sx={{
+                  float: "right",
+                }}
+              >
+                {" "}
+                v.{version}
+              </Text>
             </Text>
           </Box>
         </Box>
@@ -493,11 +491,19 @@ const Root = () => {
 
 const Leaf = (props) => {
   if (props.leaf.bold) {
-    props.children = <Text as="b">{props.children}</Text>;
+    props.children = (
+      <Text as="b" variant="bold">
+        {props.children}
+      </Text>
+    );
   }
 
   if (props.leaf.italic) {
-    props.children = <Text as="i">{props.children}</Text>;
+    props.children = (
+      <Text as="i" variant="italic">
+        {props.children}
+      </Text>
+    );
   }
 
   return (
@@ -630,6 +636,7 @@ const Icon = (props) => {
 };
 
 const ActionButton = (props) => {
+  const [active, setActive] = useState(false);
   const [hover, setHover] = useState(false);
   const [focus, setFocus] = useState(false);
 
@@ -639,6 +646,7 @@ const ActionButton = (props) => {
   const onBlur = (_) => setFocus(false);
 
   const mouseAction = (event) => {
+    setActive(!active);
     event.preventDefault();
     props.action(event);
   };
@@ -684,9 +692,7 @@ const FullscreenButton = (props) => {
     <ActionButton
       icon={isInFullscreen ? "compress" : "expand"}
       label={isInFullscreen ? "Compress" : "Expand"}
-      action={(event) => {
-        toggleFullscreen();
-      }}
+      action={(event) => toggleFullscreen()}
       {...props}
     />
   );
@@ -700,9 +706,7 @@ const UndoButton = (props) => {
       disabled={editor.history.undos.length === 0}
       icon="undo"
       label="Undo"
-      action={(event) => {
-        HistoryEditor.undo(editor);
-      }}
+      action={(_) => HistoryEditor.undo(editor)}
       {...props}
     />
   );
@@ -716,9 +720,7 @@ const RedoButton = (props) => {
       disabled={editor.history.redos.length === 0}
       icon="redo"
       label="Redo"
-      action={(_) => {
-        HistoryEditor.redo(editor);
-      }}
+      action={(_) => HistoryEditor.redo(editor)}
       {...props}
     />
   );
@@ -729,9 +731,7 @@ const PrintButton = (props) => {
     <ActionButton
       icon="print"
       label="Print"
-      action={(_) => {
-        window.print();
-      }}
+      action={(_) => window.print()}
       {...props}
     />
   );
@@ -744,9 +744,7 @@ const MarkButton = (props) => {
     <ActionButton
       active={FlowEditor.isMarkActive(editor, props.format)}
       label="Mark"
-      action={(event) => {
-        FlowEditor.toggleMark(editor, props.format);
-      }}
+      action={(_) => FlowEditor.toggleMark(editor, props.format)}
       {...props}
     />
   );
@@ -759,9 +757,7 @@ const BlockButton = (props) => {
     <ActionButton
       active={FlowEditor.isBlockActive(editor, props.format)}
       label="Block"
-      action={(event) => {
-        FlowEditor.toggleBlock(editor, props.format);
-      }}
+      action={(_) => FlowEditor.toggleBlock(editor, props.format)}
       {...props}
     />
   );
@@ -774,9 +770,7 @@ const AlignButton = (props) => {
     <ActionButton
       active={FlowEditor.isAlignActive(editor, props.format)}
       label="Align"
-      action={(event) => {
-        FlowEditor.toggleAlign(editor, props.format);
-      }}
+      action={(_) => FlowEditor.toggleAlign(editor, props.format)}
       {...props}
     />
   );
@@ -789,9 +783,7 @@ const ColorSwitch = (props) => {
     <ActionButton
       label={(colorMode === "dark" ? "Light" : "Dark") + " Mode"}
       icon={colorMode === "dark" ? "sun" : "moon"}
-      action={(event) => {
-        setColorMode(colorMode === "dark" ? "light" : "dark");
-      }}
+      action={(_) => setColorMode(colorMode === "dark" ? "light" : "dark")}
       {...props}
     />
   );
