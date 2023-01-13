@@ -314,9 +314,10 @@ const Root = () => {
     },
     buttons: {
       active: {
-        color: "primary",
-        bg: "transparent",
+        color: "background",
+        bg: "text",
         opacity: 1,
+        borderRadius: 0,
         "&:focus, &:hover": {
           outline: 0,
         },
@@ -326,7 +327,8 @@ const Root = () => {
       },
       inactive: {
         color: "text",
-        bg: "transparent",
+        bg: "background",
+        borderRadius: 0,
         opacity: 1,
         "&:focus, &:hover": {
           outline: 0,
@@ -674,8 +676,7 @@ const ActionButton = (props) => {
       onBlur={onBlur}
       disabled={props.disabled}
       variant={props.active ? "active" : "inactive"}
-      py={2}
-      px={3}
+      p={3}
       {...props}
     >
       <Icon name={props.icon} beat={hover | focus} />
